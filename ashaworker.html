@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="ASHA Workers Dashboard - Smart Community Health Monitoring System for Rural Northeast India">
+    <title>ASHA Workers Dashboard - Smart Health Monitor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f766e 0%, #059669 25%, #10b981 50%, #34d399 75%, #6ee7b7 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+        
+        .dark .gradient-bg {
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 25%, #047857 50%, #059669 75%, #0d9488 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .dark .glass-effect {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .dark .card-hover:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .animate-fade-in {
+            animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px) scale(0.95);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .animate-slide-in-left {
+            animation: slideInLeft 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        @keyframes slideInLeft {
+            from { 
+                opacity: 0; 
+                transform: translateX(-50px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(0);
+            }
+        }
+        
+        .animate-slide-in-right {
+            animation: slideInRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        @keyframes slideInRight {
+            from { 
+                opacity: 0; 
+                transform: translateX(50px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(0);
+            }
+        }
+        
+        .animate-scale-in {
+            animation: scaleIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        @keyframes scaleIn {
+            from { 
+                opacity: 0; 
+                transform: scale(0.8);
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1);
+            }
+        }
+        
+        .stagger-animation {
+            animation-delay: var(--delay, 0s);
+        }
+        
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        
+        .notification-badge {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .modal-backdrop {
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.4);
+        }
+        
+        .dark .modal-backdrop {
+            background: rgba(0, 0, 0, 0.6);
+        }
+        
+        .modal-enter {
+            animation: modalEnter 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        @keyframes modalEnter {
+            from { 
+                opacity: 0; 
+                transform: scale(0.9) translateY(20px);
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .northeast-pattern {
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+        }
+        
+        .tribal-accent {
+            border-left: 4px solid #059669;
+            background: linear-gradient(90deg, rgba(5, 150, 105, 0.1) 0%, transparent 100%);
+        }
+        
+        .dark .tribal-accent {
+            border-left: 4px solid #10b981;
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);
+        }
+        
+        .theme-transition {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .map-container {
+            position: relative;
+            height: 400px;
+            background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .dark .map-container {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+        }
+        
+        .map-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ef4444;
+            border: 3px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            animation: markerPulse 2s infinite;
+        }
+        
+        @keyframes markerPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .map-marker.healthy {
+            background: #10b981;
+        }
+        
+        .map-marker.warning {
+            background: #f59e0b;
+        }
+        
+        .map-marker.critical {
+            background: #ef4444;
+        }
+        
+        .form-section {
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .form-section:hover {
+            border-color: rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.02);
+        }
+        
+        .dark .form-section:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            background: rgba(16, 185, 129, 0.05);
+        }
+        
+        .priority-high {
+            border-left: 4px solid #ef4444;
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, transparent 100%);
+        }
+        
+        .priority-medium {
+            border-left: 4px solid #f59e0b;
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 0%, transparent 100%);
+        }
+        
+        .priority-low {
+            border-left: 4px solid #10b981;
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);
+        }
+        
+        .training-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .training-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .symptom-checkbox {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .symptom-checkbox:checked {
+            background: #10b981;
+            border-color: #10b981;
+        }
+        
+        .symptom-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .household-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen theme-transition bg-gray-50 dark:bg-gray-900">
+    <!-- Header -->
+    <header class="gradient-bg shadow-lg sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center floating-animation">
+                        <i data-lucide="heart-handshake" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-white">ASHA Workers Dashboard</h1>
+                        <p class="text-emerald-100 text-sm">Community Health Monitoring • Rural Northeast India</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="hidden md:flex items-center gap-4 mr-4">
+                        <div class="text-white text-sm">
+                            <div class="font-medium">Meera Gogoi</div>
+                            <div class="text-emerald-200">Majuli Village</div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <button id="notifications-btn" class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
+                            <i data-lucide="bell" class="w-5 h-5 text-white"></i>
+                            <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full notification-badge"></span>
+                        </button>
+                    </div>
+                    <button id="theme-toggle" class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
+                        <i data-lucide="sun" class="w-5 h-5 text-white"></i>
+                    </button>
+                    <button id="help-btn" class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
+                        <i data-lucide="help-circle" class="w-5 h-5 text-white"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Quick Stats -->
+        <section class="mb-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="glass-effect rounded-xl p-4 card-hover animate-fade-in stagger-animation" style="--delay: 0.1s;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Households</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">45</p>
+                        </div>
+                        <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center floating-animation">
+                            <i data-lucide="home" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover animate-fade-in stagger-animation" style="--delay: 0.2s;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Cases Today</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">3</p>
+                        </div>
+                        <div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center floating-animation" style="animation-delay: 1s;">
+                            <i data-lucide="alert-circle" class="w-5 h-5 text-red-600 dark:text-red-400"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover animate-fade-in stagger-animation" style="--delay: 0.3s;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Surveys Done</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">12</p>
+                        </div>
+                        <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center floating-animation" style="animation-delay: 2s;">
+                            <i data-lucide="clipboard-check" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover animate-fade-in stagger-animation" style="--delay: 0.4s;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Notifications</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">5</p>
+                        </div>
+                        <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center floating-animation" style="animation-delay: 3s;">
+                            <i data-lucide="message-square" class="w-5 h-5 text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <!-- Left Column - Forms -->
+            <div class="xl:col-span-2 space-y-8">
+                <!-- Case Reporting Form -->
+                <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-left">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="file-plus" class="w-5 h-5 text-red-600 dark:text-red-400"></i>
+                            Case Reporting Form
+                        </h2>
+                        <span class="px-3 py-1 bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300 rounded-full text-sm">
+                            Priority: High
+                        </span>
+                    </div>
+
+                    <form class="space-y-6 form-section rounded-lg p-4">
+                        <!-- Patient Information -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Patient Name</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Enter patient name">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Age</label>
+                                <input type="number" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Age">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Gender</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                    <option>Select Gender</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Contact Number</label>
+                                <input type="tel" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Phone number">
+                            </div>
+                        </div>
+
+                        <!-- Symptoms Checklist -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">Symptoms (Check all that apply)</label>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="symptoms-checklist">
+                                <!-- Symptoms will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Severity and Duration -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Severity Level</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                    <option>Select Severity</option>
+                                    <option>Mild</option>
+                                    <option>Moderate</option>
+                                    <option>Severe</option>
+                                    <option>Critical</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Duration of Symptoms</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                    <option>Select Duration</option>
+                                    <option>Less than 24 hours</option>
+                                    <option>1-3 days</option>
+                                    <option>4-7 days</option>
+                                    <option>More than 1 week</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Additional Information -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Additional Notes</label>
+                            <textarea class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white" rows="3" placeholder="Any additional observations or patient history..."></textarea>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button type="submit" class="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
+                                <i data-lucide="send" class="w-4 h-4 inline mr-2"></i>
+                                Submit Case Report
+                            </button>
+                            <button type="button" class="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                Save Draft
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Household Survey Form -->
+                <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-left">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="home" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
+                            Household Survey
+                        </h2>
+                        <button id="quick-survey-btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                            Quick Survey
+                        </button>
+                    </div>
+
+                    <form class="space-y-6 form-section rounded-lg p-4">
+                        <!-- Household Basic Info -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Household Head Name</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Head of household">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Family Members</label>
+                                <input type="number" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Number of members">
+                            </div>
+                        </div>
+
+                        <!-- Water Source Information -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Primary Water Source</label>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <label class="flex items-center gap-2 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                                    <input type="radio" name="water_source" value="well" class="text-emerald-600">
+                                    <span class="text-gray-700 dark:text-gray-300">Well</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                                    <input type="radio" name="water_source" value="tube_well" class="text-emerald-600">
+                                    <span class="text-gray-700 dark:text-gray-300">Tube Well</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                                    <input type="radio" name="water_source" value="river" class="text-emerald-600">
+                                    <span class="text-gray-700 dark:text-gray-300">River</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                                    <input type="radio" name="water_source" value="pond" class="text-emerald-600">
+                                    <span class="text-gray-700 dark:text-gray-300">Pond</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                                    <input type="radio" name="water_source" value="tap" class="text-emerald-600">
+                                    <span class="text-gray-700 dark:text-gray-300">Tap Water</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                                    <input type="radio" name="water_source" value="other" class="text-emerald-600">
+                                    <span class="text-gray-700 dark:text-gray-300">Other</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Sanitation Facilities -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Sanitation Facilities</label>
+                            <div class="space-y-3">
+                                <label class="flex items-center gap-3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                                    <input type="checkbox" class="symptom-checkbox">
+                                    <span class="text-gray-700 dark:text-gray-300">Private toilet</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                                    <input type="checkbox" class="symptom-checkbox">
+                                    <span class="text-gray-700 dark:text-gray-300">Shared toilet</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                                    <input type="checkbox" class="symptom-checkbox">
+                                    <span class="text-gray-700 dark:text-gray-300">Hand washing facility</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                                    <input type="checkbox" class="symptom-checkbox">
+                                    <span class="text-gray-700 dark:text-gray-300">Waste disposal system</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Health Status -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Any family member with symptoms in last 7 days?</label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center gap-2">
+                                    <input type="radio" name="symptoms_present" value="yes" class="text-emerald-600">
+                                    <span class="text-gray-700 dark:text-gray-300">Yes</span>
+                                </label>
+                                <label class="flex items-center gap-2">
+                                    <input type="radio" name="symptoms_present" value="no" class="text-emerald-600">
+                                    <span class="text-gray-700 dark:text-gray-300">No</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button type="submit" class="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                                <i data-lucide="save" class="w-4 h-4 inline mr-2"></i>
+                                Submit Survey
+                            </button>
+                            <button type="button" class="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                Save Draft
+                            </button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+            <!-- Right Column - Notifications, Training, Map -->
+            <div class="space-y-8">
+                <!-- Notifications from Clinics -->
+                <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-right">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="bell" class="w-5 h-5 text-purple-600 dark:text-purple-400"></i>
+                            Clinic Notifications
+                        </h2>
+                        <button class="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 text-sm">View All</button>
+                    </div>
+                    <div class="space-y-4" id="notifications-panel">
+                        <!-- Notifications will be populated by JavaScript -->
+                    </div>
+                </section>
+
+                <!-- Training Materials -->
+                <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-right">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="book-open" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
+                            Training & Guidelines
+                        </h2>
+                        <button id="download-all-btn" class="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 text-sm">Download All</button>
+                    </div>
+                    <div class="space-y-3" id="training-materials">
+                        <!-- Training materials will be populated by JavaScript -->
+                    </div>
+                </section>
+
+                <!-- Community Map -->
+                <section class="glass-effect rounded-xl p-6 card-hover animate-scale-in">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-orange-600 dark:text-orange-400"></i>
+                            Community Health Map
+                        </h2>
+                        <div class="flex gap-2">
+                            <button id="add-marker-btn" class="px-3 py-1 bg-orange-600 text-white rounded text-sm hover:bg-orange-700 transition-colors">
+                                Add Marker
+                            </button>
+                            <button id="map-legend-btn" class="px-3 py-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                Legend
+                            </button>
+                        </div>
+                    </div>
+                    <div class="map-container" id="community-map">
+                        <!-- Map markers will be populated by JavaScript -->
+                        <div class="absolute top-4 left-4 bg-white dark:bg-gray-800 rounded-lg p-3 shadow-lg">
+                            <h4 class="font-medium text-gray-900 dark:text-white text-sm mb-2">Majuli Village</h4>
+                            <div class="space-y-1 text-xs">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                    <span class="text-gray-600 dark:text-gray-400">Healthy (32)</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                    <span class="text-gray-600 dark:text-gray-400">At Risk (8)</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                    <span class="text-gray-600 dark:text-gray-400">Affected (5)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <!-- Quick Survey Modal -->
+    <div id="quick-survey-modal" class="hidden fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-50">
+        <div class="glass-effect bg-white dark:bg-gray-800 rounded-2xl max-w-lg w-full modal-enter">
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Quick Household Survey</h3>
+                <button id="close-quick-survey" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <i data-lucide="x" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
+                </button>
+            </div>
+            <div class="p-6" id="quick-survey-content">
+                <!-- Quick survey content will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Marker Modal -->
+    <div id="add-marker-modal" class="hidden fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-50">
+        <div class="glass-effect bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full modal-enter">
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Add Health Marker</h3>
+                <button id="close-add-marker" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <i data-lucide="x" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
+                </button>
+            </div>
+            <div class="p-6" id="add-marker-content">
+                <!-- Add marker content will be populated here -->
+            </div>
+        </div>
+    </div>
+    <script src="dashboard.js"></script>
+</body>
+
+    <script>
+        // Mock data
+        const symptoms = [
+            'Diarrhea', 'Vomiting', 'Fever', 'Abdominal Pain', 'Dehydration', 'Nausea',
+            'Headache', 'Fatigue', 'Loss of Appetite', 'Muscle Cramps', 'Jaundice', 'Dark Urine'
+        ];
+
+        const mockNotifications = [
+            {
+                id: 1,
+                type: 'urgent',
+                title: 'Water Contamination Alert',
+                message: 'Avoid using water from the main well near the market area. Alternative sources have been arranged.',
+                time: '15 minutes ago',
+                priority: 'high'
+            },
+            {
+                id: 2,
+                type: 'info',
+                title: 'New Treatment Protocol',
+                message: 'Updated guidelines for cholera treatment have been shared. Please review the attached document.',
+                time: '2 hours ago',
+                priority: 'medium'
+            },
+            {
+                id: 3,
+                type: 'reminder',
+                title: 'Weekly Report Due',
+                message: 'Your weekly community health report is due tomorrow. Please submit before 5 PM.',
+                time: '1 day ago',
+                priority: 'low'
+            },
+            {
+                id: 4,
+                type: 'training',
+                title: 'Training Session Tomorrow',
+                message: 'Mandatory training on water-borne disease prevention at 10 AM in the community center.',
+                time: '1 day ago',
+                priority: 'medium'
+            }
+        ];
+
+        const mockTrainingMaterials = [
+            {
+                id: 1,
+                title: 'Cholera Prevention Guidelines',
+                type: 'PDF',
+                size: '2.4 MB',
+                updated: '2 days ago',
+                category: 'prevention'
+            },
+            {
+                id: 2,
+                title: 'Water Quality Testing Procedures',
+                type: 'Video',
+                size: '45 MB',
+                updated: '1 week ago',
+                category: 'testing'
+            },
+            {
+                id: 3,
+                title: 'Symptom Recognition Chart',
+                type: 'Image',
+                size: '1.2 MB',
+                updated: '3 days ago',
+                category: 'diagnosis'
+            },
+            {
+                id: 4,
+                title: 'Emergency Response Protocol',
+                type: 'PDF',
+                size: '3.1 MB',
+                updated: '5 days ago',
+                category: 'emergency'
+            },
+            {
+                id: 5,
+                title: 'Community Awareness Toolkit',
+                type: 'ZIP',
+                size: '12.5 MB',
+                updated: '1 week ago',
+                category: 'awareness'
+            }
+        ];
+
+        const mockMapMarkers = [
+            { id: 1, x: 25, y: 30, status: 'healthy', household: 'Sharma Family', members: 5 },
+            { id: 2, x: 45, y: 25, status: 'warning', household: 'Das Family', members: 7 },
+            { id: 3, x: 65, y: 40, status: 'critical', household: 'Kumar Family', members: 4 },
+            { id: 4, x: 35, y: 60, status: 'healthy', household: 'Singh Family', members: 6 },
+            { id: 5, x: 70, y: 70, status: 'warning', household: 'Patel Family', members: 3 },
+            { id: 6, x: 20, y: 80, status: 'healthy', household: 'Gogoi Family', members: 8 },
+            { id: 7, x: 80, y: 20, status: 'critical', household: 'Devi Family', members: 5 }
+        ];
+
+        // Global state
+        let isDarkMode = false;
+
+        // Safe icon creation function
+        function createIconsSafely() {
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                try {
+                    lucide.createIcons();
+                } catch (error) {
+                    console.warn('Error creating Lucide icons:', error);
+                    setTimeout(() => {
+                        try {
+                            lucide.createIcons();
+                        } catch (retryError) {
+                            console.warn('Retry failed for Lucide icons:', retryError);
+                        }
+                    }, 1000);
+                }
+            } else {
+                console.warn('Lucide not available, retrying...');
+                setTimeout(createIconsSafely, 500);
+            }
+        }
+
+        // Initialize the app
+        function initializeApp() {
+            createIconsSafely();
+            populateSymptoms();
+            populateNotifications();
+            populateTrainingMaterials();
+            populateMapMarkers();
+            setupEventListeners();
+        }
+
+        // Populate symptoms checklist
+        function populateSymptoms() {
+            const symptomsContainer = document.getElementById('symptoms-checklist');
+            symptomsContainer.innerHTML = '';
+            
+            symptoms.forEach(symptom => {
+                const symptomElement = document.createElement('label');
+                symptomElement.className = 'flex items-center gap-3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors';
+                
+                symptomElement.innerHTML = `
+                    <input type="checkbox" class="symptom-checkbox" value="${symptom.toLowerCase().replace(' ', '_')}">
+                    <span class="text-gray-700 dark:text-gray-300 text-sm">${symptom}</span>
+                `;
+                
+                symptomsContainer.appendChild(symptomElement);
+            });
+        }
+
+        // Populate notifications
+        function populateNotifications() {
+            const notificationsPanel = document.getElementById('notifications-panel');
+            notificationsPanel.innerHTML = '';
+            
+            mockNotifications.forEach(notification => {
+                const notificationElement = document.createElement('div');
+                
+                let priorityClass = '';
+                let iconName = '';
+                
+                switch(notification.type) {
+                    case 'urgent':
+                        priorityClass = 'priority-high';
+                        iconName = 'alert-triangle';
+                        break;
+                    case 'info':
+                        priorityClass = 'priority-medium';
+                        iconName = 'info';
+                        break;
+                    case 'reminder':
+                        priorityClass = 'priority-low';
+                        iconName = 'clock';
+                        break;
+                    case 'training':
+                        priorityClass = 'priority-medium';
+                        iconName = 'book-open';
+                        break;
+                }
+                
+                notificationElement.className = `${priorityClass} rounded-lg p-4 transition-all duration-300 hover:shadow-md cursor-pointer`;
+                
+                notificationElement.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <i data-lucide="${iconName}" class="w-5 h-5 mt-0.5 ${notification.priority === 'high' ? 'text-red-600 dark:text-red-400' : notification.priority === 'medium' ? 'text-yellow-600 dark:text-yellow-400' : 'text-green-600 dark:text-green-400'}"></i>
+                        <div class="flex-1">
+                            <h4 class="font-medium text-gray-900 dark:text-white text-sm">${notification.title}</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">${notification.message}</p>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="text-gray-500 dark:text-gray-500 text-xs">${notification.time}</span>
+                                <span class="px-2 py-1 text-xs rounded-full ${notification.priority === 'high' ? 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300' : notification.priority === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300' : 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300'}">${notification.priority}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                notificationElement.addEventListener('click', () => showNotificationDetails(notification));
+                notificationsPanel.appendChild(notificationElement);
+            });
+            
+            createIconsSafely();
+        }
+
+        // Populate training materials
+        function populateTrainingMaterials() {
+            const trainingContainer = document.getElementById('training-materials');
+            trainingContainer.innerHTML = '';
+            
+            mockTrainingMaterials.forEach(material => {
+                const materialElement = document.createElement('div');
+                materialElement.className = 'training-card glass-effect rounded-lg p-4 hover:bg-white/20 dark:hover:bg-black/20 transition-all duration-300 cursor-pointer card-hover';
+                
+                let iconName = '';
+                let iconColor = '';
+                
+                switch(material.type) {
+                    case 'PDF':
+                        iconName = 'file-text';
+                        iconColor = 'text-red-600 dark:text-red-400';
+                        break;
+                    case 'Video':
+                        iconName = 'play-circle';
+                        iconColor = 'text-blue-600 dark:text-blue-400';
+                        break;
+                    case 'Image':
+                        iconName = 'image';
+                        iconColor = 'text-green-600 dark:text-green-400';
+                        break;
+                    case 'ZIP':
+                        iconName = 'archive';
+                        iconColor = 'text-purple-600 dark:text-purple-400';
+                        break;
+                }
+                
+                materialElement.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="${iconName}" class="w-5 h-5 ${iconColor}"></i>
+                        <div class="flex-1">
+                            <h4 class="font-medium text-gray-900 dark:text-white text-sm">${material.title}</h4>
+                            <div class="flex justify-between items-center mt-1">
+                                <span class="text-gray-500 dark:text-gray-400 text-xs">${material.size} • ${material.updated}</span>
+                                <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs">${material.type}</span>
+                            </div>
+                        </div>
+                        <button class="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors" onclick="downloadMaterial(${material.id})">
+                            <i data-lucide="download" class="w-4 h-4 text-gray-600 dark:text-gray-400"></i>
+                        </button>
+                    </div>
+                `;
+                
+                materialElement.addEventListener('click', () => openTrainingMaterial(material));
+                trainingContainer.appendChild(materialElement);
+            });
+            
+            createIconsSafely();
+        }
+
+        // Populate map markers
+        function populateMapMarkers() {
+            const mapContainer = document.getElementById('community-map');
+            
+            // Clear existing markers (except legend)
+            const existingMarkers = mapContainer.querySelectorAll('.map-marker');
+            existingMarkers.forEach(marker => marker.remove());
+            
+            mockMapMarkers.forEach(marker => {
+                const markerElement = document.createElement('div');
+                markerElement.className = `map-marker ${marker.status}`;
+                markerElement.style.left = `${marker.x}%`;
+                markerElement.style.top = `${marker.y}%`;
+                markerElement.title = `${marker.household} (${marker.members} members) - ${marker.status}`;
+                
+                markerElement.addEventListener('click', () => showHouseholdDetails(marker));
+                mapContainer.appendChild(markerElement);
+            });
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.documentElement.classList.toggle('dark', isDarkMode);
+            
+            const themeIcon = document.querySelector('#theme-toggle i');
+            themeIcon.setAttribute('data-lucide', isDarkMode ? 'moon' : 'sun');
+            createIconsSafely();
+            
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        }
+
+        // Load theme preference
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                isDarkMode = true;
+                document.documentElement.classList.add('dark');
+                const themeIcon = document.querySelector('#theme-toggle i');
+                if (themeIcon) {
+                    themeIcon.setAttribute('data-lucide', 'moon');
+                }
+            }
+        }
+
+        // Show quick survey modal
+        function showQuickSurveyModal() {
+            const modal = document.getElementById('quick-survey-modal');
+            const content = document.getElementById('quick-survey-content');
+            
+            content.innerHTML = `
+                <form class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Household Head</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Name">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Members</label>
+                            <input type="number" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Count">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Water Source</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <option>Well</option>
+                                <option>Tube Well</option>
+                                <option>River</option>
+                                <option>Tap</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Any symptoms in family?</label>
+                        <div class="flex gap-4">
+                            <label class="flex items-center gap-2">
+                                <input type="radio" name="quick_symptoms" value="yes" class="text-emerald-600">
+                                <span class="text-gray-700 dark:text-gray-300">Yes</span>
+                            </label>
+                            <label class="flex items-center gap-2">
+                                <input type="radio" name="quick_symptoms" value="no" class="text-emerald-600">
+                                <span class="text-gray-700 dark:text-gray-300">No</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 pt-4">
+                        <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Submit Quick Survey
+                        </button>
+                        <button type="button" onclick="closeQuickSurveyModal()" class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            `;
+            
+            modal.classList.remove('hidden');
+        }
+
+        // Show add marker modal
+        function showAddMarkerModal() {
+            const modal = document.getElementById('add-marker-modal');
+            const content = document.getElementById('add-marker-content');
+            
+            content.innerHTML = `
+                <form class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Household Name</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Family name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Health Status</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                            <option value="healthy">Healthy</option>
+                            <option value="warning">At Risk</option>
+                            <option value="critical">Affected</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Number of Members</label>
+                        <input type="number" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Family size">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Notes</label>
+                        <textarea class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white" rows="2" placeholder="Additional information..."></textarea>
+                    </div>
+                    <div class="flex gap-3 pt-4">
+                        <button type="submit" class="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
+                            Add Marker
+                        </button>
+                        <button type="button" onclick="closeAddMarkerModal()" class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            `;
+            
+            modal.classList.remove('hidden');
+        }
+
+        // Close modals
+        function closeQuickSurveyModal() {
+            document.getElementById('quick-survey-modal').classList.add('hidden');
+        }
+
+        function closeAddMarkerModal() {
+            document.getElementById('add-marker-modal').classList.add('hidden');
+        }
+
+        // Action functions
+        function showNotificationDetails(notification) {
+            alert(`Notification Details:\n\nTitle: ${notification.title}\nMessage: ${notification.message}\nTime: ${notification.time}\nPriority: ${notification.priority}`);
+        }
+
+        function openTrainingMaterial(material) {
+            alert(`Opening: ${material.title}\nType: ${material.type}\nSize: ${material.size}\nCategory: ${material.category}`);
+        }
+
+        function downloadMaterial(id) {
+            const material = mockTrainingMaterials.find(m => m.id === id);
+            alert(`Downloading: ${material.title}\nThis would start the download process.`);
+        }
+
+        function showHouseholdDetails(marker) {
+            alert(`Household Details:\n\nFamily: ${marker.household}\nMembers: ${marker.members}\nStatus: ${marker.status}\nLocation: ${marker.x}%, ${marker.y}%`);
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Theme toggle
+            document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+            
+            // Modal controls
+            document.getElementById('quick-survey-btn').addEventListener('click', showQuickSurveyModal);
+            document.getElementById('close-quick-survey').addEventListener('click', closeQuickSurveyModal);
+            document.getElementById('add-marker-btn').addEventListener('click', showAddMarkerModal);
+            document.getElementById('close-add-marker').addEventListener('click', closeAddMarkerModal);
+            
+            // Other buttons
+            document.getElementById('notifications-btn').addEventListener('click', () => {
+                alert('🔔 ASHA Worker Notifications:\n\n• 3 urgent alerts from clinic\n• 2 new training materials available\n• Weekly report reminder\n• Water quality update for your area');
+            });
+            
+            document.getElementById('help-btn').addEventListener('click', () => {
+                alert('📞 ASHA Worker Help & Support:\n\n• Emergency Hotline: 108\n• Clinic Contact: +91-9876543210\n• Technical Support: +91-9876543211\n• Training Coordinator: +91-9876543212\n\nFor immediate assistance, call the emergency hotline.');
+            });
+            
+            document.getElementById('download-all-btn').addEventListener('click', () => {
+                alert('📥 Downloading all training materials...\n\nThis would download a ZIP file containing all current training materials and guidelines for offline access.');
+            });
+            
+            document.getElementById('map-legend-btn').addEventListener('click', () => {
+                alert('🗺️ Map Legend:\n\n🟢 Green: Healthy households\n🟡 Yellow: At-risk households (symptoms reported)\n🔴 Red: Affected households (confirmed cases)\n\nClick on any marker to view household details.');
+            });
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM Content Loaded - Initializing ASHA Dashboard...');
+            loadTheme();
+            initializeApp();
+        });
+
+        // Fallback initialization
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                console.log('DOM Content Loaded - Initializing ASHA Dashboard...');
+                loadTheme();
+                initializeApp();
+            });
+        } else {
+            console.log('DOM already loaded - Initializing ASHA Dashboard immediately...');
+            loadTheme();
+            initializeApp();
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b7a1d094b79a5e',t:'MTc1NzI2MzA2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
