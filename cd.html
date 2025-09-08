@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Volunteer Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Custom scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
+        <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+                    <i data-lucide="users" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-900 dark:text-gray-50">Community Volunteer Dashboard</h1>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Your health at a glance</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="#" class="px-4 py-2 bg-indigo-100 dark:bg-gray-700 hover:bg-indigo-200 dark:hover:bg-gray-600 rounded-lg transition-colors text-indigo-700 dark:text-gray-300 flex items-center gap-2">
+                    <i data-lucide="home" class="w-4 h-4"></i>
+                    <span>Home</span>
+                </a>
+                <!-- Dark Mode Toggle -->
+                <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors duration-300">
+                    <i data-lucide="sun" id="sun-icon" class="w-5 h-5"></i>
+                    <i data-lucide="moon" id="moon-icon" class="w-5 h-5 hidden"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="container mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- Card: New Data Submission -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 lg:col-span-2 transition-transform hover:scale-[1.01] duration-300">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-3 rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300">
+                        <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">New Health Data Submission</h2>
+                </div>
+                <form class="space-y-4">
+                    <div>
+                        <label for="patient-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Patient/Household Name</label>
+                        <input type="text" id="patient-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-50" placeholder="e.g., John Doe / Household #123">
+                    </div>
+                    <!-- New Age Field -->
+                    <div>
+                        <label for="patient-age" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Patient's Age</label>
+                        <input type="number" id="patient-age" name="patient-age" min="0" max="120" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-50" placeholder="e.g., 35">
+                    </div>
+                    <div>
+                        <label for="symptoms" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Symptoms Observed</label>
+                        <textarea id="symptoms" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-50" placeholder="e.g., Fever, diarrhea, headache"></textarea>
+                    </div>
+                    <div>
+                        <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Location</label>
+                        <input type="text" id="location" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-50" placeholder="e.g., Ward 5, Block B">
+                    </div>
+                    <button type="submit" class="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        Submit Data
+                    </button>
+                </form>
+            </div>
+
+            <!-- Card: Water Quality Report -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-3 rounded-full bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300">
+                        <i data-lucide="droplets" class="w-5 h-5"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Water Quality Report</h2>
+                </div>
+                <div class="space-y-4">
+                    <p class="text-gray-600 dark:text-gray-300">Quickly report water contamination or issues from your testing kits.</p>
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Last report submitted:</p>
+                        <p class="font-semibold text-gray-900 dark:text-gray-50">Water Source A3 - High Bacterial Count</p>
+                    </div>
+                    <button class="w-full py-3 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors show-modal" data-title="Water Quality Report" data-message="A form to report water quality will be displayed here.">
+                        Submit New Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card: Local Outbreaks & Alerts -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 lg:col-span-2 transition-transform hover:scale-[1.01] duration-300">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-3 rounded-full bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300">
+                        <i data-lucide="map-pin" class="w-5 h-5"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Local Outbreaks & Alerts</h2>
+                </div>
+                <ul class="space-y-4">
+                    <li class="p-4 bg-yellow-50 dark:bg-gray-700 border-l-4 border-yellow-500 rounded-xl">
+                        <p class="font-semibold text-gray-900 dark:text-gray-50">Hotspot Identified in South Block</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Increased cases of fever and stomach issues have been reported. District officials notified.</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Oct 26, 2025 - 10:30 AM</p>
+                    </li>
+                    <li class="p-4 bg-red-50 dark:bg-gray-700 border-l-4 border-red-500 rounded-xl">
+                        <p class="font-semibold text-gray-900 dark:text-gray-50">Immediate Action Required</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">A potential cholera outbreak is being investigated. Do not use local well water.</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Oct 25, 2025 - 09:15 PM</p>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Card: My Activity Log -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-3 rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-300">
+                        <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">My Activity Log</h2>
+                </div>
+                <ul class="space-y-4">
+                    <li class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                        <p class="font-semibold text-gray-900 dark:text-gray-50">Submitted 3 health records</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Today, 09:45 AM</p>
+                    </li>
+                    <li class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                        <p class="font-semibold text-gray-900 dark:text-gray-50">Reported water quality</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Oct 25, 05:20 PM</p>
+                    </li>
+                    <li class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                        <p class="font-semibold text-gray-900 dark:text-gray-50">Shared health awareness campaign</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Oct 24, 11:00 AM</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Message Modal -->
+    <div id="messageModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800 text-center">
+            <div class="mt-3 text-center">
+                <i data-lucide="info" class="w-16 h-16 text-blue-500 mx-auto mb-4"></i>
+                <h3 id="modalTitle" class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-50"></h3>
+                <div class="mt-2 px-7 py-3">
+                    <p id="modalMessage" class="text-sm text-gray-500 dark:text-gray-400"></p>
+                </div>
+                <div class="items-center px-4 py-3">
+                    <button id="closeModal" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-base font-medium rounded-lg w-full shadow-sm hover:from-blue-700 hover:to-purple-700 transition-all focus:outline-none focus:ring-2 focus:ring-blue-600">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                lucide.createIcons();
+            }
+
+            // Dark Mode Toggle Logic
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
+            
+            const loadTheme = () => {
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                    sunIcon.classList.add('hidden');
+                    moonIcon.classList.remove('hidden');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    sunIcon.classList.remove('hidden');
+                    moonIcon.classList.add('hidden');
+                }
+            };
+            
+            loadTheme();
+
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                if (isDark) {
+                    localStorage.setItem('theme', 'dark');
+                    sunIcon.classList.add('hidden');
+                    moonIcon.classList.remove('hidden');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    sunIcon.classList.remove('hidden');
+                    moonIcon.classList.add('hidden');
+                }
+            });
+
+            // Message Modal Logic
+            const messageModal = document.getElementById('messageModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMessage = document.getElementById('modalMessage');
+            const closeModalBtn = document.getElementById('closeModal');
+
+            document.querySelectorAll('.show-modal').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const title = e.currentTarget.getAttribute('data-title');
+                    const message = e.currentTarget.getAttribute('data-message');
+                    modalTitle.textContent = title;
+                    modalMessage.textContent = message;
+                    messageModal.classList.remove('hidden');
+                });
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                messageModal.classList.add('hidden');
+            });
+
+            // Close modal when clicking outside
+            messageModal.addEventListener('click', (e) => {
+                if (e.target === messageModal) {
+                    messageModal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
