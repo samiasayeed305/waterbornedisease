@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Outbreak Prediction Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <div class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold text-center mb-2">🦠 AI Outbreak Prediction Engine</h1>
+            <p class="text-center text-blue-100">Advanced Disease Outbreak Forecasting & Patient Data Analytics</p>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Main Input Section -->
+        <div class="bg-white rounded-lg card-shadow p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-6 text-gray-800">📍 Location & Prediction Settings</h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Pin Code Input -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Pin Code</label>
+                    <input type="text" id="pinCode" placeholder="Enter 6-digit pin code" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           maxlength="6" pattern="[0-9]{6}">
+                    <div id="areaInfo" class="mt-2 text-sm text-gray-600"></div>
+                </div>
+
+                <!-- Current Cases Input -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Current Cases</label>
+                    <input type="number" id="currentCases" placeholder="Enter current case count" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           min="0" max="100000">
+                    <div class="mt-1 text-xs text-gray-500">Leave empty for auto-calculation</div>
+                </div>
+
+                <!-- Prediction Days -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Prediction Period (Days)</label>
+                    <select id="predictionDays" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="7">7 Days</option>
+                        <option value="14" selected>14 Days</option>
+                        <option value="30">30 Days</option>
+                        <option value="60">60 Days</option>
+                        <option value="90">90 Days</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Disease Type Selection -->
+            <div class="mt-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Water-Borne Disease Type</label>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <button class="disease-btn px-4 py-2 border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors" data-disease="cholera">
+                        💧 Cholera
+                    </button>
+                    <button class="disease-btn px-4 py-2 border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors" data-disease="typhoid">
+                        🦠 Typhoid
+                    </button>
+                    <button class="disease-btn px-4 py-2 border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors" data-disease="hepatitis">
+                        🟡 Hepatitis A
+                    </button>
+                    <button class="disease-btn px-4 py-2 border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors" data-disease="diarrhea">
+                        🤢 Diarrheal Diseases
+                    </button>
+                </div>
+            </div>
+
+            <!-- Predict Button -->
+            <button id="predictBtn" class="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                🔮 Generate Prediction
+            </button>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="hidden">
+            <!-- Area Information -->
+            <div class="bg-white rounded-lg card-shadow p-6 mb-6">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">📍 Area Information</h3>
+                <div id="areaDetails" class="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Prediction Results -->
+            <div class="bg-white rounded-lg card-shadow p-6 mb-6">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">📊 Outbreak Prediction</h3>
+                <div id="predictionResults" class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Patient Data Access -->
+            <div class="bg-white rounded-lg card-shadow p-6">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">👥 Patient Data Analytics</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-medium text-gray-700 mb-3">Current Patient Statistics</h4>
+                        <div id="patientStats" class="space-y-2">
+                            <!-- Will be populated dynamically -->
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-700 mb-3">Data Access Controls</h4>
+                        <div class="space-y-3">
+                            <button class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors" onclick="accessPatientData('demographics')">
+                                📋 Demographics Data
+                            </button>
+                            <button class="w-full bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-lg transition-colors" onclick="accessPatientData('symptoms')">
+                                🩺 Symptoms Analysis
+                            </button>
+                            <button class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg transition-colors" onclick="accessPatientData('treatment')">
+                                💊 Treatment Records
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patient Data Modal -->
+        <div id="patientModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-96 overflow-y-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="modalTitle" class="text-xl font-semibold text-gray-800"></h3>
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                </div>
+                <div id="modalContent" class="text-gray-600">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample pin code to area mapping with detailed location info
+        const pinCodeData = {
+            '110001': { 
+                area: 'Connaught Place', 
+                city: 'New Delhi', 
+                state: 'Delhi', 
+                population: 45000,
+                district: 'Central Delhi',
+                coordinates: '28.6315° N, 77.2167° E',
+                waterSources: 'Yamuna River, Municipal Supply',
+                riskFactors: 'High population density, street food vendors'
+            },
+            '400001': { 
+                area: 'Fort', 
+                city: 'Mumbai', 
+                state: 'Maharashtra', 
+                population: 52000,
+                district: 'Mumbai City',
+                coordinates: '18.9388° N, 72.8354° E',
+                waterSources: 'Municipal Supply, Groundwater',
+                riskFactors: 'Coastal area, monsoon flooding'
+            },
+            '560001': { 
+                area: 'Bangalore GPO', 
+                city: 'Bangalore', 
+                state: 'Karnataka', 
+                population: 38000,
+                district: 'Bangalore Urban',
+                coordinates: '12.9716° N, 77.5946° E',
+                waterSources: 'Cauvery River, Borewells',
+                riskFactors: 'Rapid urbanization, water scarcity'
+            },
+            '600001': { 
+                area: 'Chennai GPO', 
+                city: 'Chennai', 
+                state: 'Tamil Nadu', 
+                population: 41000,
+                district: 'Chennai',
+                coordinates: '13.0827° N, 80.2707° E',
+                waterSources: 'Municipal Supply, Desalination',
+                riskFactors: 'Coastal flooding, water contamination'
+            },
+            '700001': { 
+                area: 'Kolkata GPO', 
+                city: 'Kolkata', 
+                state: 'West Bengal', 
+                population: 47000,
+                district: 'Kolkata',
+                coordinates: '22.5726° N, 88.3639° E',
+                waterSources: 'Hooghly River, Municipal Supply',
+                riskFactors: 'River pollution, poor sanitation'
+            },
+            '500001': { 
+                area: 'Hyderabad GPO', 
+                city: 'Hyderabad', 
+                state: 'Telangana', 
+                population: 43000,
+                district: 'Hyderabad',
+                coordinates: '17.3850° N, 78.4867° E',
+                waterSources: 'Krishna River, Groundwater',
+                riskFactors: 'Industrial pollution, water shortage'
+            }
+        };
+
+        let selectedDisease = '';
+        let currentPinCode = '';
+        let currentDays = 14;
+
+        // Pin code input handler
+        document.getElementById('pinCode').addEventListener('input', function(e) {
+            const pinCode = e.target.value;
+            const areaInfo = document.getElementById('areaInfo');
+            
+            if (pinCode.length === 6) {
+                currentPinCode = pinCode;
+                if (pinCodeData[pinCode]) {
+                    const data = pinCodeData[pinCode];
+                    areaInfo.innerHTML = `📍 ${data.area}, ${data.city}, ${data.state}`;
+                    areaInfo.className = 'mt-2 text-sm text-green-600 font-medium';
+                } else {
+                    areaInfo.innerHTML = '📍 Sample Area (Pin code not in database)';
+                    areaInfo.className = 'mt-2 text-sm text-orange-600';
+                }
+            } else {
+                areaInfo.innerHTML = '';
+            }
+        });
+
+        // Disease selection
+        document.querySelectorAll('.disease-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.disease-btn').forEach(b => {
+                    b.classList.remove('bg-blue-100', 'border-blue-500', 'text-blue-700');
+                    b.classList.add('border-gray-300');
+                });
+                
+                this.classList.add('bg-blue-100', 'border-blue-500', 'text-blue-700');
+                this.classList.remove('border-gray-300');
+                selectedDisease = this.dataset.disease;
+            });
+        });
+
+        // Prediction days change
+        document.getElementById('predictionDays').addEventListener('change', function(e) {
+            currentDays = parseInt(e.target.value);
+        });
+
+        // Generate prediction
+        document.getElementById('predictBtn').addEventListener('click', function() {
+            const pinCode = document.getElementById('pinCode').value;
+            
+            if (!pinCode || pinCode.length !== 6) {
+                alert('Please enter a valid 6-digit pin code');
+                return;
+            }
+            
+            if (!selectedDisease) {
+                alert('Please select a disease type');
+                return;
+            }
+
+            generatePrediction();
+        });
+
+        function generatePrediction() {
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.classList.remove('hidden');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+
+            // Populate area details
+            const areaData = pinCodeData[currentPinCode] || {
+                area: 'Sample Area',
+                city: 'Sample City',
+                state: 'Sample State',
+                population: 35000
+            };
+
+            document.getElementById('areaDetails').innerHTML = `
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <div class="text-sm text-gray-600">Area & District</div>
+                    <div class="font-semibold text-gray-800">${areaData.area}</div>
+                    <div class="text-xs text-gray-500">${areaData.district || 'District info not available'}</div>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <div class="text-sm text-gray-600">Location</div>
+                    <div class="font-semibold text-gray-800">${areaData.city}, ${areaData.state}</div>
+                    <div class="text-xs text-gray-500">${areaData.coordinates || 'Coordinates not available'}</div>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <div class="text-sm text-gray-600">Population</div>
+                    <div class="font-semibold text-gray-800">${areaData.population.toLocaleString()}</div>
+                </div>
+                <div class="bg-yellow-50 p-4 rounded-lg">
+                    <div class="text-sm text-gray-600">Water Sources</div>
+                    <div class="font-semibold text-gray-800 text-sm">${areaData.waterSources || 'Municipal Supply'}</div>
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg">
+                    <div class="text-sm text-gray-600">Risk Factors</div>
+                    <div class="font-semibold text-gray-800 text-sm">${areaData.riskFactors || 'Standard urban risks'}</div>
+                </div>
+            `;
+
+            // Generate prediction data
+            const userCases = document.getElementById('currentCases').value;
+            let currentCases;
+            
+            if (userCases && userCases > 0) {
+                currentCases = parseInt(userCases);
+            } else {
+                const baseRate = Math.random() * 0.1 + 0.02; // 2-12% infection rate
+                currentCases = Math.floor(areaData.population * baseRate);
+            }
+            
+            const predictedCases = Math.floor(currentCases * (1 + Math.random() * 0.5 + 0.1));
+            const riskLevel = predictedCases > currentCases * 1.3 ? 'High' : predictedCases > currentCases * 1.1 ? 'Medium' : 'Low';
+            const riskColor = riskLevel === 'High' ? 'red' : riskLevel === 'Medium' ? 'yellow' : 'green';
+
+            document.getElementById('predictionResults').innerHTML = `
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <div class="text-sm text-gray-600">Current Cases</div>
+                    <div class="text-2xl font-bold text-blue-600">${currentCases}</div>
+                </div>
+                <div class="bg-orange-50 p-4 rounded-lg">
+                    <div class="text-sm text-gray-600">Predicted Cases (${currentDays} days)</div>
+                    <div class="text-2xl font-bold text-orange-600">${predictedCases}</div>
+                </div>
+                <div class="bg-${riskColor}-50 p-4 rounded-lg">
+                    <div class="text-sm text-gray-600">Risk Level</div>
+                    <div class="text-2xl font-bold text-${riskColor}-600">${riskLevel}</div>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <div class="text-sm text-gray-600">Growth Rate</div>
+                    <div class="text-2xl font-bold text-gray-600">${((predictedCases - currentCases) / currentCases * 100).toFixed(1)}%</div>
+                </div>
+            `;
+
+            // Generate patient statistics
+            document.getElementById('patientStats').innerHTML = `
+                <div class="flex justify-between py-2 border-b">
+                    <span class="text-gray-600">Active Patients:</span>
+                    <span class="font-semibold">${Math.floor(currentCases * 0.8)}</span>
+                </div>
+                <div class="flex justify-between py-2 border-b">
+                    <span class="text-gray-600">Recovered:</span>
+                    <span class="font-semibold text-green-600">${Math.floor(currentCases * 0.15)}</span>
+                </div>
+                <div class="flex justify-between py-2 border-b">
+                    <span class="text-gray-600">Critical:</span>
+                    <span class="font-semibold text-red-600">${Math.floor(currentCases * 0.05)}</span>
+                </div>
+                <div class="flex justify-between py-2">
+                    <span class="text-gray-600">Avg Age:</span>
+                    <span class="font-semibold">${Math.floor(Math.random() * 20 + 35)} years</span>
+                </div>
+            `;
+        }
+
+        function accessPatientData(dataType) {
+            const modal = document.getElementById('patientModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+
+            let title = '';
+            let content = '';
+
+            switch(dataType) {
+                case 'demographics':
+                    title = '📋 Patient Demographics Data';
+                    content = `
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-4 rounded">
+                                <h4 class="font-semibold mb-2">Age Distribution</h4>
+                                <div class="space-y-1 text-sm">
+                                    <div class="flex justify-between"><span>0-18 years:</span><span>15%</span></div>
+                                    <div class="flex justify-between"><span>19-35 years:</span><span>35%</span></div>
+                                    <div class="flex justify-between"><span>36-60 years:</span><span>40%</span></div>
+                                    <div class="flex justify-between"><span>60+ years:</span><span>10%</span></div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded">
+                                <h4 class="font-semibold mb-2">Gender Distribution</h4>
+                                <div class="space-y-1 text-sm">
+                                    <div class="flex justify-between"><span>Male:</span><span>52%</span></div>
+                                    <div class="flex justify-between"><span>Female:</span><span>48%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-4">⚠️ Demo Data - This is sample patient demographic information for demonstration purposes.</p>
+                    `;
+                    break;
+                case 'symptoms':
+                    title = '🩺 Symptoms Analysis';
+                    content = `
+                        <div class="space-y-4">
+                            <div class="bg-red-50 p-4 rounded">
+                                <h4 class="font-semibold text-red-800 mb-2">Most Common Symptoms</h4>
+                                <div class="grid grid-cols-2 gap-2 text-sm">
+                                    <div>• Fever (85%)</div>
+                                    <div>• Cough (72%)</div>
+                                    <div>• Fatigue (68%)</div>
+                                    <div>• Headache (45%)</div>
+                                </div>
+                            </div>
+                            <div class="bg-yellow-50 p-4 rounded">
+                                <h4 class="font-semibold text-yellow-800 mb-2">Severity Distribution</h4>
+                                <div class="space-y-1 text-sm">
+                                    <div class="flex justify-between"><span>Mild:</span><span>70%</span></div>
+                                    <div class="flex justify-between"><span>Moderate:</span><span>25%</span></div>
+                                    <div class="flex justify-between"><span>Severe:</span><span>5%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-4">⚠️ Demo Data - This is sample symptoms analysis for demonstration purposes.</p>
+                    `;
+                    break;
+                case 'treatment':
+                    title = '💊 Treatment Records';
+                    content = `
+                        <div class="space-y-4">
+                            <div class="bg-green-50 p-4 rounded">
+                                <h4 class="font-semibold text-green-800 mb-2">Treatment Protocols</h4>
+                                <div class="text-sm space-y-1">
+                                    <div>• Home isolation: 60%</div>
+                                    <div>• Outpatient care: 30%</div>
+                                    <div>• Hospitalization: 10%</div>
+                                </div>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded">
+                                <h4 class="font-semibold text-blue-800 mb-2">Recovery Rates</h4>
+                                <div class="text-sm space-y-1">
+                                    <div>• Average recovery time: 7-14 days</div>
+                                    <div>• Full recovery rate: 95%</div>
+                                    <div>• Readmission rate: 2%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-4">⚠️ Demo Data - This is sample treatment data for demonstration purposes.</p>
+                    `;
+                    break;
+            }
+
+            modalTitle.textContent = title;
+            modalContent.innerHTML = content;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('patientModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('patientModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97bd170920a73b34',t:'MTc1NzMyMDI5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
