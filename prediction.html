@@ -156,326 +156,394 @@
         </div>
     </div>
 
-    <script>
-        // Sample pin code to area mapping with detailed location info
-        const pinCodeData = {
-            '110001': { 
-                area: 'Connaught Place', 
-                city: 'New Delhi', 
-                state: 'Delhi', 
-                population: 45000,
-                district: 'Central Delhi',
-                coordinates: '28.6315° N, 77.2167° E',
-                waterSources: 'Yamuna River, Municipal Supply',
-                riskFactors: 'High population density, street food vendors'
-            },
-            '400001': { 
-                area: 'Fort', 
-                city: 'Mumbai', 
-                state: 'Maharashtra', 
-                population: 52000,
-                district: 'Mumbai City',
-                coordinates: '18.9388° N, 72.8354° E',
-                waterSources: 'Municipal Supply, Groundwater',
-                riskFactors: 'Coastal area, monsoon flooding'
-            },
-            '560001': { 
-                area: 'Bangalore GPO', 
-                city: 'Bangalore', 
-                state: 'Karnataka', 
-                population: 38000,
-                district: 'Bangalore Urban',
-                coordinates: '12.9716° N, 77.5946° E',
-                waterSources: 'Cauvery River, Borewells',
-                riskFactors: 'Rapid urbanization, water scarcity'
-            },
-            '600001': { 
-                area: 'Chennai GPO', 
-                city: 'Chennai', 
-                state: 'Tamil Nadu', 
-                population: 41000,
-                district: 'Chennai',
-                coordinates: '13.0827° N, 80.2707° E',
-                waterSources: 'Municipal Supply, Desalination',
-                riskFactors: 'Coastal flooding, water contamination'
-            },
-            '700001': { 
-                area: 'Kolkata GPO', 
-                city: 'Kolkata', 
-                state: 'West Bengal', 
-                population: 47000,
-                district: 'Kolkata',
-                coordinates: '22.5726° N, 88.3639° E',
-                waterSources: 'Hooghly River, Municipal Supply',
-                riskFactors: 'River pollution, poor sanitation'
-            },
-            '500001': { 
-                area: 'Hyderabad GPO', 
-                city: 'Hyderabad', 
-                state: 'Telangana', 
-                population: 43000,
-                district: 'Hyderabad',
-                coordinates: '17.3850° N, 78.4867° E',
-                waterSources: 'Krishna River, Groundwater',
-                riskFactors: 'Industrial pollution, water shortage'
+   <!-- Replace the entire script section in prediction.html with this updated version -->
+
+<script>
+    // Sample pin code to area mapping with detailed location info
+    const pinCodeData = {
+        '110001': { 
+            area: 'Connaught Place', 
+            city: 'New Delhi', 
+            state: 'Delhi', 
+            population: 45000,
+            district: 'Central Delhi',
+            coordinates: '28.6315° N, 77.2167° E',
+            waterSources: 'Yamuna River, Municipal Supply',
+            riskFactors: 'High population density, street food vendors'
+        },
+        '400001': { 
+            area: 'Fort', 
+            city: 'Mumbai', 
+            state: 'Maharashtra', 
+            population: 52000,
+            district: 'Mumbai City',
+            coordinates: '18.9388° N, 72.8354° E',
+            waterSources: 'Municipal Supply, Groundwater',
+            riskFactors: 'Coastal area, monsoon flooding'
+        },
+        '560001': { 
+            area: 'Bangalore GPO', 
+            city: 'Bangalore', 
+            state: 'Karnataka', 
+            population: 38000,
+            district: 'Bangalore Urban',
+            coordinates: '12.9716° N, 77.5946° E',
+            waterSources: 'Cauvery River, Borewells',
+            riskFactors: 'Rapid urbanization, water scarcity'
+        },
+        '600001': { 
+            area: 'Chennai GPO', 
+            city: 'Chennai', 
+            state: 'Tamil Nadu', 
+            population: 41000,
+            district: 'Chennai',
+            coordinates: '13.0827° N, 80.2707° E',
+            waterSources: 'Municipal Supply, Desalination',
+            riskFactors: 'Coastal flooding, water contamination'
+        },
+        '700001': { 
+            area: 'Kolkata GPO', 
+            city: 'Kolkata', 
+            state: 'West Bengal', 
+            population: 47000,
+            district: 'Kolkata',
+            coordinates: '22.5726° N, 88.3639° E',
+            waterSources: 'Hooghly River, Municipal Supply',
+            riskFactors: 'River pollution, poor sanitation'
+        },
+        '500001': { 
+            area: 'Hyderabad GPO', 
+            city: 'Hyderabad', 
+            state: 'Telangana', 
+            population: 43000,
+            district: 'Hyderabad',
+            coordinates: '17.3850° N, 78.4867° E',
+            waterSources: 'Krishna River, Groundwater',
+            riskFactors: 'Industrial pollution, water shortage'
+        }
+    };
+
+    let selectedDisease = '';
+    let currentPinCode = '';
+    let currentDays = 14;
+
+    // Pin code input handler
+    document.getElementById('pinCode').addEventListener('input', function(e) {
+        const pinCode = e.target.value;
+        const areaInfo = document.getElementById('areaInfo');
+        
+        if (pinCode.length === 6) {
+            currentPinCode = pinCode;
+            if (pinCodeData[pinCode]) {
+                const data = pinCodeData[pinCode];
+                areaInfo.innerHTML = 📍 ${data.area}, ${data.city}, ${data.state};
+                areaInfo.className = 'mt-2 text-sm text-green-600 font-medium';
+            } else {
+                areaInfo.innerHTML = '📍 Sample Area (Pin code not in database)';
+                areaInfo.className = 'mt-2 text-sm text-orange-600';
             }
+        } else {
+            areaInfo.innerHTML = '';
+        }
+    });
+
+    // Disease selection
+    document.querySelectorAll('.disease-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.disease-btn').forEach(b => {
+                b.classList.remove('bg-blue-100', 'border-blue-500', 'text-blue-700');
+                b.classList.add('border-gray-300');
+            });
+            
+            this.classList.add('bg-blue-100', 'border-blue-500', 'text-blue-700');
+            this.classList.remove('border-gray-300');
+            selectedDisease = this.dataset.disease;
+        });
+    });
+
+    // Prediction days change
+    document.getElementById('predictionDays').addEventListener('change', function(e) {
+        currentDays = parseInt(e.target.value);
+    });
+
+    // Generate prediction
+    document.getElementById('predictBtn').addEventListener('click', function() {
+        const pinCode = document.getElementById('pinCode').value;
+        
+        if (!pinCode || pinCode.length !== 6) {
+            alert('Please enter a valid 6-digit pin code');
+            return;
+        }
+        
+        if (!selectedDisease) {
+            alert('Please select a disease type');
+            return;
+        }
+
+        generatePrediction();
+    });
+
+    // Function to call ML API
+    async function callMLPredictionAPI(pinCode, disease, days, currentCases) {
+        // Show loading state
+        document.getElementById('predictText').textContent = 'Processing with AI...';
+        document.getElementById('predictLoading').classList.remove('hidden');
+        document.getElementById('predictBtn').disabled = true;
+        
+        try {
+            const response = await fetch('/api/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    pinCode: pinCode,
+                    disease: disease,
+                    days: days,
+                    currentCases: currentCases || null
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('API response error');
+            }
+            
+            const result = await response.json();
+            
+            if (!result.success) {
+                throw new Error(result.error || 'Prediction failed');
+            }
+            
+            return result;
+        } catch (error) {
+            console.error('Error calling ML API:', error);
+            throw new Error('Failed to get prediction from AI engine');
+        } finally {
+            // Reset button state
+            document.getElementById('predictText').textContent = '🔮 Generate Prediction';
+            document.getElementById('predictLoading').classList.add('hidden');
+            document.getElementById('predictBtn').disabled = false;
+        }
+    }
+
+    async function generatePrediction() {
+        try {
+            const userCases = document.getElementById('currentCases').value;
+            const casesValue = userCases && userCases > 0 ? parseInt(userCases) : null;
+            
+            // Call ML API
+            const result = await callMLPredictionAPI(
+                currentPinCode, 
+                selectedDisease, 
+                currentDays,
+                casesValue
+            );
+            
+            displayPredictionResults(result.data);
+        } catch (error) {
+            alert(error.message || 'Error generating prediction. Please try again.');
+            console.error('Prediction error:', error);
+        }
+    }
+
+    function displayPredictionResults(predictionData) {
+        const resultsSection = document.getElementById('resultsSection');
+        resultsSection.classList.remove('hidden');
+        resultsSection.scrollIntoView({ behavior: 'smooth' });
+
+        // Populate area details
+        const areaData = pinCodeData[currentPinCode] || {
+            area: 'Sample Area',
+            city: 'Sample City',
+            state: 'Sample State',
+            population: 35000
         };
 
-        let selectedDisease = '';
-        let currentPinCode = '';
-        let currentDays = 14;
+        document.getElementById('areaDetails').innerHTML = `
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Area & District</div>
+                <div class="font-semibold text-gray-800">${areaData.area}</div>
+                <div class="text-xs text-gray-500">${areaData.district || 'District info not available'}</div>
+            </div>
+            <div class="bg-green-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Location</div>
+                <div class="font-semibold text-gray-800">${areaData.city}, ${areaData.state}</div>
+                <div class="text-xs text-gray-500">${areaData.coordinates || 'Coordinates not available'}</div>
+            </div>
+            <div class="bg-purple-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Population</div>
+                <div class="font-semibold text-gray-800">${areaData.population.toLocaleString()}</div>
+            </div>
+            <div class="bg-yellow-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Water Sources</div>
+                <div class="font-semibold text-gray-800 text-sm">${areaData.waterSources || 'Municipal Supply'}</div>
+            </div>
+            <div class="bg-red-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Risk Factors</div>
+                <div class="font-semibold text-gray-800 text-sm">${areaData.riskFactors || 'Standard urban risks'}</div>
+            </div>
+        `;
 
-        // Pin code input handler
-        document.getElementById('pinCode').addEventListener('input', function(e) {
-            const pinCode = e.target.value;
-            const areaInfo = document.getElementById('areaInfo');
-            
-            if (pinCode.length === 6) {
-                currentPinCode = pinCode;
-                if (pinCodeData[pinCode]) {
-                    const data = pinCodeData[pinCode];
-                    areaInfo.innerHTML = `📍 ${data.area}, ${data.city}, ${data.state}`;
-                    areaInfo.className = 'mt-2 text-sm text-green-600 font-medium';
-                } else {
-                    areaInfo.innerHTML = '📍 Sample Area (Pin code not in database)';
-                    areaInfo.className = 'mt-2 text-sm text-orange-600';
-                }
-            } else {
-                areaInfo.innerHTML = '';
-            }
-        });
+        // Determine risk color
+        const riskColor = predictionData.riskLevel === 'High' ? 'red' : 
+                         predictionData.riskLevel === 'Medium' ? 'yellow' : 'green';
 
-        // Disease selection
-        document.querySelectorAll('.disease-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.disease-btn').forEach(b => {
-                    b.classList.remove('bg-blue-100', 'border-blue-500', 'text-blue-700');
-                    b.classList.add('border-gray-300');
-                });
+        // Display prediction results from ML API
+        document.getElementById('predictionResults').innerHTML = `
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Current Cases</div>
+                <div class="text-2xl font-bold text-blue-600">${predictionData.currentCases}</div>
+            </div>
+            <div class="bg-orange-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Predicted Cases (${currentDays} days)</div>
+                <div class="text-2xl font-bold text-orange-600">${predictionData.predictedCases}</div>
+            </div>
+            <div class="bg-${riskColor}-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Risk Level</div>
+                <div class="text-2xl font-bold text-${riskColor}-600">${predictionData.riskLevel}</div>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Daily Growth Rate</div>
+                <div class="text-2xl font-bold text-gray-600">${predictionData.dailyGrowthRate}%</div>
+            </div>
+        `;
+
+        // Fetch and display patient statistics
+        fetchPatientStats();
+    }
+
+    async function fetchPatientStats() {
+        try {
+            const response = await fetch('/api/patient_stats');
+            if (response.ok) {
+                const stats = await response.json();
                 
-                this.classList.add('bg-blue-100', 'border-blue-500', 'text-blue-700');
-                this.classList.remove('border-gray-300');
-                selectedDisease = this.dataset.disease;
-            });
-        });
-
-        // Prediction days change
-        document.getElementById('predictionDays').addEventListener('change', function(e) {
-            currentDays = parseInt(e.target.value);
-        });
-
-        // Generate prediction
-        document.getElementById('predictBtn').addEventListener('click', function() {
-            const pinCode = document.getElementById('pinCode').value;
-            
-            if (!pinCode || pinCode.length !== 6) {
-                alert('Please enter a valid 6-digit pin code');
-                return;
+                document.getElementById('patientStats').innerHTML = `
+                    <div class="flex justify-between py-2 border-b">
+                        <span class="text-gray-600">Active Patients:</span>
+                        <span class="font-semibold">${stats.active}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b">
+                        <span class="text-gray-600">Recovered:</span>
+                        <span class="font-semibold text-green-600">${stats.recovered}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b">
+                        <span class="text-gray-600">Critical:</span>
+                        <span class="font-semibold text-red-600">${stats.critical}</span>
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <span class="text-gray-600">Avg Age:</span>
+                        <span class="font-semibold">${stats.averageAge} years</span>
+                    </div>
+                `;
             }
-            
-            if (!selectedDisease) {
-                alert('Please select a disease type');
-                return;
-            }
-
-            generatePrediction();
-        });
-
-        function generatePrediction() {
-            const resultsSection = document.getElementById('resultsSection');
-            resultsSection.classList.remove('hidden');
-            resultsSection.scrollIntoView({ behavior: 'smooth' });
-
-            // Populate area details
-            const areaData = pinCodeData[currentPinCode] || {
-                area: 'Sample Area',
-                city: 'Sample City',
-                state: 'Sample State',
-                population: 35000
-            };
-
-            document.getElementById('areaDetails').innerHTML = `
-                <div class="bg-blue-50 p-4 rounded-lg">
-                    <div class="text-sm text-gray-600">Area & District</div>
-                    <div class="font-semibold text-gray-800">${areaData.area}</div>
-                    <div class="text-xs text-gray-500">${areaData.district || 'District info not available'}</div>
-                </div>
-                <div class="bg-green-50 p-4 rounded-lg">
-                    <div class="text-sm text-gray-600">Location</div>
-                    <div class="font-semibold text-gray-800">${areaData.city}, ${areaData.state}</div>
-                    <div class="text-xs text-gray-500">${areaData.coordinates || 'Coordinates not available'}</div>
-                </div>
-                <div class="bg-purple-50 p-4 rounded-lg">
-                    <div class="text-sm text-gray-600">Population</div>
-                    <div class="font-semibold text-gray-800">${areaData.population.toLocaleString()}</div>
-                </div>
-                <div class="bg-yellow-50 p-4 rounded-lg">
-                    <div class="text-sm text-gray-600">Water Sources</div>
-                    <div class="font-semibold text-gray-800 text-sm">${areaData.waterSources || 'Municipal Supply'}</div>
-                </div>
-                <div class="bg-red-50 p-4 rounded-lg">
-                    <div class="text-sm text-gray-600">Risk Factors</div>
-                    <div class="font-semibold text-gray-800 text-sm">${areaData.riskFactors || 'Standard urban risks'}</div>
-                </div>
-            `;
-
-            // Generate prediction data
-            const userCases = document.getElementById('currentCases').value;
-            let currentCases;
-            
-            if (userCases && userCases > 0) {
-                currentCases = parseInt(userCases);
-            } else {
-                const baseRate = Math.random() * 0.1 + 0.02; // 2-12% infection rate
-                currentCases = Math.floor(areaData.population * baseRate);
-            }
-            
-            const predictedCases = Math.floor(currentCases * (1 + Math.random() * 0.5 + 0.1));
-            const riskLevel = predictedCases > currentCases * 1.3 ? 'High' : predictedCases > currentCases * 1.1 ? 'Medium' : 'Low';
-            const riskColor = riskLevel === 'High' ? 'red' : riskLevel === 'Medium' ? 'yellow' : 'green';
-
-            document.getElementById('predictionResults').innerHTML = `
-                <div class="bg-blue-50 p-4 rounded-lg">
-                    <div class="text-sm text-gray-600">Current Cases</div>
-                    <div class="text-2xl font-bold text-blue-600">${currentCases}</div>
-                </div>
-                <div class="bg-orange-50 p-4 rounded-lg">
-                    <div class="text-sm text-gray-600">Predicted Cases (${currentDays} days)</div>
-                    <div class="text-2xl font-bold text-orange-600">${predictedCases}</div>
-                </div>
-                <div class="bg-${riskColor}-50 p-4 rounded-lg">
-                    <div class="text-sm text-gray-600">Risk Level</div>
-                    <div class="text-2xl font-bold text-${riskColor}-600">${riskLevel}</div>
-                </div>
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <div class="text-sm text-gray-600">Growth Rate</div>
-                    <div class="text-2xl font-bold text-gray-600">${((predictedCases - currentCases) / currentCases * 100).toFixed(1)}%</div>
-                </div>
-            `;
-
-            // Generate patient statistics
-            document.getElementById('patientStats').innerHTML = `
-                <div class="flex justify-between py-2 border-b">
-                    <span class="text-gray-600">Active Patients:</span>
-                    <span class="font-semibold">${Math.floor(currentCases * 0.8)}</span>
-                </div>
-                <div class="flex justify-between py-2 border-b">
-                    <span class="text-gray-600">Recovered:</span>
-                    <span class="font-semibold text-green-600">${Math.floor(currentCases * 0.15)}</span>
-                </div>
-                <div class="flex justify-between py-2 border-b">
-                    <span class="text-gray-600">Critical:</span>
-                    <span class="font-semibold text-red-600">${Math.floor(currentCases * 0.05)}</span>
-                </div>
-                <div class="flex justify-between py-2">
-                    <span class="text-gray-600">Avg Age:</span>
-                    <span class="font-semibold">${Math.floor(Math.random() * 20 + 35)} years</span>
-                </div>
-            `;
+        } catch (error) {
+            console.error('Error fetching patient stats:', error);
         }
+    }
 
-        function accessPatientData(dataType) {
-            const modal = document.getElementById('patientModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalContent = document.getElementById('modalContent');
+    function accessPatientData(dataType) {
+        const modal = document.getElementById('patientModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
 
-            let title = '';
-            let content = '';
+        let title = '';
+        let content = '';
 
-            switch(dataType) {
-                case 'demographics':
-                    title = '📋 Patient Demographics Data';
-                    content = `
-                        <div class="grid md:grid-cols-2 gap-4">
-                            <div class="bg-gray-50 p-4 rounded">
-                                <h4 class="font-semibold mb-2">Age Distribution</h4>
-                                <div class="space-y-1 text-sm">
-                                    <div class="flex justify-between"><span>0-18 years:</span><span>15%</span></div>
-                                    <div class="flex justify-between"><span>19-35 years:</span><span>35%</span></div>
-                                    <div class="flex justify-between"><span>36-60 years:</span><span>40%</span></div>
-                                    <div class="flex justify-between"><span>60+ years:</span><span>10%</span></div>
-                                </div>
-                            </div>
-                            <div class="bg-gray-50 p-4 rounded">
-                                <h4 class="font-semibold mb-2">Gender Distribution</h4>
-                                <div class="space-y-1 text-sm">
-                                    <div class="flex justify-between"><span>Male:</span><span>52%</span></div>
-                                    <div class="flex justify-between"><span>Female:</span><span>48%</span></div>
-                                </div>
+        switch(dataType) {
+            case 'demographics':
+                title = '📋 Patient Demographics Data';
+                content = `
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded">
+                            <h4 class="font-semibold mb-2">Age Distribution</h4>
+                            <div class="space-y-1 text-sm">
+                                <div class="flex justify-between"><span>0-18 years:</span><span>15%</span></div>
+                                <div class="flex justify-between"><span>19-35 years:</span><span>35%</span></div>
+                                <div class="flex justify-between"><span>36-60 years:</span><span>40%</span></div>
+                                <div class="flex justify-between"><span>60+ years:</span><span>10%</span></div>
                             </div>
                         </div>
-                        <p class="text-sm text-gray-500 mt-4">⚠️ Demo Data - This is sample patient demographic information for demonstration purposes.</p>
-                    `;
-                    break;
-                case 'symptoms':
-                    title = '🩺 Symptoms Analysis';
-                    content = `
-                        <div class="space-y-4">
-                            <div class="bg-red-50 p-4 rounded">
-                                <h4 class="font-semibold text-red-800 mb-2">Most Common Symptoms</h4>
-                                <div class="grid grid-cols-2 gap-2 text-sm">
-                                    <div>• Fever (85%)</div>
-                                    <div>• Cough (72%)</div>
-                                    <div>• Fatigue (68%)</div>
-                                    <div>• Headache (45%)</div>
-                                </div>
-                            </div>
-                            <div class="bg-yellow-50 p-4 rounded">
-                                <h4 class="font-semibold text-yellow-800 mb-2">Severity Distribution</h4>
-                                <div class="space-y-1 text-sm">
-                                    <div class="flex justify-between"><span>Mild:</span><span>70%</span></div>
-                                    <div class="flex justify-between"><span>Moderate:</span><span>25%</span></div>
-                                    <div class="flex justify-between"><span>Severe:</span><span>5%</span></div>
-                                </div>
+                        <div class="bg-gray-50 p-4 rounded">
+                            <h4 class="font-semibold mb-2">Gender Distribution</h4>
+                            <div class="space-y-1 text-sm">
+                                <div class="flex justify-between"><span>Male:</span><span>52%</span></div>
+                                <div class="flex justify-between"><span>Female:</span><span>48%</span></div>
                             </div>
                         </div>
-                        <p class="text-sm text-gray-500 mt-4">⚠️ Demo Data - This is sample symptoms analysis for demonstration purposes.</p>
-                    `;
-                    break;
-                case 'treatment':
-                    title = '💊 Treatment Records';
-                    content = `
-                        <div class="space-y-4">
-                            <div class="bg-green-50 p-4 rounded">
-                                <h4 class="font-semibold text-green-800 mb-2">Treatment Protocols</h4>
-                                <div class="text-sm space-y-1">
-                                    <div>• Home isolation: 60%</div>
-                                    <div>• Outpatient care: 30%</div>
-                                    <div>• Hospitalization: 10%</div>
-                                </div>
-                            </div>
-                            <div class="bg-blue-50 p-4 rounded">
-                                <h4 class="font-semibold text-blue-800 mb-2">Recovery Rates</h4>
-                                <div class="text-sm space-y-1">
-                                    <div>• Average recovery time: 7-14 days</div>
-                                    <div>• Full recovery rate: 95%</div>
-                                    <div>• Readmission rate: 2%</div>
-                                </div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">⚠ Demo Data - This is sample patient demographic information for demonstration purposes.</p>
+                `;
+                break;
+            case 'symptoms':
+                title = '🩺 Symptoms Analysis';
+                content = `
+                    <div class="space-y-4">
+                        <div class="bg-red-50 p-4 rounded">
+                            <h4 class="font-semibold text-red-800 mb-2">Most Common Symptoms</h4>
+                            <div class="grid grid-cols-2 gap-2 text-sm">
+                                <div>• Fever (85%)</div>
+                                <div>• Cough (72%)</div>
+                                <div>• Fatigue (68%)</div>
+                                <div>• Headache (45%)</div>
                             </div>
                         </div>
-                        <p class="text-sm text-gray-500 mt-4">⚠️ Demo Data - This is sample treatment data for demonstration purposes.</p>
-                    `;
-                    break;
-            }
-
-            modalTitle.textContent = title;
-            modalContent.innerHTML = content;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+                        <div class="bg-yellow-50 p-4 rounded">
+                            <h4 class="font-semibold text-yellow-800 mb-2">Severity Distribution</h4>
+                            <div class="space-y-1 text-sm">
+                                <div class="flex justify-between"><span>Mild:</span><span>70%</span></div>
+                                <div class="flex justify-between"><span>Moderate:</span><span>25%</span></div>
+                                <div class="flex justify-between"><span>Severe:</span><span>5%</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">⚠ Demo Data - This is sample symptoms analysis for demonstration purposes.</p>
+                `;
+                break;
+            case 'treatment':
+                title = '💊 Treatment Records';
+                content = `
+                    <div class="space-y-4">
+                        <div class="bg-green-50 p-4 rounded">
+                            <h4 class="font-semibold text-green-800 mb-2">Treatment Protocols</h4>
+                            <div class="text-sm space-y-1">
+                                <div>• Home isolation: 60%</div>
+                                <div>• Outpatient care: 30%</div>
+                                <div>• Hospitalization: 10%</div>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded">
+                            <h4 class="font-semibold text-blue-800 mb-2">Recovery Rates</h4>
+                            <div class="text-sm space-y-1">
+                                <div>• Average recovery time: 7-14 days</div>
+                                <div>• Full recovery rate: 95%</div>
+                                <div>• Readmission rate: 2%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">⚠ Demo Data - This is sample treatment data for demonstration purposes.</p>
+                `;
+                break;
         }
 
-        function closeModal() {
-            const modal = document.getElementById('patientModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
+        modalTitle.textContent = title;
+        modalContent.innerHTML = content;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
 
-        // Close modal when clicking outside
-        document.getElementById('patientModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-    </script>
+    function closeModal() {
+        const modal = document.getElementById('patientModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('patientModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+</script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97bd170920a73b34',t:'MTc1NzMyMDI5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

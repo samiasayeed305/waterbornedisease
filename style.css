@@ -222,6 +222,10 @@ body {
     background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
 }
 
+.patient-gradient {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
 .feature-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -256,7 +260,7 @@ body {
 
 @keyframes blink {
     from, to { border-color: transparent }
-    50% { border-color: #667eea; }
+   50% { border-color: #667eea; }
 }
 
 .modal-backdrop {

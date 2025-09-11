@@ -25,7 +25,8 @@ const translations = {
         roleDescription: "Select your role to access the appropriate dashboard and tools",
         asha: "ASHA Worker",
         volunteer: "Community Volunteer",
-        admin: "Health Administrator"
+        admin: "Health Administrator",
+        patient: "Patient"
     },
     as: {
         title: "স্মাৰ্ট সম্প্ৰদায়িক স্বাস্থ্য নিৰীক্ষণ ব্যৱস্থা",
@@ -35,7 +36,8 @@ const translations = {
         roleDescription: "উপযুক্ত ডেছবৰ্ড আৰু সঁজুলি ব্যৱহাৰ কৰিবলৈ আপোনাৰ ভূমিকা নিৰ্বাচন কৰক",
         asha: "আশা কৰ্মী",
         volunteer: "সম্প্ৰদায়িক স্বেচ্ছাসেৱক",
-        admin: "স্বাস্থ্য প্ৰশাসক"
+        admin: "স্বাস্থ্য প্ৰশাসক",
+        patient: "ৰোগী"
     },
     bn: {
         title: "স্মার্ট কমিউনিটি স্বাস্থ্য পর্যবেক্ষণ সিস্টেম",
@@ -45,7 +47,8 @@ const translations = {
         roleDescription: "উপযুক্ত ড্যাশবোর্ড এবং সরঞ্জাম অ্যাক্সেস করতে আপনার ভূমিকা নির্বাচন করুন",
         asha: "আশা কর্মী",
         volunteer: "কমিউনিটি স্বেচ্ছাসেবক",
-        admin: "স্বাস্থ্য প্রশাসক"
+        admin: "স্বাস্থ্য প্রশাসক",
+        patient: "রোগী"
     },
     hi: {
         title: "स्मार्ट सामुदायिक स्वास्थ्य निगरानी प्रणाली",
@@ -55,7 +58,8 @@ const translations = {
         roleDescription: "उपयुक्त डैशबोर्ड और उपकरणों तक पहुंचने के लिए अपनी भूमिका का चयन करें",
         asha: "आशा कार्यकर्ता",
         volunteer: "सामुदायिक स्वयंसेवक",
-        admin: "स्वास्थ्य प्रशासक"
+        admin: "स्वास्थ्य प्रशासक",
+        patient: "रोगी"
     }
 };
 
@@ -123,10 +127,11 @@ function showLoginModal(role) {
     const roleNames = {
         asha: 'ASHA Worker',
         volunteer: 'Community Volunteer',
-        admin: 'Health Administrator'
+        admin: 'Health Administrator',
+        patient: 'Patient'
     };
     
-    title.textContent = `Login as ${roleNames[role]}`;
+    title.textContent = Login as ${roleNames[role]};
     
     content.innerHTML = `
         <form class="space-y-4" onsubmit="handleLogin(event)">
@@ -154,7 +159,7 @@ function showLoginModal(role) {
                 </button>
                 <div class="text-center">
                     <span class="text-sm text-gray-600 dark:text-gray-400">Don't have an account? </span>
-                    <button type="button" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300" onclick="showRegistrationInfo()">
+                    <button type="button" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300" onclick="showRegistrationInfo('${role}')">
                         Request Access
                     </button>
                 </div>
@@ -173,7 +178,7 @@ function showLoginModal(role) {
     createIconsSafely();
 }
 
-// Handle login
+// Handle login - UPDATED TO REDIRECT TO APPROPRIATE DASHBOARDS
 function handleLogin(event) {
     event.preventDefault();
     
@@ -183,16 +188,36 @@ function handleLogin(event) {
     setTimeout(() => {
         document.getElementById('success-modal').classList.add('hidden');
         
-        // Redirect to the patient dashboard after successful login.
-        window.location.href = 'ashaworker.html';
-
+        // Redirect to the appropriate dashboard after successful login
+        if (currentRole === 'patient') {
+            window.location.href = 'pd.html';
+        } else if (currentRole === 'asha') {
+            window.location.href = 'ashaworker.html';
+        } else if (currentRole === 'volunteer') {
+            window.location.href = 'cd.html';
+        } else if (currentRole === 'admin') {
+            // Redirect to Health Administrator dashboard
+            window.location.href = 'had.html';
+        }
     }, 3000);
 }
 
-// **MODIFIED FUNCTION**
-// This now redirects to the registration page (`uy.html`)
-function showRegistrationInfo() {
-    window.location.href = 'uy.html';
+// Show registration info - UPDATED TO INCLUDE ADMIN REDIRECTION
+function showRegistrationInfo(role) {
+    // Close the login modal first
+    closeModal();
+    
+    // Redirect based on role
+    if (role === 'volunteer') {
+        // Redirect to Community Volunteer registration page
+        window.location.href = 'cv.html';
+    } else if (role === 'admin') {
+        // Redirect to Health Administrator registration page
+        window.location.href = 'uy1ha.html';
+    } else {
+        // For other roles, show an alert
+        alert(To request access as a ${role}, please contact your local health administrator.);
+    }
 }
 
 // Close modal
@@ -224,7 +249,7 @@ function changeLanguage(lang) {
 
 function updatePageContent() {
     // This is a simplified example. In a real app, you'd translate all necessary text.
-    console.log(`Language changed to ${currentLanguage}`);
+    console.log(Language changed to ${currentLanguage});
 }
 
 function setupTypingAnimation() {
