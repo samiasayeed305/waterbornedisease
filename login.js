@@ -21,6 +21,8 @@ let currentRole = '';
 const translations = {
     en: {
         // ... (previous keys are still here)
+        headerTitle: "SAMAJ HEALTH SURAKSHA",
+        headerSubtitle: "Northeast India Health Initiative",
         title: "SAMAJ HEALTH SURAKSHA Monitoring System",
         subtitle: "Early Warning System for Water-Borne Diseases in Rural Northeast India",
         tagline: "Protecting Communities • Preventing Disease • Promoting Health",
@@ -76,6 +78,8 @@ const translations = {
     },
     as: {
         // ... (previous keys)
+        headerTitle: "সমাজ স্বাস্থ্য সুৰক্ষা",
+        headerSubtitle: "উত্তৰ-পূৰ্ব ভাৰত স্বাস্থ্য উদ্যোগ",
         title: "সমাজ স্বাস্থ্য সুৰক্ষা নিৰীক্ষণ ব্যৱস্থা",
         subtitle: "গ্ৰাম্য উত্তৰ-পূৰ্ব ভাৰতত পানীবাহিত ৰোগৰ বাবে আগতীয়া সতৰ্কবাণী ব্যৱস্থা",
         tagline: "সম্প্ৰদায় সুৰক্ষা • ৰোগ প্ৰতিৰোধ • স্বাস্থ্য প্ৰসাৰ",
@@ -130,6 +134,8 @@ const translations = {
     },
     bn: {
         // ... (all previous bn keys)
+        headerTitle: "সমাজ স্বাস্থ্য সুরক্ষা",
+        headerSubtitle: "উত্তর-পূর্ব ভারত স্বাস্থ্য উদ্যোগ",
         title: "সমাজ স্বাস্থ্য সুরক্ষা পর্যবেক্ষণ সিস্টেম",
         subtitle: "গ্রামীণ উত্তর-পূর্ব ভারতে পানিবাহিত রোগের জন্য প্রাথমিক সতর্কতা সিস্টেম",
         tagline: "সম্প্রদায় সুরক্ষা • রোগ প্রতিরোধ • স্বাস্থ্য প্রচার",
@@ -184,6 +190,8 @@ const translations = {
     },
     hi: {
         // ... (all previous hi keys)
+        headerTitle: "समाज स्वास्थ्य सुरक्षा",
+        headerSubtitle: "उत्तर-पूर्व भारत स्वास्थ्य पहल",
         title: "समाज स्वास्थ्य सुरक्षा निगरानी प्रणाली",
         subtitle: "ग्रामीण उत्तर-पूर्व भारत में जल-जनित रोगों के लिए प्रारंभिक चेतावनी प्रणाली",
         tagline: "समुदाय सुरक्षा • रोग रोकथाम • स्वास्थ्य संवर्धन",
@@ -381,7 +389,15 @@ function showRegistrationInfo(role) {
         window.location.href = 'cv.html';
     } else if (role === 'admin') {
         window.location.href = 'uy1ha.html';
-    } else {
+    } 
+    else if (role === 'asha'){
+        window.location.href = 'uy.html'
+    }
+    else if(role === 'patient'){
+        window.location.href = ''
+
+    }
+        else {
         alert(`To request access as a ${role}, please contact your local health administrator.`);
     }
 }
@@ -430,6 +446,10 @@ function updatePageContent() {
             element.textContent = text;
         }
     };
+
+    // ✅ Update header section
+    setText('#header-title', t.headerTitle);
+    setText('#header-subtitle', t.headerSubtitle);
 
     // Update main heading (retains the gradient span)
     const mainHeading = document.getElementById('main-heading');
