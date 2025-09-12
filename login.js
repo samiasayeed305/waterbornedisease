@@ -74,7 +74,20 @@ const translations = {
         patient_item2: "Symptom Reporting",
         patient_item3: "Test Results",
         patient_item4: "Provider Communication",
-        patient_button: "Login as Patient"
+        patient_button: "Login as Patient",
+
+           // NEW KEYS FOR LOGIN MODAL
+        login_title: "Login as {role}",
+        user_id_label: "User ID / Email",
+        user_id_placeholder: "Enter your user ID or email",
+        password_label: "Password",
+        password_placeholder: "Enter your password",
+        remember_me: "Remember me",
+        forgot_password: "Forgot password?",
+        login_button: "Login to Dashboard",
+        no_account: "Don't have an account? ",
+        request_access: "Request Access",
+        security_note: "For security, all access is managed by your district health administrator. Contact your supervisor for login credentials."
     },
     as: {
         // ... (previous keys)
@@ -130,7 +143,20 @@ const translations = {
         patient_item2: "লক্ষণ জনোৱা",
         patient_item3: "পৰীক্ষাৰ ফলাফল",
         patient_item4: "প্ৰদানকাৰীৰ সৈতে যোগাযোগ",
-        patient_button: "ৰোগী হিচাপে লগইন কৰক"
+        patient_button: "ৰোগী হিচাপে লগইন কৰক",
+
+          // NEW KEYS FOR LOGIN MODAL
+        login_title: "{role} হিচাপে লগইন কৰক",
+        user_id_label: "ব্যৱহাৰকাৰী ID / ইমেইল",
+        user_id_placeholder: "আপোনাৰ ব্যৱহাৰকাৰী ID বা ইমেইল সুমুৱাওক",
+        password_label: "পাছৱৰ্ড",
+        password_placeholder: "আপোনাৰ পাছৱৰ্ড সুমুৱাওক",
+        remember_me: "মোক মনত ৰাখক",
+        forgot_password: "পাছৱৰ্ড পাহৰিলে?",
+        login_button: "ডেশ্ববৰ্ডত লগইন কৰক",
+        no_account: "একাউণ্ট নাই? ",
+        request_access: "প্ৰৱেশৰ বাবে অনুৰোধ কৰক",
+        security_note: "সুৰক্ষাৰ বাবে, সকলো প্ৰৱেশ আপোনাৰ জিলাৰ স্বাস্থ্য প্ৰশাসকৰ দ্বাৰা পৰিচালিত হয়। লগইন কৰ্ডেনচিয়েলবোৰৰ বাবে আপোনাৰ উপৰিদৰ্শকৰ সৈতে যোগাযোগ কৰক।"
     },
     bn: {
         // ... (all previous bn keys)
@@ -186,7 +212,20 @@ const translations = {
         patient_item2: "উপসর্গ রিপোর্টিং",
         patient_item3: "পরীক্ষার ফলাফল",
         patient_item4: "প্রদানকারী যোগাযোগ",
-        patient_button: "রোগী হিসাবে লগইন করুন"
+        patient_button: "রোগী হিসাবে লগইন করুন",
+
+          // NEW KEYS FOR LOGIN MODAL
+        login_title: "{role} হিসাবে লগইন করুন",
+        user_id_label: "ব্যবহারকারী আইডি / ইমেল",
+        user_id_placeholder: "আপনার ব্যবহারকারী আইডি বা ইমেল প্রবেশ করুন",
+        password_label: "পাসওয়ার্ড",
+        password_placeholder: "আপনার পাসওয়ার্ড প্রবেশ করুন",
+        remember_me: "আমাকে মনে রাখুন",
+        forgot_password: "পাসওয়ার্ড ভুলে গেছেন?",
+        login_button: "ড্যাশবোর্ডে লগইন করুন",
+        no_account: "অ্যাকাউন্ট নেই? ",
+        request_access: "অ্যাক্সেসের জন্য অনুরোধ করুন",
+        security_note: "সুরক্ষার জন্য, সমস্ত অ্যাক্সেস আপনার জেলার স্বাস্থ্য প্রশাসক দ্বারা পরিচালিত হয়। লগইন পরিচয়পত্রের জন্য আপনার সুপারভাইজারের সাথে যোগাযোগ করুন।"
     },
     hi: {
         // ... (all previous hi keys)
@@ -242,7 +281,22 @@ const translations = {
         patient_item2: "लक्षण रिपोर्टिंग",
         patient_item3: "परीक्षा परिणाम",
         patient_item4: "प्रदाता संचार",
-        patient_button: "रोगी के रूप में लॉगिन करें"
+        patient_button: "रोगी के रूप में लॉगिन करें",
+
+         // NEW KEYS FOR LOGIN MODAL
+        login_title: "{role} के रूप में लॉगिन करें",
+        user_id_label: "यूजर आईडी / ईमेल",
+        user_id_placeholder: "अपना यूजर आईडी या ईमेल दर्ज करें",
+        password_label: "पासवर्ड",
+        password_placeholder: "अपना पासवर्ड दर्ज करें",
+        remember_me: "मुझे याद रखें",
+        forgot_password: "पासवर्ड भूल गए?",
+        login_button: "डैशबोर्ड में लॉगिन करें",
+        no_account: "खाता नहीं है? ",
+        request_access: "एक्सेस के लिए अनुरोध करें",
+        security_note: "सुरक्षा के लिए, सभी एक्सेस आपके जिला स्वास्थ्य प्रशासक द्वारा प्रबंधित किए जाते हैं। लॉगिन क्रेडेंशियल्स के लिए अपने पर्यवेक्षक से संपर्क करें।"
+
+       
     }
 };
 
@@ -306,43 +360,45 @@ function showLoginModal(role) {
     const title = document.getElementById('modal-title');
     const content = document.getElementById('modal-content');
     
+    const t = translations[currentLanguage];
     const roleNames = {
-        asha: 'ASHA Worker',
-        volunteer: 'Community Volunteer',
-        admin: 'Health Administrator',
-        patient: 'Patient'
+        asha: t.asha,
+        volunteer: t.volunteer,
+        admin: t.admin,
+        patient: t.patient
     };
     
-    title.textContent = `Login as ${roleNames[role]}`;
+    // Use the translated login title with role placeholder
+    title.textContent = t.login_title.replace('{role}', roleNames[role]);
     
     content.innerHTML = `
         <form class="space-y-4" onsubmit="handleLogin(event)">
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">User ID / Email</label>
-                <input type="text" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Enter your user ID or email">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">${t.user_id_label}</label>
+                <input type="text" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="${t.user_id_placeholder}">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
-                <input type="password" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Enter your password">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">${t.password_label}</label>
+                <input type="password" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="${t.password_placeholder}">
             </div>
             <div class="flex items-center justify-between">
                 <label class="flex items-center gap-2">
                     <input type="checkbox" class="text-blue-600 rounded">
-                    <span class="text-sm text-gray-600 dark:text-gray-400">Remember me</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">${t.remember_me}</span>
                 </label>
                 <button type="button" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
-                    Forgot password?
+                    ${t.forgot_password}
                 </button>
             </div>
             <div class="space-y-3 pt-4">
                 <button type="submit" class="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium">
                     <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i>
-                    Login to Dashboard
+                    ${t.login_button}
                 </button>
                 <div class="text-center">
-                    <span class="text-sm text-gray-600 dark:text-gray-400">Don't have an account? </span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">${t.no_account}</span>
                     <button type="button" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300" onclick="showRegistrationInfo('${role}')">
-                        Request Access
+                        ${t.request_access}
                     </button>
                 </div>
             </div>
@@ -350,8 +406,7 @@ function showLoginModal(role) {
         
         <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
             <p class="text-xs text-gray-500 dark:text-gray-400 text-center">
-                For security, all access is managed by your district health administrator. 
-                Contact your supervisor for login credentials.
+                ${t.security_note}
             </p>
         </div>
     `;
