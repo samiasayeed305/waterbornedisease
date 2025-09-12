@@ -56,16 +56,16 @@
     <main class="container mx-auto px-6 py-12">
         <section class="text-center mb-16 animate-fade-in">
             <div class="max-w-4xl mx-auto">
-                <h1 id="main-heading" class="text-4xl md:text-6xl font-bold text-white mb-6">
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
                     Smart Community Health
                     <span class="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300">
                         Monitoring System
                     </span>
                 </h1>
-                <p id="sub-heading" class="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+                <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
                     Early Warning System for Water-Borne Diseases in Rural Northeast India
                 </p>
-                <div id="tagline" class="text-lg text-white/80 typing-animation overflow-hidden whitespace-nowrap mx-auto">
+                <div class="text-lg text-white/80 typing-animation overflow-hidden whitespace-nowrap max-w-md mx-auto">
                     Protecting Communities • Preventing Disease • Promoting Health
                 </div>
             </div>
@@ -73,8 +73,8 @@
 
         <section class="mb-16">
             <div class="text-center mb-12">
-                <h2 id="choose-role-heading" class="text-3xl font-bold text-white mb-4">Choose Your Role</h2>
-                <p id="role-description" class="text-white/80 text-lg">Select your role to access the appropriate dashboard and tools</p>
+                <h2 class="text-3xl font-bold text-white mb-4">Choose Your Role</h2>
+                <p class="text-white/80 text-lg">Select your role to access the appropriate dashboard and tools</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
@@ -82,18 +82,20 @@
                     <div class="role-icon asha-gradient">
                         <i data-lucide="user-check" class="w-8 h-8 text-white"></i>
                     </div>
-                    <h3 data-role-title="asha" class="text-2xl font-bold text-gray-900 dark:text-white mb-3">ASHA Worker</h3>
-                    <p data-role-desc="asha" class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">ASHA Worker</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
                         Access health monitoring tools, community data, and coordinate with volunteers for disease prevention and health awareness.
                     </p>
+                    
                     <div class="space-y-2 mb-6 text-left">
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="asha-1">Health Data Management</span></div>
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="asha-2">Community Coordination</span></div>
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="asha-3">Emergency Response</span></div>
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="asha-4">Training Resources</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>Health Data Management</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>Community Coordination</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>Emergency Response</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>Training Resources</span></div>
                     </div>
+                    
                     <button class="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium transform hover:scale-105 pulse-glow" onclick="showLoginModal('asha')">
-                        <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i><span data-role-button="asha">Login as ASHA Worker</span>
+                        <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i>Login as ASHA Worker
                     </button>
                 </div>
 
@@ -101,18 +103,20 @@
                     <div class="role-icon volunteer-gradient">
                         <i data-lucide="users" class="w-8 h-8 text-white"></i>
                     </div>
-                    <h3 data-role-title="volunteer" class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Community Volunteer</h3>
-                    <p data-role-desc="volunteer" class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Community Volunteer</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
                         Report water sources, conduct awareness campaigns, collect community feedback, and communicate with ASHA workers.
                     </p>
+                    
                     <div class="space-y-2 mb-6 text-left">
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="volunteer-1">Water Source Reporting</span></div>
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="volunteer-2">Awareness Campaigns</span></div>
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="volunteer-3">Community Feedback</span></div>
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="volunteer-4">Direct Communication</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>Water Source Reporting</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>Awareness Campaigns</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>Community Feedback</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>Direct Communication</span></div>
                     </div>
+                    
                     <button class="w-full px-6 py-3 bg-gradient-to-r from-pink-600 to-red-600 text-white rounded-xl hover:from-pink-700 hover:to-red-700 transition-all duration-300 font-medium transform hover:scale-105 pulse-glow" onclick="showLoginModal('volunteer')">
-                        <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i><span data-role-button="volunteer">Login as Volunteer</span>
+                        <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i>Login as Volunteer
                     </button>
                 </div>
 
@@ -120,37 +124,42 @@
                     <div class="role-icon admin-gradient">
                         <i data-lucide="shield-check" class="w-8 h-8 text-white"></i>
                     </div>
-                    <h3 data-role-title="admin" class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Health Administrator</h3>
-                    <p data-role-desc="admin" class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Health Administrator</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
                         Monitor district-wide health data, manage resources, coordinate responses, and oversee system operations.
                     </p>
+                    
                     <div class="space-y-2 mb-6 text-left">
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="admin-1">District-wide Analytics</span></div>
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="admin-2">Resource Management</span></div>
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="admin-3">Policy Implementation</span></div>
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="admin-4">System Administration</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>District-wide Analytics</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>Resource Management</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>Policy Implementation</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>System Administration</span></div>
                     </div>
+                    
                     <button class="w-full px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl hover:from-cyan-700 hover:to-blue-700 transition-all duration-300 font-medium transform hover:scale-105 pulse-glow" onclick="showLoginModal('admin')">
-                        <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i><span data-role-button="admin">Login as Administrator</span>
+                        <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i>Login as Administrator
                     </button>
                 </div>
 
+                <!-- New Patient Card -->
                 <div class="login-card glass-effect rounded-2xl p-8 text-center card-hover animate-fade-in stagger-animation" style="--delay: 0.8s;">
                     <div class="role-icon patient-gradient">
                         <i data-lucide="user" class="w-8 h-8 text-white"></i>
                     </div>
-                    <h3 data-role-title="patient" class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Patient</h3>
-                    <p data-role-desc="patient" class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Patient</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
                         Access your health records, report symptoms, view test results, and communicate with healthcare providers.
                     </p>
+                    
                     <div class="space-y-2 mb-6 text-left">
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="patient-1">Health Record Access</span></div>
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="patient-2">Symptom Reporting</span></div>
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="patient-3">Test Results</span></div>
-                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span data-role-item="patient-4">Provider Communication</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>Health Record Access</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>Symptom Reporting</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>Test Results</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span>Provider Communication</span></div>
                     </div>
+                    
                     <button class="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-teal-600 text-white rounded-xl hover:from-green-700 hover:to-teal-700 transition-all duration-300 font-medium transform hover:scale-105 pulse-glow" onclick="showLoginModal('patient')">
-                        <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i><span data-role-button="patient">Login as Patient</span>
+                        <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i>Login as Patient
                     </button>
                 </div>
             </div>
@@ -158,41 +167,17 @@
 
         <section class="mb-16 animate-fade-in">
             <div class="text-center mb-12">
-                <h2 id="features-title" class="text-3xl font-bold text-white mb-4">System Features</h2>
-                <p id="features-description" class="text-white/80 text-lg">Comprehensive tools for community health monitoring and disease prevention</p>
+                <h2 class="text-3xl font-bold text-white mb-4">System Features</h2>
+                <p class="text-white/80 text-lg">Comprehensive tools for community health monitoring and disease prevention</p>
             </div>
             
             <div class="feature-grid max-w-6xl mx-auto">
-                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.1s;">
-                    <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i data-lucide="droplets" class="w-6 h-6 text-blue-300"></i></div>
-                    <h3 data-feature-title="1" class="text-lg font-semibold text-white mb-2">Water Quality Monitoring</h3>
-                    <p data-feature-desc="1" class="text-white/70 text-sm">Real-time tracking and reporting of water source safety across communities</p>
-                </div>
-                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.2s;">
-                    <div class="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i data-lucide="alert-triangle" class="w-6 h-6 text-red-300"></i></div>
-                    <h3 data-feature-title="2" class="text-lg font-semibold text-white mb-2">Early Warning System</h3>
-                    <p data-feature-desc="2" class="text-white/70 text-sm">Automated alerts for disease outbreaks and contamination events</p>
-                </div>
-                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.3s;">
-                    <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i data-lucide="users" class="w-6 h-6 text-green-300"></i></div>
-                    <h3 data-feature-title="3" class="text-lg font-semibold text-white mb-2">Community Engagement</h3>
-                    <p data-feature-desc="3" class="text-white/70 text-sm">Tools for awareness campaigns and community feedback collection</p>
-                </div>
-                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.4s;">
-                    <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i data-lucide="bar-chart-3" class="w-6 h-6 text-purple-300"></i></div>
-                    <h3 data-feature-title="4" class="text-lg font-semibold text-white mb-2">Data Analytics</h3>
-                    <p data-feature-desc="4" class="text-white/70 text-sm">Comprehensive health data analysis and trend identification</p>
-                </div>
-                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.5s;">
-                    <div class="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i data-lucide="smartphone" class="w-6 h-6 text-yellow-300"></i></div>
-                    <h3 data-feature-title="5" class="text-lg font-semibold text-white mb-2">Mobile Accessibility</h3>
-                    <p data-feature-desc="5" class="text-white/70 text-sm">Responsive design for access on any device, anywhere</p>
-                </div>
-                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.6s;">
-                    <div class="w-12 h-12 bg-indigo-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i data-lucide="globe" class="w-6 h-6 text-indigo-300"></i></div>
-                    <h3 data-feature-title="6" class="text-lg font-semibold text-white mb-2">Multi-language Support</h3>
-                    <p data-feature-desc="6" class="text-white/70 text-sm">Available in local languages for better community reach</p>
-                </div>
+                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.1s;"><div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i data-lucide="droplets" class="w-6 h-6 text-blue-300"></i></div><h3 class="text-lg font-semibold text-white mb-2">Water Quality Monitoring</h3><p class="text-white/70 text-sm">Real-time tracking and reporting of water source safety across communities</p></div>
+                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.2s;"><div class="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i data-lucide="alert-triangle" class="w-6 h-6 text-red-300"></i></div><h3 class="text-lg font-semibold text-white mb-2">Early Warning System</h3><p class="text-white/70 text-sm">Automated alerts for disease outbreaks and contamination events</p></div>
+                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.3s;"><div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i data-lucide="users" class="w-6 h-6 text-green-300"></i></div><h3 class="text-lg font-semibold text-white mb-2">Community Engagement</h3><p class="text-white/70 text-sm">Tools for awareness campaigns and community feedback collection</p></div>
+                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.4s;"><div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i data-lucide="bar-chart-3" class="w-6 h-6 text-purple-300"></i></div><h3 class="text-lg font-semibold text-white mb-2">Data Analytics</h3><p class="text-white/70 text-sm">Comprehensive health data analysis and trend identification</p></div>
+                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.5s;"><div class="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i data-lucide="smartphone" class="w-6 h-6 text-yellow-300"></i></div><h3 class="text-lg font-semibold text-white mb-2">Mobile Accessibility</h3><p class="text-white/70 text-sm">Responsive design for access on any device, anywhere</p></div>
+                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.6s;"><div class="w-12 h-12 bg-indigo-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i data-lucide="globe" class="w-6 h-6 text-indigo-300"></i></div><h3 class="text-lg font-semibold text-white mb-2">Multi-language Support</h3><p class="text-white/70 text-sm">Available in local languages for better community reach</p></div>
             </div>
         </section>
     </main>
@@ -200,7 +185,7 @@
     <footer class="text-center py-8 text-white/70">
         <div class="container mx-auto px-6">
             <p class="mb-2">© 2025 Smart Community Health Monitoring System</p>
-            <p class="text-sm">Developed By AJU Students for Rural Northeast India • Protecting Communities Through Technology</p>
+            <p class="text-sm">Developed for Rural Northeast India • Protecting Communities Through Technology</p>
             <div class="flex justify-center gap-4 mt-4">
                 <button class="hover:text-white transition-colors">Privacy Policy</button>
                 <button class="hover:text-white transition-colors">Terms of Service</button>

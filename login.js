@@ -16,8 +16,11 @@ let currentLanguage = 'en';
 let currentRole = '';
 
 // Language translations
+
+
 const translations = {
     en: {
+        // ... (previous keys are still here)
         title: "Smart Community Health Monitoring System",
         subtitle: "Early Warning System for Water-Borne Diseases in Rural Northeast India",
         tagline: "Protecting Communities • Preventing Disease • Promoting Health",
@@ -26,9 +29,53 @@ const translations = {
         asha: "ASHA Worker",
         volunteer: "Community Volunteer",
         admin: "Health Administrator",
-        patient: "Patient"
+        patient: "Patient",
+        featuresTitle: "System Features",
+        featuresDescription: "Comprehensive tools for community health monitoring and disease prevention",
+        feature1_title: "Water Quality Monitoring",
+        feature1_desc: "Real-time tracking and reporting of water source safety across communities",
+        feature2_title: "Early Warning System",
+        feature2_desc: "Automated alerts for disease outbreaks and contamination events",
+        feature3_title: "Community Engagement",
+        feature3_desc: "Tools for awareness campaigns and community feedback collection",
+        feature4_title: "Data Analytics",
+        feature4_desc: "Comprehensive health data analysis and trend identification",
+        feature5_title: "Mobile Accessibility",
+        feature5_desc: "Responsive design for access on any device, anywhere",
+        feature6_title: "Multi-language Support",
+        feature6_desc: "Available in local languages for better community reach",
+
+        // ADD ALL THE NEW KEYS BELOW
+        asha_desc: "Access health monitoring tools, community data, and coordinate with volunteers for disease prevention and health awareness.",
+        asha_item1: "Health Data Management",
+        asha_item2: "Community Coordination",
+        asha_item3: "Emergency Response",
+        asha_item4: "Training Resources",
+        asha_button: "Login as ASHA Worker",
+
+        volunteer_desc: "Report water sources, conduct awareness campaigns, collect community feedback, and communicate with ASHA workers.",
+        volunteer_item1: "Water Source Reporting",
+        volunteer_item2: "Awareness Campaigns",
+        volunteer_item3: "Community Feedback",
+        volunteer_item4: "Direct Communication",
+        volunteer_button: "Login as Volunteer",
+
+        admin_desc: "Monitor district-wide health data, manage resources, coordinate responses, and oversee system operations.",
+        admin_item1: "District-wide Analytics",
+        admin_item2: "Resource Management",
+        admin_item3: "Policy Implementation",
+        admin_item4: "System Administration",
+        admin_button: "Login as Administrator",
+
+        patient_desc: "Access your health records, report symptoms, view test results, and communicate with healthcare providers.",
+        patient_item1: "Health Record Access",
+        patient_item2: "Symptom Reporting",
+        patient_item3: "Test Results",
+        patient_item4: "Provider Communication",
+        patient_button: "Login as Patient"
     },
     as: {
+        // ... (previous keys)
         title: "স্মাৰ্ট সম্প্ৰদায়িক স্বাস্থ্য নিৰীক্ষণ ব্যৱস্থা",
         subtitle: "গ্ৰাম্য উত্তৰ-পূৰ্ব ভাৰতত পানীবাহিত ৰোগৰ বাবে আগতীয়া সতৰ্কবাণী ব্যৱস্থা",
         tagline: "সম্প্ৰদায় সুৰক্ষা • ৰোগ প্ৰতিৰোধ • স্বাস্থ্য প্ৰসাৰ",
@@ -37,9 +84,52 @@ const translations = {
         asha: "আশা কৰ্মী",
         volunteer: "সম্প্ৰদায়িক স্বেচ্ছাসেৱক",
         admin: "স্বাস্থ্য প্ৰশাসক",
-        patient: "ৰোগী"
+        patient: "ৰোগী",
+        featuresTitle: "চিস্টেমৰ বৈশিষ্ট্যসমূহ",
+        featuresDescription: "সামূহিক স্বাস্থ্য নিৰীক্ষণ আৰু ৰোগ প্ৰতিৰোধৰ বাবে ব্যাপক সঁজুলি",
+        feature1_title: "পানীৰ গুণগত মান নিৰীক্ষণ",
+        feature1_desc: "সমুদায়সমূহত পানীৰ উৎসৰ সুৰক্ষাৰ বাস্তৱ-সময়ত ট্ৰেকিং আৰু প্ৰতিবেদন",
+        feature2_title: "আগতীয়া সতৰ্কবাণী ব্যৱস্থা",
+        feature2_desc: "ৰোগৰ সংক্ৰমণ আৰু সংক্ৰমণৰ ঘটনাৰ বাবে স্বয়ংক্ৰিয় সতৰ্কবাণী",
+        feature3_title: "সামূহিক অংশগ্ৰহণ",
+        feature3_desc: "সজাগতা অভিযান আৰু সামূহিক মতামত সংগ্ৰহৰ বাবে সঁজুলি",
+        feature4_title: "তথ্য বিশ্লেষণ",
+        feature4_desc: "ব্যাপক স্বাস্থ্য তথ্য বিশ্লেষণ আৰু প্ৰවণতা চিনাক্তকৰণ",
+        feature5_title: "মোবাইলত উপলব্ধতা",
+        feature5_desc: "যিকোনো ডিভাইচত, যিকোনো ঠাইতে ব্যৱহাৰৰ বাবে দায়বদ্ধ ডিজাইন",
+        feature6_title: "বহুভাষিক সমৰ্থন",
+        feature6_desc: "উন্নত সামূহিক প্ৰসাৰৰ বাবে স্থানীয় ভাষাত উপলব্ধ",
+
+        asha_desc: "স্বাস্থ্য নিৰীক্ষণ সঁজুলি, সম্প্ৰদায়ৰ তথ্য ব্যৱহাৰ কৰক, আৰু ৰোগ প্ৰতিৰোধ আৰু স্বাস্থ্য সজাগতাৰ বাবে স্বেচ্ছাসেৱকৰ সৈতে সমন্বয় কৰক।",
+        asha_item1: "স্বাস্থ্য তথ্য ব্যৱস্থাপনা",
+        asha_item2: "সম্প্ৰদায় সমন্বয়",
+        asha_item3: "জৰুৰীকালীন সঁহাৰি",
+        asha_item4: "প্ৰশিক্ষণ সম্পদ",
+        asha_button: "আশা কৰ্মী হিচাপে লগইন কৰক",
+
+        volunteer_desc: "পানীৰ উৎসৰ প্ৰতিবেদন দিয়ক, সজাগতা অভিযান চলাওক, সম্প্ৰদায়ৰ মতামত সংগ্ৰহ কৰক, আৰু আশা কৰ্মীৰ সৈতে যোগাযোগ কৰক।",
+        volunteer_item1: "পানীৰ উৎসৰ প্ৰতিবেদন",
+        volunteer_item2: "সজাগতা অভিযান",
+        volunteer_item3: "সম্প্ৰদায়ৰ মতামত",
+        volunteer_item4: "পোনপটীয়া যোগাযোগ",
+        volunteer_button: "স্বেচ্ছাসেৱক হিচাপে লগইন কৰক",
+
+        admin_desc: "জিলাব্যাপী স্বাস্থ্য তথ্য নিৰীক্ষণ কৰক, সম্পদ ব্যৱস্থাপনা কৰক, সঁহাৰি সমন্বয় কৰক, আৰু চিস্টেমৰ কাৰ্য্যকলাপ নিৰীক্ষণ কৰক।",
+        admin_item1: "জিলাব্যাপী বিশ্লেষণ",
+        admin_item2: "সম্পদ ব্যৱস্থাপনা",
+        admin_item3: "নীতি ৰূপায়ণ",
+        admin_item4: "চিস্টেম প্ৰশাসন",
+        admin_button: "প্ৰশাসক হিচাপে লগইন কৰক",
+
+        patient_desc: "আপোনাৰ স্বাস্থ্য ৰেকৰ্ড চাওক, লক্ষণসমূহ জনাওক, পৰীক্ষাৰ ফলাফল চাওক, আৰু স্বাস্থ্যসেৱা প্ৰদানকাৰীৰ সৈতে যোগাযোগ কৰক।",
+        patient_item1: "স্বাস্থ্য ৰেকৰ্ড ব্যৱহাৰ",
+        patient_item2: "লক্ষণ জনোৱা",
+        patient_item3: "পৰীক্ষাৰ ফলাফল",
+        patient_item4: "প্ৰদানকাৰীৰ সৈতে যোগাযোগ",
+        patient_button: "ৰোগী হিচাপে লগইন কৰক"
     },
     bn: {
+        // ... (all previous bn keys)
         title: "স্মার্ট কমিউনিটি স্বাস্থ্য পর্যবেক্ষণ সিস্টেম",
         subtitle: "গ্রামীণ উত্তর-পূর্ব ভারতে পানিবাহিত রোগের জন্য প্রাথমিক সতর্কতা সিস্টেম",
         tagline: "সম্প্রদায় সুরক্ষা • রোগ প্রতিরোধ • স্বাস্থ্য প্রচার",
@@ -48,9 +138,52 @@ const translations = {
         asha: "আশা কর্মী",
         volunteer: "কমিউনিটি স্বেচ্ছাসেবক",
         admin: "স্বাস্থ্য প্রশাসক",
-        patient: "রোগী"
+        patient: "রোগী",
+        featuresTitle: "সিস্টেমের বৈশিষ্ট্য",
+        featuresDescription: "সম্প্রদায়ের স্বাস্থ্য পর্যবেক্ষণ এবং রোগ প্রতিরোধের জন্য ব্যাপক সরঞ্জাম",
+        feature1_title: "জলের গুণমান পর্যবেক্ষণ",
+        feature1_desc: "קהילות জুড়ে জলের উৎসের নিরাপত্তার রিয়েল-টাইম ট্র্যাকিং এবং রিপোর্টিং",
+        feature2_title: "প্রাথমিক সতর্কতা সিস্টেম",
+        feature2_desc: "রোগের প্রাদুর্ভাব এবং দূষণের ঘটনার জন্য স্বয়ংক্রিয় সতর্কতা",
+        feature3_title: "সম্প্রদায়ের অংশগ্রহণ",
+        feature3_desc: "সচেতনতা অভিযান এবং সম্প্রদায়ের প্রতিক্রিয়া সংগ্রহের জন্য সরঞ্জাম",
+        feature4_title: "ডেটা অ্যানালিটিক্স",
+        feature4_desc: "ব্যাপক স্বাস্থ্য তথ্য বিশ্লেষণ এবং প্রবণতা সনাক্তকরণ",
+        feature5_title: "মোবাইল অ্যাক্সেসিবিলিটি",
+        feature5_desc: "যেকোনো ডিভাইসে, যেকোনো জায়গায় অ্যাক্সেসের জন্য প্রতিক্রিয়াশীল ডিজাইন",
+        feature6_title: "বহু-ভাষা সমর্থন",
+        feature6_desc: "উন্নত সম্প্রদায়ের কাছে পৌঁছানোর জন্য স্থানীয় ভাষায় উপলব্ধ",
+
+        asha_desc: "স্বাস্থ্য পর্যবেক্ষণের সরঞ্জাম, কমিউনিটি ডেটা অ্যাক্সেস করুন এবং রোগ প্রতিরোধ ও স্বাস্থ্য সচেতনতার জন্য স্বেচ্ছাসেবকদের সাথে সমন্বয় করুন।",
+        asha_item1: "স্বাস্থ্য ডেটা ম্যানেজমেন্ট",
+        asha_item2: "কমিউনিটি সমন্বয়",
+        asha_item3: "জরুরী প্রতিক্রিয়া",
+        asha_item4: "প্রশিক্ষণ সম্পদ",
+        asha_button: "আশা কর্মী হিসাবে লগইন করুন",
+
+        volunteer_desc: "জলের উৎস সম্পর্কে রিপোর্ট করুন, সচেতনতা অভিযান পরিচালনা করুন, সম্প্রদায়ের প্রতিক্রিয়া সংগ্রহ করুন এবং আশা কর্মীদের সাথে যোগাযোগ করুন।",
+        volunteer_item1: "জলের উৎস রিপোর্টিং",
+        volunteer_item2: "সচেতনতা অভিযান",
+        volunteer_item3: "সম্প্রদায়ের প্রতিক্রিয়া",
+        volunteer_item4: "সরাসরি যোগাযোগ",
+        volunteer_button: "স্বেচ্ছাসেবক হিসাবে লগইন করুন",
+
+        admin_desc: "জেলা-ব্যাপী স্বাস্থ্য ডেটা নিরীক্ষণ করুন, সম্পদ পরিচালনা করুন, প্রতিক্রিয়া সমন্বয় করুন এবং সিস্টেম অপারেশন তত্ত্বাবধান করুন।",
+        admin_item1: "জেলা-ব্যাপী বিশ্লেষণ",
+        admin_item2: "সম্পদ ব্যবস্থাপনা",
+        admin_item3: "নীতি বাস্তবায়ন",
+        admin_item4: "সিস্টেম প্রশাসন",
+        admin_button: "প্রশাসক হিসাবে লগইন করুন",
+
+        patient_desc: "আপনার স্বাস্থ্য রেকর্ড অ্যাক্সেস করুন, উপসর্গ রিপোর্ট করুন, পরীক্ষার ফলাফল দেখুন এবং স্বাস্থ্যসেবা প্রদানকারীদের সাথে যোগাযোগ করুন।",
+        patient_item1: "স্বাস্থ্য রেকর্ড অ্যাক্সেস",
+        patient_item2: "উপসর্গ রিপোর্টিং",
+        patient_item3: "পরীক্ষার ফলাফল",
+        patient_item4: "প্রদানকারী যোগাযোগ",
+        patient_button: "রোগী হিসাবে লগইন করুন"
     },
     hi: {
+        // ... (all previous hi keys)
         title: "स्मार्ट सामुदायिक स्वास्थ्य निगरानी प्रणाली",
         subtitle: "ग्रामीण उत्तर-पूर्व भारत में जल-जनित रोगों के लिए प्रारंभिक चेतावनी प्रणाली",
         tagline: "समुदाय सुरक्षा • रोग रोकथाम • स्वास्थ्य संवर्धन",
@@ -59,7 +192,49 @@ const translations = {
         asha: "आशा कार्यकर्ता",
         volunteer: "सामुदायिक स्वयंसेवक",
         admin: "स्वास्थ्य प्रशासक",
-        patient: "रोगी"
+        patient: "रोगी",
+        featuresTitle: "सिस्टम की सुविधाएँ",
+        featuresDescription: "सामुदायिक स्वास्थ्य निगरानी और रोग की रोकथाम के लिए व्यापक उपकरण",
+        feature1_title: "जल गुणवत्ता की निगरानी",
+        feature1_desc: "समुदायों में जल स्रोतों की सुरक्षा की रीयल-टाइम ट्रैकिंग और रिपोर्टING",
+        feature2_title: "प्रारंभिक चेतावनी प्रणाली",
+        feature2_desc: "बीमारी के प्रकोप और संदूषण की घटनाओं के लिए स्वचालित अलर्ट",
+        feature3_title: "सामुदायिक भागीदारी",
+        feature3_desc: "जागरूकता अभियानों और सामुदायिक प्रतिक्रिया संग्रह के लिए उपकरण",
+        feature4_title: "डेटा एनालिटिक्स",
+        feature4_desc: "व्यापक स्वास्थ्य डेटा विश्लेषण और प्रवृत्ति की पहचान",
+        feature5_title: "मोबाइल एक्सेसिबिलिटी",
+        feature5_desc: "किसी भी डिवाइस पर, कहीं भी एक्सेस के लिए रिस्पॉन्सिव डिज़ाइन",
+        feature6_title: "बहु-भाषा समर्थन",
+        feature6_desc: "बेहतर सामुदायिक पहुंच के लिए स्थानीय भाषाओं में उपलब्ध",
+
+        asha_desc: "स्वास्थ्य निगरानी उपकरणों, सामुदायिक डेटा तक पहुँचें, और रोग की रोकथाम और स्वास्थ्य जागरूकता के लिए स्वयंसेवकों के साथ समन्वय करें।",
+        asha_item1: "स्वास्थ्य डेटा प्रबंधन",
+        asha_item2: "सामुदायिक समन्वय",
+        asha_item3: "आपातकालीन प्रतिक्रिया",
+        asha_item4: "प्रशिक्षण संसाधन",
+        asha_button: "आशा कार्यकर्ता के रूप में लॉगिन करें",
+
+        volunteer_desc: "जल स्रोतों की रिपोर्ट करें, जागरूकता अभियान चलाएं, सामुदायिक प्रतिक्रिया एकत्र करें, और आशा कार्यकर्ताओं के साथ संवाद करें।",
+        volunteer_item1: "जल स्रोत रिपोर्टिंग",
+        volunteer_item2: "जागरूकता अभियान",
+        volunteer_item3: "सामुदायिक प्रतिक्रिया",
+        volunteer_item4: "सीधा संचार",
+        volunteer_button: "स्वयंसेवक के रूप में लॉगिन करें",
+
+        admin_desc: "जिला-व्यापी स्वास्थ्य डेटा की निगरानी करें, संसाधनों का प्रबंधन करें, प्रतिक्रियाओं का समन्वय करें, और सिस्टम संचालन की देखरेख करें।",
+        admin_item1: "जिला-व्यापी विश्लेषण",
+        admin_item2: "संसाधन प्रबंधन",
+        admin_item3: "नीति कार्यान्वयन",
+        admin_item4: "सिस्टम प्रशासन",
+        admin_button: "प्रशासक के रूप में लॉगिन करें",
+
+        patient_desc: "अपने स्वास्थ्य रिकॉर्ड तक पहुँचें, लक्षणों की रिपोर्ट करें, परीक्षा परिणाम देखें, और स्वास्थ्य सेवा प्रदाताओं के साथ संवाद करें।",
+        patient_item1: "स्वास्थ्य रिकॉर्ड एक्सेस",
+        patient_item2: "लक्षण रिपोर्टिंग",
+        patient_item3: "परीक्षा परिणाम",
+        patient_item4: "प्रदाता संचार",
+        patient_button: "रोगी के रूप में लॉगिन करें"
     }
 };
 
@@ -89,7 +264,6 @@ function initializeApp() {
     createIconsSafely();
     setupEventListeners();
     loadTheme();
-    setupTypingAnimation();
 }
 
 // Toggle theme
@@ -131,7 +305,7 @@ function showLoginModal(role) {
         patient: 'Patient'
     };
     
-    title.textContent = Login as ${roleNames[role]};
+    title.textContent = `Login as ${roleNames[role]}`;
     
     content.innerHTML = `
         <form class="space-y-4" onsubmit="handleLogin(event)">
@@ -178,7 +352,7 @@ function showLoginModal(role) {
     createIconsSafely();
 }
 
-// Handle login - UPDATED TO REDIRECT TO APPROPRIATE DASHBOARDS
+// Handle login
 function handleLogin(event) {
     event.preventDefault();
     
@@ -188,7 +362,6 @@ function handleLogin(event) {
     setTimeout(() => {
         document.getElementById('success-modal').classList.add('hidden');
         
-        // Redirect to the appropriate dashboard after successful login
         if (currentRole === 'patient') {
             window.location.href = 'pd.html';
         } else if (currentRole === 'asha') {
@@ -196,27 +369,20 @@ function handleLogin(event) {
         } else if (currentRole === 'volunteer') {
             window.location.href = 'cd.html';
         } else if (currentRole === 'admin') {
-            // Redirect to Health Administrator dashboard
             window.location.href = 'had.html';
         }
     }, 3000);
 }
 
-// Show registration info - UPDATED TO INCLUDE ADMIN REDIRECTION
+// Show registration info
 function showRegistrationInfo(role) {
-    // Close the login modal first
     closeModal();
-    
-    // Redirect based on role
     if (role === 'volunteer') {
-        // Redirect to Community Volunteer registration page
         window.location.href = 'cv.html';
     } else if (role === 'admin') {
-        // Redirect to Health Administrator registration page
         window.location.href = 'uy1ha.html';
     } else {
-        // For other roles, show an alert
-        alert(To request access as a ${role}, please contact your local health administrator.);
+        alert(`To request access as a ${role}, please contact your local health administrator.`);
     }
 }
 
@@ -247,18 +413,64 @@ function changeLanguage(lang) {
     localStorage.setItem('language', lang);
 }
 
-function updatePageContent() {
-    // This is a simplified example. In a real app, you'd translate all necessary text.
-    console.log(Language changed to ${currentLanguage});
-}
+// === MODIFIED UPDATE PAGE CONTENT FUNCTION ===
 
-function setupTypingAnimation() {
-    // Simplified to prevent issues, you can restore the complex version if needed
-    const element = document.querySelector('.typing-animation');
-    if(element) {
-        element.style.width = '100%';
+
+function updatePageContent() {
+    const t = translations[currentLanguage];
+    if (!t) {
+        console.error(`Translations not found for language: ${currentLanguage}`);
+        return;
     }
+
+    // Helper function to safely set text content
+    const setText = (selector, text) => {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.textContent = text;
+        }
+    };
+
+    // Update main heading (retains the gradient span)
+    const mainHeading = document.getElementById('main-heading');
+    if (mainHeading) {
+        const titleString = t.title;
+        const lastSpaceIndex = titleString.lastIndexOf(' ');
+        const part1 = titleString.substring(0, lastSpaceIndex);
+        const part2 = titleString.substring(lastSpaceIndex + 1);
+        mainHeading.innerHTML = `${part1} <span class="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300">${part2}</span>`;
+    }
+
+    // Update other main text elements
+    setText('#sub-heading', t.subtitle);
+    setText('#tagline', t.tagline);
+    setText('#choose-role-heading', t.chooseRole);
+    setText('#role-description', t.roleDescription);
+    
+    // === ADD THIS NEW LOGIC FOR ROLE CARDS ===
+    const roles = ['asha', 'volunteer', 'admin', 'patient'];
+    roles.forEach(role => {
+        setText(`[data-role-title="${role}"]`, t[role]);
+        setText(`[data-role-desc="${role}"]`, t[`${role}_desc`]);
+        setText(`[data-role-button="${role}"]`, t[`${role}_button`]);
+        for (let i = 1; i <= 4; i++) {
+            setText(`[data-role-item="${role}-${i}"]`, t[`${role}_item${i}`]);
+        }
+    });
+    // === END OF NEW LOGIC ===
+
+    // Update features section
+    setText('#features-title', t.featuresTitle);
+    setText('#features-description', t.featuresDescription);
+    for (let i = 1; i <= 6; i++) {
+        setText(`[data-feature-title="${i}"]`, t[`feature${i}_title`]);
+        setText(`[data-feature-desc="${i}"]`, t[`feature${i}_desc`]);
+    }
+
+    console.log(`Page content updated to ${currentLanguage}`);
 }
+// === END MODIFICATION ===
+
 
 function setupEventListeners() {
     document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);

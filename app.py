@@ -8,7 +8,7 @@ import json
 import random
 
 # Initialize the Flask app to serve static files from the current directory
-app = Flask(_name_, static_folder='.', static_url_path='')
+app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
 
 # --- Database Connection Logic ---
@@ -255,5 +255,5 @@ def get_patient_stats():
         print(f"Patient Stats Error: {e}")
         return jsonify({'error': 'Could not fetch patient statistics'}), 500
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True, port=5000)
