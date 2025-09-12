@@ -21,7 +21,7 @@ let currentRole = '';
 const translations = {
     en: {
         // ... (previous keys are still here)
-        title: "Smart Community Health Monitoring System",
+        title: "SAMAJ HEALTH SURAKSHA Monitoring System",
         subtitle: "Early Warning System for Water-Borne Diseases in Rural Northeast India",
         tagline: "Protecting Communities • Preventing Disease • Promoting Health",
         chooseRole: "Choose Your Role",
@@ -76,7 +76,7 @@ const translations = {
     },
     as: {
         // ... (previous keys)
-        title: "স্মাৰ্ট সম্প্ৰদায়িক স্বাস্থ্য নিৰীক্ষণ ব্যৱস্থা",
+        title: "সমাজ স্বাস্থ্য সুৰক্ষা নিৰীক্ষণ ব্যৱস্থা",
         subtitle: "গ্ৰাম্য উত্তৰ-পূৰ্ব ভাৰতত পানীবাহিত ৰোগৰ বাবে আগতীয়া সতৰ্কবাণী ব্যৱস্থা",
         tagline: "সম্প্ৰদায় সুৰক্ষা • ৰোগ প্ৰতিৰোধ • স্বাস্থ্য প্ৰসাৰ",
         chooseRole: "আপোনাৰ ভূমিকা বাছনি কৰক",
@@ -130,7 +130,7 @@ const translations = {
     },
     bn: {
         // ... (all previous bn keys)
-        title: "স্মার্ট কমিউনিটি স্বাস্থ্য পর্যবেক্ষণ সিস্টেম",
+        title: "সমাজ স্বাস্থ্য সুরক্ষা পর্যবেক্ষণ সিস্টেম",
         subtitle: "গ্রামীণ উত্তর-পূর্ব ভারতে পানিবাহিত রোগের জন্য প্রাথমিক সতর্কতা সিস্টেম",
         tagline: "সম্প্রদায় সুরক্ষা • রোগ প্রতিরোধ • স্বাস্থ্য প্রচার",
         chooseRole: "আপনার ভূমিকা নির্বাচন করুন",
@@ -184,7 +184,7 @@ const translations = {
     },
     hi: {
         // ... (all previous hi keys)
-        title: "स्मार्ट सामुदायिक स्वास्थ्य निगरानी प्रणाली",
+        title: "समाज स्वास्थ्य सुरक्षा निगरानी प्रणाली",
         subtitle: "ग्रामीण उत्तर-पूर्व भारत में जल-जनित रोगों के लिए प्रारंभिक चेतावनी प्रणाली",
         tagline: "समुदाय सुरक्षा • रोग रोकथाम • स्वास्थ्य संवर्धन",
         chooseRole: "अपनी भूमिका चुनें",
