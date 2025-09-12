@@ -249,17 +249,7 @@ body {
 }
 
 /* === MODIFIED TYPING ANIMATION === */
-/*
- * ===================================================================
- * REPLACE the old .typing-animation block in style.css with this one
- * ===================================================================
- */
 
-/*
- * ===================================================================
- * REPLACE the old .typing-animation block in style.css with this one
- * ===================================================================
- */
 
 .typing-animation {
     /* Set the width based on its content, which is essential for the animation */
