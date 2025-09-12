@@ -252,65 +252,28 @@ body {
 
 
 .typing-animation {
-    /* Set the width based on its content, which is essential for the animation */
-    width: max-content;
-
-    /* These are required to hide the text until it's "typed" */
-    overflow: hidden;
-    white-space: nowrap;
-
-    /*
-     This single, master animation controls the entire 8.5-second lifecycle:
-     - The duration is now 8.5s (4.5s for typing + 4s for the pause).
-     - `steps(65)` creates the "typing" effect, one character at a time.
-     - `infinite` makes the entire sequence loop forever.
-    */
-    animation: typing-lifecycle 8.5s steps(65) infinite;
+  display: inline-block;        /* required so width: ...ch works as expected */
+  white-space: nowrap;          /* prevent wrapping */
+  overflow: hidden;             /* hide the unseen characters */
+  width: 0ch;                   /* start closed (0 characters visible) */
+  border-right: .15em solid #fde047;
+  /* steps(62,end) → 62 character steps; adjust if you change the text */
+  animation:
+    typing-lifecycle 8.5s steps(52,end) infinite,
+    blink 0.7s step-end infinite;
 }
 
-/*
- * The keyframe percentages have been recalculated for the new 8.5s duration.
- */
+/* Type (4.5s) then hold (remaining time). Keep final width at 62ch until loop resets. */
 @keyframes typing-lifecycle {
-    /* === Phase 1: Typing Part 1 (0s -> 3.3s) === */
-    0% {
-        width: 0;
-        border-right: .15em solid #fde047; /* Cursor is visible */
-    }
-    38.8% { /* (3.3s / 8.5s) * 100 */
-        width: 96.9%; /* Pauses before the 'h' in "Health" */
-        border-right: .15em solid #fde047;
-    }
-
-    /* === Phase 2: Pause in the middle (3.3s -> 4.0s) === */
-    47% { /* (4.0s / 8.5s) * 100 */
-        width: 96.9%;
-        border-right: .15em solid #fde047;
-    }
-
-    /* === Phase 3: Typing Part 2 (4.0s -> 4.5s) === */
-    52.9% { /* (4.5s / 8.5s) * 100 */
-        width: 100%; /* Finishes the sentence */
-        border-right: .15em solid #fde047;
-    }
-
-    /* === Phase 4: Hold with no cursor (4.5s -> 8.5s) === */
-    /* The cursor disappears, and the full sentence is displayed for 4 seconds */
-    53% {
-        border-right-color: transparent; /* Cursor vanishes */
-    }
-    99.9% {
-        width: 100%;
-        border-right-color: transparent;
-    }
-
-    /* === Phase 5: Reset for the next loop === */
-    100% {
-        width: 0;
-        border-right-color: transparent;
-    }
+  0%    { width: 0ch;                    } /* start */
+  52.941% { width: 52ch;                 } /* typed after 4.5s (4.5/8.5*100 ≈ 52.941%) */
+  100%  { width: 52ch;                   } /* hold the fully-typed state until loop resets */
 }
-/* === END MODIFICATION === */
+
+/* Cursor blink */
+@keyframes blink {
+  50% { border-color: transparent; }
+}
 
 
 .modal-backdrop {
