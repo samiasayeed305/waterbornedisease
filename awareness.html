@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Hygiene Awareness and Waterborne Disease Prevention Module">
+    <title>SAMAJ HEALTH SURAKSHA - Hygiene Awareness</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <style>
+        .theme-transition {
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1f2937, #0f172a);
+        }
+        .glass-effect {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease-in-out;
+        }
+        .animate-fade-in {
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+        .animate-slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+        .animate-slide-in-right {
+            animation: slideInRight 0.8s ease-out forwards;
+        }
+        .floating-animation {
+            animation: floating 3s ease-in-out infinite;
+        }
+        .pulse-glow {
+            animation: pulseGlow 2s infinite;
+        }
+        .feature-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .feature-card:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: background-color 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(76, 29, 155, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(76, 29, 155, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(76, 29, 155, 0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen theme-transition gradient-bg text-white">
+    <header class="relative z-30 p-6">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4 animate-slide-in-left">
+                <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center floating-animation">
+                    <i data-lucide="heart-pulse" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-white">Samaj Health Suraksha</h1>
+                    <p class="text-white/80 text-sm">Northeast India Health Initiative</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4 animate-slide-in-right">
+                <div class="language-selector relative">
+                    <button id="language-btn" class="flex items-center gap-2 px-3 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 text-white">
+                        <i data-lucide="globe" class="w-4 h-4"></i>
+                        <span id="current-language">English</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div id="language-dropdown" class="absolute right-0 mt-2 w-48 bg-gray-800/80 rounded-lg shadow-lg hidden">
+                        <div class="p-2">
+                            <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="en">English</button>
+                            <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="as">অসমীয়া (Assamese)</button>
+                            <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="bn">বাংলা (Bengali)</button>
+                            <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="hi">हिंदी (Hindi)</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="theme-toggle" class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
+                    <i data-lucide="sun" class="w-5 h-5 text-white"></i>
+                </button>
+                
+                <button id="help-btn" class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
+                    <i data-lucide="help-circle" class="w-5 h-5 text-white"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section class="text-center mb-16 animate-fade-in">
+            <div class="max-w-4xl mx-auto">
+                <h1 id="main-heading" class="text-4xl md:text-6xl font-bold text-white mb-6"></h1>
+                <p id="main-tagline" class="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed"></p>
+                <div id="sub-tagline" class="text-lg text-white/80 typing-animation overflow-hidden whitespace-nowrap max-w-md mx-auto"></div>
+            </div>
+        </section>
+
+        <section id="module-content" class="mb-16">
+            </section>
+    </main>
+
+    <footer class="text-center py-8 text-white/70">
+        <div class="container mx-auto px-6">
+            <p class="mb-2">© 2025 Smart Community Health Monitoring System</p>
+            <p class="text-sm">Developed By AJU Students for Rural Northeast India • Protecting Communities Through Technology</p>
+            <div class="flex justify-center gap-4 mt-4">
+                <button class="hover:text-white transition-colors">Privacy Policy</button>
+                <button class="hover:text-white transition-colors">Terms of Service</button>
+                <button class="hover:text-white transition-colors">Contact Support</button>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        const translations = {
+            en: {
+                mainHeading: 'Hygiene Awareness & Waterborne Disease Prevention',
+                mainTagline: 'A comprehensive module to promote health and prevent waterborne diseases in rural communities.',
+                subTagline: 'Clean Hands • Safe Water • Healthy Life',
+                introSectionTitle: 'Introduction to Hygiene',
+                introSectionContent: 'Hygiene means keeping our body, hands, clothes, and surroundings clean. Good hygiene protects us from diseases and keeps us healthy. Personal hygiene and environmental hygiene are both important for a safe and healthy life.',
+                handwashingSectionTitle: 'Importance of Handwashing',
+                handwashingSectionContent: 'Washing hands with soap and clean water is one of the easiest ways to prevent many diseases. Hands should be washed before eating, after using the toilet, and after playing outside. Clean hands stop the spread of germs that cause diarrhea, cholera, and typhoid.',
+                waterSectionTitle: 'Safe Drinking Water',
+                waterSectionContent: 'Drinking clean and safe water is essential for good health. Always boil water or use a filter before drinking. Store water in clean, covered containers to prevent contamination. Avoid drinking from ponds, rivers, or unclean sources.',
+                preventiveMeasuresTitle: 'Preventive Measures for Waterborne Diseases',
+                preventiveMeasuresItems: [
+                    'Boil Water: Always boil water before drinking or use water purifiers.',
+                    'Use Safe Toilets: Ensure proper sanitation to prevent contamination.',
+                    'Wash Hands Regularly: Especially before eating and after using the toilet.',
+                    'Avoid Stagnant Water: Do not drink or bathe in water from stagnant sources.'
+                ],
+                sanitationTitle: 'Sanitation & Clean Environment',
+                sanitationItems: [
+                    'Always use toilets; avoid open defecation.',
+                    'Dispose of waste properly in dustbins.',
+                    'Keep surroundings clean; remove trash and stagnant water.',
+                    'Cover food and water to prevent contamination.',
+                    'Prevent mosquito breeding by clearing stagnant water.',
+                    'Maintain personal hygiene to reduce spread of germs.'
+                ],
+                healthyHabitsTitle: 'Healthy Habits',
+                healthyHabitsItems: [
+                    'Bathe daily with soap.',
+                    'Brush teeth twice a day.',
+                    'Trim nails regularly.',
+                    'Wear clean clothes.'
+                ],
+                awarenessActivitiesTitle: 'Community Awareness Activities',
+                awarenessActivitiesItems: [
+                    'Organize awareness programs in schools and neighborhoods.',
+                    'Teach children and adults about hygiene and safe water.',
+                    'Use posters, street plays, and social media to spread messages.',
+                    'Encourage community participation in cleaning drives.',
+                    'Promote safe water and sanitation practices in the community.',
+                    'Support local health workers in educating the public.'
+                ],
+                immediateActionsTitle: 'Immediate Actions',
+                immediateActionsHelpline: 'Call the National Health Helpline – 104: Available 24/7. Provides free medical advice and can guide you to the nearest healthcare facility. Operated by the National Health Mission.',
+                immediateActionsEmergency: 'Dial Emergency Services: Ambulance Services : Dial 102 or 108 for immediate medical assistance. Universal Emergency Number : Dial 112 for police, fire, or medical emergencies.',
+                immediateActionsFacility: 'Visit the Nearest Government Health Facility: District Hospitals : They are equipped to handle waterborne disease cases. Primary Health Centers (PHCs) : For initial treatment and referrals.',
+                keyMessage: 'Key Message: “Clean Hands, Safe Water, Healthy Life”'
+            },
+            as: {
+                mainHeading: 'স্বাস্থ্যবিধি সজাগতা আৰু জলজনিত ৰোগ প্ৰতিৰোধ',
+                mainTagline: 'গ্ৰাম্য সম্প্ৰদায়ত স্বাস্থ্যৰ উন্নতি আৰু জলজনিত ৰোগ প্ৰতিৰোধৰ বাবে এক বিস্তৃত মডিউল।',
+                subTagline: 'পৰিষ্কাৰ হাত • নিৰাপদ পানী • সুস্থ জীৱন',
+                introSectionTitle: 'স্বাস্থ্যবিধিৰ পৰিচয়',
+                introSectionContent: 'স্বাস্থ্যবিধিৰ অৰ্থ হৈছে আমাৰ শৰীৰ, হাত, কাপোৰ, আৰু চৌপাশ পৰিষ্কাৰ কৰি ৰখা। ভাল স্বাস্থ্যবিধিয়ে আমাক ৰোগৰ পৰা সুৰক্ষা দিয়ে আৰু সুস্থ কৰি ৰাখে। এটা নিৰাপদ আৰু সুস্থ জীৱনৰ বাবে ব্যক্তিগত স্বাস্থ্যবিধি আৰু পৰিৱেশৰ স্বাস্থ্যবিধি দুয়োটাই গুৰুত্বপূৰ্ণ।',
+                handwashingSectionTitle: 'হাত ধোৱাৰ গুৰুত্ব',
+                handwashingSectionContent: 'চাবোন আৰু পৰিষ্কাৰ পানীৰে হাত ধোৱাটো বহুতো ৰোগ প্ৰতিৰোধ কৰাৰ অন্যতম সহজ উপায়। খোৱাৰ আগতে, শৌচাগাৰ ব্যৱহাৰ কৰাৰ পিছত, আৰু বাহিৰত খেলাৰ পিছত হাত ধুব লাগে। পৰিষ্কাৰ হাতে ডায়েৰিয়া, কলেৰা, আৰু টাইফইডৰ দৰে ৰোগ সৃষ্টিকাৰী বীজাণুৰ বিস্তাৰ বন্ধ কৰে।',
+                waterSectionTitle: 'নিৰাপদ খোৱা পানী',
+                waterSectionContent: 'সুস্বাস্থ্যৰ বাবে পৰিষ্কাৰ আৰু নিৰাপদ পানী খোৱাটো অত্যাৱশ্যক। খোৱাৰ আগতে পানী সদায় উতলাই লওক বা ফিল্টাৰ ব্যৱহাৰ কৰক। পানী যাতে দূষিত নহয় তাৰ বাবে পৰিষ্কাৰ, ঢকা পাত্ৰত সংৰক্ষণ কৰক। পুখুৰী, নদী, বা অপৰিষ্কাৰ উৎসৰ পৰা পানী খোৱা পৰিহাৰ কৰক।',
+                preventiveMeasuresTitle: 'জলজনিত ৰোগৰ বাবে প্ৰতিৰোধমূলক ব্যৱস্থা',
+                preventiveMeasuresItems: [
+                    'পানী উতলাওক: পানী খোৱাৰ আগতে সদায় উতলাই লওক বা পানী পৰিষ্কাৰ কৰা যন্ত্ৰ ব্যৱহাৰ কৰক।',
+                    'নিৰাপদ শৌচাগাৰ ব্যৱহাৰ কৰক: পানী দূষিত হোৱা প্ৰতিৰোধ কৰিবলৈ সঠিক অনাময় ব্যৱস্থা সুনিশ্চিত কৰক।',
+                    'নিয়মিতভাৱে হাত ধুব: বিশেষকৈ খোৱাৰ আগতে আৰু শৌচাগাৰ ব্যৱহাৰ কৰাৰ পিছত।',
+                    'স্থিৰ পানী পৰিহাৰ কৰক: স্থিৰ উৎসৰ পৰা পানী নাখাব বা তাত গা নুধুব।'
+                ],
+                sanitationTitle: 'অনাময় আৰু পৰিষ্কাৰ পৰিৱেশ',
+                sanitationItems: [
+                    'সদায় শৌচাগাৰ ব্যৱহাৰ কৰক; মুকলি ঠাইত শৌচ কৰা পৰিহাৰ কৰক।',
+                    'আৱৰ্জনা সঠিকভাৱে আৱৰ্জনাৰ ডবাত পেলাওক।',
+                    'চৌপাশ পৰিষ্কাৰ কৰি ৰাখক; আৱৰ্জনা আৰু স্থিৰ পানী আতঁৰাওক।',
+                    'দূষণ প্ৰতিৰোধ কৰিবলৈ খাদ্য আৰু পানী ঢাকি ৰাখক।',
+                    'স্থিৰ পানী পৰিষ্কাৰ কৰি মহৰ বংশবৃদ্ধি বন্ধ কৰক।',
+                    'বীজাণুৰ বিস্তাৰ হ্ৰাস কৰিবলৈ ব্যক্তিগত স্বাস্থ্যবিধি বজাই ৰাখক।'
+                ],
+                healthyHabitsTitle: 'সুস্থ অভ্যাস',
+                healthyHabitsItems: [
+                    'প্ৰতিদিনে চাবোনেৰে গা ধুব।',
+                    'দিনত দুবাৰ দাঁত ঘঁহিব।',
+                    'নিয়মিতভাৱে নখ কাটিব।',
+                    'পৰিষ্কাৰ কাপোৰ পিন্ধিব।'
+                ],
+                awarenessActivitiesTitle: 'সম্প্ৰদায় সজাগতা কাৰ্যসূচী',
+                awarenessActivitiesItems: [
+                    'বিদ্যালয় আৰু চুবুৰীত সজাগতা কাৰ্যসূচীৰ আয়োজন কৰক।',
+                    'শিশু আৰু প্ৰাপ্তবয়স্কসকলক স্বাস্থ্যবিধি আৰু নিৰাপদ পানীৰ বিষয়ে শিকোৱা।',
+                    'পোষ্টাৰ, পথ নাট আৰু ছ’চিয়েল মিডিয়া ব্যৱহাৰ কৰি বাৰ্তা প্ৰচাৰ কৰক।',
+                    'পৰিষ্কাৰকৰণ অভিযানত সম্প্ৰদায়ৰ অংশগ্ৰহণক উৎসাহিত কৰক।',
+                    'সম্প্ৰদায়ত নিৰাপদ পানী আৰু অনাময় ব্যৱস্থাৰ প্ৰচাৰ কৰক।',
+                    'জনসাধাৰণক শিক্ষিত কৰাত স্থানীয় স্বাস্থ্য কৰ্মীসকলক সহায় কৰক।'
+                ],
+                immediateActionsTitle: 'জৰুৰী কাৰ্যসূচী',
+                immediateActionsHelpline: 'ৰাষ্ট্ৰীয় স্বাস্থ্য সহায়ক নম্বৰ - 104ত কল কৰক: ২৪/৭ উপলব্ধ। বিনামূলীয়া চিকিৎসা পৰামৰ্শ প্ৰদান কৰে আৰু আপোনাক নিকটতম স্বাস্থ্যসেৱা কেন্দ্ৰলৈ পথ-নিৰ্দেশনা দিব পাৰে। ৰাষ্ট্ৰীয় স্বাস্থ্য অভিযানৰ দ্বাৰা পৰিচালিত।',
+                immediateActionsEmergency: 'জৰুৰীকালীন সেৱা: এম্বুলেন্স সেৱা: তাৎক্ষণিক চিকিৎসা সহায়ৰ বাবে 102 বা 108 ডায়েল কৰক। ইউনিভাৰ্চেল জৰুৰীকালীন নম্বৰ: আৰক্ষী, অগ্নি, বা চিকিৎসা জৰুৰীকালীন অৱস্থাৰ বাবে 112 ডায়েল কৰক।',
+                immediateActionsFacility: 'নিকটতম চৰকাৰী স্বাস্থ্য কেন্দ্ৰলৈ যাওক: জিলা চিকিৎসালয়: তেওঁলোক জলজনিত ৰোগৰ গোচৰৰ সৈতে মোকাবিলা কৰিবলৈ সজ্জিত। প্ৰাথমিক স্বাস্থ্য কেন্দ্ৰ (PHCs): প্ৰাথমিক চিকিৎসা আৰু ৰেফাৰেলৰ বাবে।',
+                keyMessage: 'মুখ্য বাৰ্তা: “পৰিষ্কাৰ হাত, নিৰাপদ পানী, সুস্থ জীৱন”'
+            },
+            bn: {
+                mainHeading: 'স্বাস্থ্যবিধি সচেতনতা ও জলবাহিত রোগ প্রতিরোধ',
+                mainTagline: 'গ্রামীণ জনগোষ্ঠীর মধ্যে স্বাস্থ্য প্রচার এবং জলবাহিত রোগ প্রতিরোধের জন্য একটি ব্যাপক মডিউল।',
+                subTagline: 'পরিষ্কার হাত • নিরাপদ জল • সুস্থ জীবন',
+                introSectionTitle: 'স্বাস্থ্যবিধি পরিচিতি',
+                introSectionContent: 'স্বাস্থ্যবিধি মানে আমাদের শরীর, হাত, পোশাক এবং চারপাশ পরিষ্কার রাখা। ভালো স্বাস্থ্যবিধি আমাদের রোগ থেকে রক্ষা করে এবং সুস্থ রাখে। একটি নিরাপদ এবং সুস্থ জীবনের জন্য ব্যক্তিগত স্বাস্থ্যবিধি এবং পরিবেশগত স্বাস্থ্যবিধি উভয়ই গুরুত্বপূর্ণ।',
+                handwashingSectionTitle: 'হাত ধোয়ার গুরুত্ব',
+                handwashingSectionContent: 'সাবান ও পরিষ্কার জল দিয়ে হাত ধোয়া অনেক রোগ প্রতিরোধের সবচেয়ে সহজ উপায়গুলির মধ্যে একটি। খাবার আগে, শৌচাগার ব্যবহারের পরে এবং বাইরে খেলাধুলার পরে হাত ধোয়া উচিত। পরিষ্কার হাত ডায়রিয়া, কলেরা এবং টাইফয়েডের মতো রোগ সৃষ্টিকারী জীবাণুর বিস্তার রোধ করে।',
+                waterSectionTitle: 'নিরাপদ পানীয় জল',
+                waterSectionContent: 'সুস্বাস্থ্যের জন্য পরিষ্কার ও নিরাপদ জল পান করা অপরিহার্য। জল পান করার আগে সর্বদা তা ফুটিয়ে নিন বা ফিল্টার ব্যবহার করুন। দূষণ রোধ করতে জল পরিষ্কার, ঢাকা পাত্রে সংরক্ষণ করুন। পুকুর, নদী বা অপরিষ্কার উৎস থেকে জল পান করা এড়িয়ে চলুন।',
+                preventiveMeasuresTitle: 'জলবাহিত রোগের জন্য প্রতিরোধমূলক ব্যবস্থা',
+                preventiveMeasuresItems: [
+                    'জল ফোটান: জল পান করার আগে সর্বদা তা ফুটিয়ে নিন বা জল পরিশোধক ব্যবহার করুন।',
+                    'নিরাপদ শৌচাগার ব্যবহার করুন: দূষণ রোধ করতে সঠিক পয়ঃনিষ্কাশন নিশ্চিত করুন।',
+                    'নিয়মিত হাত ধোন: বিশেষ করে খাওয়ার আগে এবং শৌচাগার ব্যবহারের পরে।',
+                    'স্থবির জল এড়িয়ে চলুন: স্থবির উৎস থেকে জল পান করবেন না বা তাতে গোসল করবেন না।'
+                ],
+                sanitationTitle: 'পয়ঃনিষ্কাশন ও পরিচ্ছন্ন পরিবেশ',
+                sanitationItems: [
+                    'সর্বদা শৌচাগার ব্যবহার করুন; খোলা জায়গায় মলত্যাগ এড়িয়ে চলুন।',
+                    'আবর্জনা সঠিক স্থানে, ডাস্টবিনে ফেলুন।',
+                    'চারপাশ পরিষ্কার রাখুন; আবর্জনা এবং স্থবির জল সরিয়ে ফেলুন।',
+                    'দূষণ রোধ করতে খাবার ও জল ঢেকে রাখুন।',
+                    'স্থবির জল পরিষ্কার করে মশার প্রজনন রোধ করুন।',
+                    'জীবাণু ছড়ানো কমাতে ব্যক্তিগত স্বাস্থ্যবিধি বজায় রাখুন।'
+                ],
+                healthyHabitsTitle: 'স্বাস্থ্যকর অভ্যাস',
+                healthyHabitsItems: [
+                    'প্রতিদিন সাবান দিয়ে গোসল করুন।',
+                    'দিনে দুবার দাঁত মাজুন।',
+                    'নিয়মিতভাবে নখ কাটুন।',
+                    'পরিষ্কার পোশাক পরুন।'
+                ],
+                awarenessActivitiesTitle: 'সম্প্রদায় সচেতনতা কার্যক্রম',
+                awarenessActivitiesItems: [
+                    'স্কুল এবং পাড়া-মহল্লায় সচেতনতা কর্মসূচির আয়োজন করুন।',
+                    'শিশু এবং প্রাপ্তবয়স্কদের স্বাস্থ্যবিধি এবং নিরাপদ জলের বিষয়ে শেখান।',
+                    'বার্তা ছড়িয়ে দিতে পোস্টার, পথনাটক এবং সোশ্যাল মিডিয়া ব্যবহার করুন।',
+                    'পরিষ্কার-পরিচ্ছন্নতা অভিযানে সম্প্রদায়ের অংশগ্রহণকে উৎসাহিত করুন।',
+                    'সম্প্রদায়ে নিরাপদ জল এবং পয়ঃনিষ্কাশন অনুশীলনের প্রচার করুন।',
+                    'জনসাধারণকে শিক্ষিত করতে স্থানীয় স্বাস্থ্য কর্মীদের সহায়তা করুন।'
+                ],
+                immediateActionsTitle: 'জরুরী পদক্ষেপ',
+                immediateActionsHelpline: 'ন্যাশনাল হেলথ হেল্পলাইন – 104 নম্বরে কল করুন: 24/7 উপলব্ধ। বিনামূল্যে চিকিৎসা পরামর্শ প্রদান করে এবং আপনাকে নিকটতম স্বাস্থ্যসেবা কেন্দ্রে নির্দেশনা দিতে পারে। ন্যাশনাল হেলথ মিশন দ্বারা পরিচালিত।',
+                immediateActionsEmergency: 'জরুরী পরিষেবায় ডায়াল করুন: অ্যাম্বুলেন্স পরিষেবা: তাৎক্ষণিক চিকিৎসা সহায়তার জন্য 102 বা 108 ডায়াল করুন। ইউনিভার্সাল জরুরী নম্বর: পুলিশ, ফায়ার বা চিকিৎসা জরুরী অবস্থার জন্য 112 ডায়াল করুন।',
+                immediateActionsFacility: 'নিকটতম সরকারি স্বাস্থ্য কেন্দ্রে যান: জেলা হাসপাতাল: তারা জলবাহিত রোগের মামলাগুলি পরিচালনা করতে সজ্জিত। প্রাথমিক স্বাস্থ্য কেন্দ্র (PHCs): প্রাথমিক চিকিৎসা এবং রেফারেলের জন্য।',
+                keyMessage: 'মূল বার্তা: “পরিষ্কার হাত, নিরাপদ জল, সুস্থ জীবন”'
+            },
+            hi: {
+                mainHeading: 'स्वच्छता जागरूकता और जल-जनित रोग निवारण',
+                mainTagline: 'ग्रामीण समुदायों में स्वास्थ्य को बढ़ावा देने और जल-जनित रोगों को रोकने के लिए एक व्यापक मॉड्यूल।',
+                subTagline: 'स्वच्छ हाथ • सुरक्षित जल • स्वस्थ जीवन',
+                introSectionTitle: 'स्वच्छता का परिचय',
+                introSectionContent: 'स्वच्छता का अर्थ है हमारे शरीर, हाथ, कपड़े और परिवेश को साफ रखना। अच्छी स्वच्छता हमें बीमारियों से बचाती है और हमें स्वस्थ रखती है। एक सुरक्षित और स्वस्थ जीवन के लिए व्यक्तिगत स्वच्छता और पर्यावरणीय स्वच्छता दोनों महत्वपूर्ण हैं।',
+                handwashingSectionTitle: 'हाथ धोने का महत्व',
+                handwashingSectionContent: 'साबुन और साफ पानी से हाथ धोना कई बीमारियों को रोकने का सबसे आसान तरीका है। भोजन करने से पहले, शौचालय का उपयोग करने के बाद और बाहर खेलने के बाद हाथ धोने चाहिए। स्वच्छ हाथ डायरिया, हैजा और टाइफाइड जैसी बीमारियों को फैलाने वाले कीटाणुओं को रोकते हैं।',
+                waterSectionTitle: 'सुरक्षित पीने का पानी',
+                waterSectionContent: 'अच्छे स्वास्थ्य के लिए साफ और सुरक्षित पानी पीना आवश्यक है। पीने से पहले हमेशा पानी उबालें या फिल्टर का उपयोग करें। प्रदूषण को रोकने के लिए पानी को साफ, ढके हुए बर्तनों में स्टोर करें। तालाबों, नदियों या गंदे स्रोतों से पीने से बचें।',
+                preventiveMeasuresTitle: 'जल-जनित रोगों के लिए निवारक उपाय',
+                preventiveMeasuresItems: [
+                    'पानी उबालें: पीने से पहले हमेशा पानी उबालें या जल शोधक का उपयोग करें।',
+                    'सुरक्षित शौचालयों का उपयोग करें: प्रदूषण को रोकने के लिए उचित स्वच्छता सुनिश्चित करें।',
+                    'नियमित रूप से हाथ धोएं: विशेष रूप से खाने से पहले और शौचालय का उपयोग करने के बाद।',
+                    'स्थिर पानी से बचें: स्थिर स्रोतों से पानी न पीएं और न ही स्नान करें।'
+                ],
+                sanitationTitle: 'स्वच्छता और स्वच्छ पर्यावरण',
+                sanitationItems: [
+                    'हमेशा शौचालयों का उपयोग करें; खुले में शौच करने से बचें।',
+                    'कचरे को सही जगह, कूड़ेदान में डालें।',
+                    'आस-पास को साफ रखें; कचरा और स्थिर पानी हटा दें।',
+                    'प्रदूषण को रोकने के लिए भोजन और पानी को ढककर रखें।',
+                    'स्थिर पानी को साफ करके मच्छरों के प्रजनन को रोकें।',
+                    'कीटाणुओं के प्रसार को कम करने के लिए व्यक्तिगत स्वच्छता बनाए रखें।'
+                ],
+                healthyHabitsTitle: 'स्वस्थ आदतें',
+                healthyHabitsItems: [
+                    'रोजाना साबुन से स्नान करें।',
+                    'दिन में दो बार ब्रश करें।',
+                    'नियमित रूप से नाखून काटें।',
+                    'साफ कपड़े पहनें।'
+                ],
+                awarenessActivitiesTitle: 'सामुदायिक जागरूकता गतिविधियां',
+                awarenessActivitiesItems: [
+                    'स्कूलों और मोहल्लों में जागरूकता कार्यक्रमों का आयोजन करें।',
+                    'बच्चों और वयस्कों को स्वच्छता और सुरक्षित पानी के बारे में सिखाएं।',
+                    'संदेश फैलाने के लिए पोस्टर, नुक्कड़ नाटक और सोशल मीडिया का उपयोग करें।',
+                    'सफाई अभियानों में समुदाय की भागीदारी को प्रोत्साहित करें।',
+                    'समुदाय में सुरक्षित जल और स्वच्छता प्रथाओं को बढ़ावा दें।',
+                    'जनता को शिक्षित करने में स्थानीय स्वास्थ्य कार्यकर्ताओं का समर्थन करें।'
+                ],
+                immediateActionsTitle: 'तत्काल कार्रवाई',
+                immediateActionsHelpline: 'राष्ट्रीय स्वास्थ्य हेल्पलाइन - 104 पर कॉल करें: 24/7 उपलब्ध। मुफ्त चिकित्सा सलाह प्रदान करता है और आपको निकटतम स्वास्थ्य सुविधा केंद्र तक मार्गदर्शन कर सकता है। राष्ट्रीय स्वास्थ्य मिशन द्वारा संचालित।',
+                immediateActionsEmergency: 'आपातकालीन सेवाओं को डायल करें: एम्बुलेंस सेवाएं: तत्काल चिकित्सा सहायता के लिए 102 या 108 डायल करें। यूनिवर्सल इमरजेंसी नंबर: पुलिस, आग, या चिकित्सा आपात स्थितियों के लिए 112 डायल करें।',
+                immediateActionsFacility: 'निकटतम सरकारी स्वास्थ्य सुविधा पर जाएं: जिला अस्पताल: वे जल-जनित रोगों के मामलों को संभालने के लिए सुसज्जित हैं। प्राथमिक स्वास्थ्य केंद्र (PHCs): प्रारंभिक उपचार और रेफरल के लिए।',
+                keyMessage: 'मुख्य संदेश: “स्वच्छ हाथ, सुरक्षित जल, स्वस्थ जीवन”'
+            }
+        };
+
+        const moduleContent = document.getElementById('module-content');
+        const mainHeading = document.getElementById('main-heading');
+        const mainTagline = document.getElementById('main-tagline');
+        const subTagline = document.getElementById('sub-tagline');
+        const langDropdown = document.getElementById('language-dropdown');
+        const langBtn = document.getElementById('language-btn');
+        const currentLangSpan = document.getElementById('current-language');
+
+        function renderContent(lang) {
+            const data = translations[lang];
+            
+            mainHeading.textContent = data.mainHeading;
+            mainTagline.textContent = data.mainTagline;
+            subTagline.textContent = data.subTagline;
+            currentLangSpan.textContent = lang === 'en' ? 'English' : (lang === 'as' ? 'অসমীয়া' : (lang === 'bn' ? 'বাংলা' : 'हिंदी'));
+
+            moduleContent.innerHTML = `
+                <div class="space-y-12">
+                    <div class="animate-fade-in">
+                        <div class="text-center mb-6">
+                            <h2 class="text-3xl font-bold text-white mb-2">${data.introSectionTitle}</h2>
+                            <p class="text-white/80 text-lg">${data.introSectionContent}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="animate-fade-in" style="--delay: 0.2s;">
+                        <div class="text-center mb-6">
+                            <h2 class="text-3xl font-bold text-white mb-2">${data.handwashingSectionTitle}</h2>
+                            <p class="text-white/80 text-lg">${data.handwashingSectionContent}</p>
+                        </div>
+                    </div>
+
+                    <div class="animate-fade-in" style="--delay: 0.4s;">
+                        <div class="text-center mb-6">
+                            <h2 class="text-3xl font-bold text-white mb-2">${data.waterSectionTitle}</h2>
+                            <p class="text-white/80 text-lg">${data.waterSectionContent}</p>
+                        </div>
+                    </div>
+
+                    <div class="animate-fade-in" style="--delay: 0.6s;">
+                        <div class="text-center mb-6">
+                            <h2 class="text-3xl font-bold text-white mb-2">${data.preventiveMeasuresTitle}</h2>
+                        </div>
+                        <ul class="max-w-xl mx-auto space-y-4">
+                            ${data.preventiveMeasuresItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-white/90 text-lg">${item}</p></li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="animate-fade-in" style="--delay: 0.8s;">
+                        <div class="text-center mb-6">
+                            <h2 class="text-3xl font-bold text-white mb-2">${data.sanitationTitle}</h2>
+                        </div>
+                        <ul class="max-w-xl mx-auto space-y-4">
+                            ${data.sanitationItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-white/90 text-lg">${item}</p></li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="animate-fade-in" style="--delay: 1.0s;">
+                        <div class="text-center mb-6">
+                            <h2 class="text-3xl font-bold text-white mb-2">${data.healthyHabitsTitle}</h2>
+                        </div>
+                        <ul class="max-w-xl mx-auto space-y-4">
+                            ${data.healthyHabitsItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-white/90 text-lg">${item}</p></li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="animate-fade-in" style="--delay: 1.2s;">
+                        <div class="text-center mb-6">
+                            <h2 class="text-3xl font-bold text-white mb-2">${data.awarenessActivitiesTitle}</h2>
+                        </div>
+                        <ul class="max-w-xl mx-auto space-y-4">
+                            ${data.awarenessActivitiesItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-white/90 text-lg">${item}</p></li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="animate-fade-in" style="--delay: 1.4s;">
+                        <div class="text-center mb-6">
+                            <h2 class="text-3xl font-bold text-white mb-2">${data.immediateActionsTitle}</h2>
+                        </div>
+                        <div class="max-w-xl mx-auto space-y-6">
+                            <p class="text-white/90 text-lg">${data.immediateActionsHelpline}</p>
+                            <p class="text-white/90 text-lg">${data.immediateActionsEmergency}</p>
+                            <p class="text-white/90 text-lg">${data.immediateActionsFacility}</p>
+                        </div>
+                    </div>
+
+                    <div class="text-center animate-fade-in" style="--delay: 1.6s;">
+                        <p class="text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300">
+                            ${data.keyMessage}
+                        </p>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        renderContent('en');
+
+        langBtn.addEventListener('click', () => {
+            langDropdown.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('.language-option').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const lang = e.target.dataset.lang;
+                renderContent(lang);
+                langDropdown.classList.add('hidden');
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!langBtn.contains(e.target) && !langDropdown.contains(e.target)) {
+                langDropdown.classList.add('hidden');
+            }
+        });
+        
+    </script>
+</body>
+</html>
