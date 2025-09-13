@@ -1,3 +1,11 @@
+// Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Add event listener for the awareness button
+        document.getElementById('awareness-btn').addEventListener('click', function() {
+            // Open awareness page in a new tab
+            window.open('awareness.html', '_blank');
+        });
 // Tailwind CSS configuration
 tailwind.config = {
     darkMode: 'class',
