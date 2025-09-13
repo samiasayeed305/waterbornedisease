@@ -26,7 +26,6 @@
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
-    <!-- Header -->
     <div class="gradient-bg text-white py-8">
         <div class="container mx-auto px-4">
             <h1 class="text-4xl font-bold text-center mb-2">🦠 AI Outbreak Prediction Engine</h1>
@@ -35,12 +34,10 @@
     </div>
 
     <div class="container mx-auto px-4 py-8">
-        <!-- Main Input Section -->
         <div class="bg-white rounded-lg card-shadow p-6 mb-8">
             <h2 class="text-2xl font-semibold mb-6 text-gray-800">📍 Location & Prediction Settings</h2>
             
             <div class="grid md:grid-cols-3 gap-6">
-                <!-- Pin Code Input -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Pin Code</label>
                     <input type="text" id="pinCode" placeholder="Enter 6-digit pin code" 
@@ -49,7 +46,6 @@
                     <div id="areaInfo" class="mt-2 text-sm text-gray-600"></div>
                 </div>
 
-                <!-- Current Cases Input -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Current Cases</label>
                     <input type="number" id="currentCases" placeholder="Enter current case count" 
@@ -58,7 +54,6 @@
                     <div class="mt-1 text-xs text-gray-500">Leave empty for auto-calculation</div>
                 </div>
 
-                <!-- Prediction Days -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Prediction Period (Days)</label>
                     <select id="predictionDays" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
@@ -71,7 +66,6 @@
                 </div>
             </div>
 
-            <!-- Disease Type Selection -->
             <div class="mt-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Water-Borne Disease Type</label>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -90,39 +84,31 @@
                 </div>
             </div>
 
-            <!-- Predict Button -->
             <button id="predictBtn" class="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
                 🔮 Generate Prediction
             </button>
         </div>
 
-        <!-- Results Section -->
         <div id="resultsSection" class="hidden">
-            <!-- Area Information -->
             <div class="bg-white rounded-lg card-shadow p-6 mb-6">
                 <h3 class="text-xl font-semibold mb-4 text-gray-800">📍 Area Information</h3>
                 <div id="areaDetails" class="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
-                    <!-- Will be populated dynamically -->
-                </div>
+                    </div>
             </div>
 
-            <!-- Prediction Results -->
             <div class="bg-white rounded-lg card-shadow p-6 mb-6">
                 <h3 class="text-xl font-semibold mb-4 text-gray-800">📊 Outbreak Prediction</h3>
                 <div id="predictionResults" class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- Will be populated dynamically -->
-                </div>
+                    </div>
             </div>
 
-            <!-- Patient Data Access -->
             <div class="bg-white rounded-lg card-shadow p-6">
                 <h3 class="text-xl font-semibold mb-4 text-gray-800">👥 Patient Data Analytics</h3>
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
                         <h4 class="font-medium text-gray-700 mb-3">Current Patient Statistics</h4>
                         <div id="patientStats" class="space-y-2">
-                            <!-- Will be populated dynamically -->
-                        </div>
+                            </div>
                     </div>
                     <div>
                         <h4 class="font-medium text-gray-700 mb-3">Data Access Controls</h4>
@@ -142,7 +128,6 @@
             </div>
         </div>
 
-        <!-- Patient Data Modal -->
         <div id="patientModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
             <div class="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-96 overflow-y-auto">
                 <div class="flex justify-between items-center mb-4">
@@ -150,13 +135,10 @@
                     <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
                 </div>
                 <div id="modalContent" class="text-gray-600">
-                    <!-- Will be populated dynamically -->
-                </div>
+                    </div>
             </div>
         </div>
     </div>
-
-   <!-- Replace the entire script section in prediction.html with this updated version -->
 
 <script>
     // Sample pin code to area mapping with detailed location info
@@ -220,6 +202,88 @@
             coordinates: '17.3850° N, 78.4867° E',
             waterSources: 'Krishna River, Groundwater',
             riskFactors: 'Industrial pollution, water shortage'
+        },
+        
+        // --- NORTHEAST REGION PINCODES ---
+        '781001': { 
+            area: 'Guwahati GPO', 
+            city: 'Guwahati', 
+            state: 'Assam', 
+            population: 40000,
+            district: 'Kamrup Metropolitan',
+            coordinates: '26.1800° N, 91.7300° E',
+            waterSources: 'Brahmaputra River, Municipal Supply',
+            riskFactors: 'River flooding during monsoon, proximity to river'
+        },
+        '799001': {
+            area: 'Agartala H.O',
+            city: 'Agartala',
+            state: 'Tripura',
+            population: 55000,
+            district: 'West Tripura',
+            coordinates: '23.8315° N, 91.2868° E',
+            waterSources: 'Haora River, Municipal Supply',
+            riskFactors: 'Monsoon flooding, cross-border river pollution'
+        },
+        '795001': {
+            area: 'Imphal H.O',
+            city: 'Imphal',
+            state: 'Manipur',
+            population: 48000,
+            district: 'Imphal West',
+            coordinates: '24.8170° N, 93.9368° E',
+            waterSources: 'Imphal River, Loktak Lake, Springs',
+            riskFactors: 'Frequent flooding, contamination of local water bodies'
+        },
+        '793001': {
+            area: 'Shillong GPO',
+            city: 'Shillong',
+            state: 'Meghalaya',
+            population: 42000,
+            district: 'East Khasi Hills',
+            coordinates: '25.5788° N, 91.8933° E',
+            waterSources: 'Umiam Lake, Springs, Municipal Supply',
+            riskFactors: 'High rainfall causing contamination runoff'
+        },
+        '796001': {
+            area: 'Aizawl H.O',
+            city: 'Aizawl',
+            state: 'Mizoram',
+            population: 45000,
+            district: 'Aizawl',
+            coordinates: '23.7271° N, 92.7176° E',
+            waterSources: 'Tlawng River, Rainwater harvesting, Springs',
+            riskFactors: 'Landslides affecting pipelines, reliance on natural springs'
+        },
+        '797001': {
+            area: 'Kohima H.O',
+            city: 'Kohima',
+            state: 'Nagaland',
+            population: 38000,
+            district: 'Kohima',
+            coordinates: '25.6751° N, 94.1021° E',
+            waterSources: 'Natural springs, Dzüko Valley streams',
+            riskFactors: 'Hilly terrain, potential for source contamination'
+        },
+        '786184': {
+            area: 'Nalani Gaon (Nalani village, “Nalani Gaon” / Nalani Dalani)',
+            city: 'Chabubua Town',
+            state: 'Assam',
+            population: 35000,
+            district: 'Dibrugarh',
+            coordinates: '27.40°N, 95.03°E',
+            waterSources: 'Tubewell / groundwater (tube-well water used for drinking).',
+            riskFactors: 'Investigation found E. coli and Shigella in stool/water; many cases used tubewell water, low pre-treatment of drinking water, poor hand hygiene, poultry farms near houses (flies), and persistent open-defecation / poor sanitation — WASH gaps identified as drivers. (case control / lab work).'
+        },
+        '794111': {
+            area: 'Williamnagar town & outskirts',
+            city: 'Williamnagar (Tura / East Garo Hills HQ)',
+            state: 'Meghalaya',
+            population: 18000-19000,
+            district: 'East Garo Hills',
+            coordinates: '25.53°N, 90.59°E',
+            waterSources: 'Raw water from Chibok / Simsang (river / open wells / raw water used for supply); open wells in affected areas.',
+            riskFactors: 'Local reporting (April 2021) recorded ~200 hospital admissions; PHE teams tested raw water from Chibok and Simsang, disinfected open wells, and advised boiling water. Risk factors: suspected contamination of raw water / open wells (cause under investigation), inadequate treatment/contamination after heavy rains; public health response included disinfection and boil-water advisories.'
         }
     };
 
@@ -236,7 +300,7 @@
             currentPinCode = pinCode;
             if (pinCodeData[pinCode]) {
                 const data = pinCodeData[pinCode];
-                areaInfo.innerHTML = 📍 ${data.area}, ${data.city}, ${data.state};
+                areaInfo.innerHTML = `📍 ${data.area}, ${data.city}, ${data.state}`;
                 areaInfo.className = 'mt-2 text-sm text-green-600 font-medium';
             } else {
                 areaInfo.innerHTML = '📍 Sample Area (Pin code not in database)';
@@ -285,53 +349,78 @@
 
     // Function to call ML API
     async function callMLPredictionAPI(pinCode, disease, days, currentCases) {
-        // Show loading state
-        document.getElementById('predictText').textContent = 'Processing with AI...';
-        document.getElementById('predictLoading').classList.remove('hidden');
-        document.getElementById('predictBtn').disabled = true;
+        // This is a mock function. In a real application, you would make a fetch request here.
+        // For demonstration, we'll generate some plausible fake data.
+        console.log(`Calling mock API for pin: ${pinCode}, disease: ${disease}, days: ${days}`);
+
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        const areaData = pinCodeData[pinCode] || { population: 50000 };
+        const baseCases = currentCases || Math.floor(Math.random() * (areaData.population / 2000));
+        const growthRate = (Math.random() * 2 + 0.5).toFixed(2); // Random growth rate between 0.5% and 2.5%
+        let predicted = baseCases;
+        for(let i=0; i<days; i++) {
+            predicted *= (1 + (growthRate/100));
+        }
+        predicted = Math.round(predicted);
+
+        let riskLevel = 'Low';
+        if (predicted / areaData.population > 0.005) {
+            riskLevel = 'High';
+        } else if (predicted / areaData.population > 0.002) {
+            riskLevel = 'Medium';
+        }
+
+        const mockResponse = {
+            success: true,
+            data: {
+                currentCases: baseCases,
+                predictedCases: predicted,
+                dailyGrowthRate: growthRate,
+                riskLevel: riskLevel,
+            }
+        };
         
-        try {
-            const response = await fetch('/api/predict', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    pinCode: pinCode,
-                    disease: disease,
-                    days: days,
-                    currentCases: currentCases || null
-                })
-            });
-            
-            if (!response.ok) {
-                throw new Error('API response error');
+        // In a real scenario, you would not have the `if(true)` block.
+        // This simulates a successful API call for the demo.
+        if (true) { // Directly return mock data instead of a real fetch
+            return mockResponse;
+        } else {
+             // Real fetch call would look like this:
+            try {
+                const response = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pinCode, disease, days, currentCases: currentCases || null })
+                });
+                if (!response.ok) throw new Error('API response error');
+                const result = await response.json();
+                if (!result.success) throw new Error(result.error || 'Prediction failed');
+                return result;
+            } catch (error) {
+                console.error('Error calling ML API:', error);
+                throw new Error('Failed to get prediction from AI engine');
             }
-            
-            const result = await response.json();
-            
-            if (!result.success) {
-                throw new Error(result.error || 'Prediction failed');
-            }
-            
-            return result;
-        } catch (error) {
-            console.error('Error calling ML API:', error);
-            throw new Error('Failed to get prediction from AI engine');
-        } finally {
-            // Reset button state
-            document.getElementById('predictText').textContent = '🔮 Generate Prediction';
-            document.getElementById('predictLoading').classList.add('hidden');
-            document.getElementById('predictBtn').disabled = false;
         }
     }
 
     async function generatePrediction() {
+        const predictBtn = document.getElementById('predictBtn');
+        predictBtn.disabled = true;
+        predictBtn.innerHTML = `
+            <span class="flex items-center justify-center">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing with AI...
+            </span>`;
+        
         try {
             const userCases = document.getElementById('currentCases').value;
             const casesValue = userCases && userCases > 0 ? parseInt(userCases) : null;
             
-            // Call ML API
             const result = await callMLPredictionAPI(
                 currentPinCode, 
                 selectedDisease, 
@@ -343,6 +432,9 @@
         } catch (error) {
             alert(error.message || 'Error generating prediction. Please try again.');
             console.error('Prediction error:', error);
+        } finally {
+            predictBtn.disabled = false;
+            predictBtn.innerHTML = '🔮 Generate Prediction';
         }
     }
 
@@ -351,24 +443,27 @@
         resultsSection.classList.remove('hidden');
         resultsSection.scrollIntoView({ behavior: 'smooth' });
 
-        // Populate area details
         const areaData = pinCodeData[currentPinCode] || {
             area: 'Sample Area',
             city: 'Sample City',
             state: 'Sample State',
-            population: 35000
+            population: 35000,
+            district: 'N/A',
+            coordinates: 'N/A',
+            waterSources: 'N/A',
+            riskFactors: 'N/A'
         };
 
         document.getElementById('areaDetails').innerHTML = `
             <div class="bg-blue-50 p-4 rounded-lg">
                 <div class="text-sm text-gray-600">Area & District</div>
                 <div class="font-semibold text-gray-800">${areaData.area}</div>
-                <div class="text-xs text-gray-500">${areaData.district || 'District info not available'}</div>
+                <div class="text-xs text-gray-500">${areaData.district}</div>
             </div>
             <div class="bg-green-50 p-4 rounded-lg">
                 <div class="text-sm text-gray-600">Location</div>
                 <div class="font-semibold text-gray-800">${areaData.city}, ${areaData.state}</div>
-                <div class="text-xs text-gray-500">${areaData.coordinates || 'Coordinates not available'}</div>
+                <div class="text-xs text-gray-500">${areaData.coordinates}</div>
             </div>
             <div class="bg-purple-50 p-4 rounded-lg">
                 <div class="text-sm text-gray-600">Population</div>
@@ -376,19 +471,17 @@
             </div>
             <div class="bg-yellow-50 p-4 rounded-lg">
                 <div class="text-sm text-gray-600">Water Sources</div>
-                <div class="font-semibold text-gray-800 text-sm">${areaData.waterSources || 'Municipal Supply'}</div>
+                <div class="font-semibold text-gray-800 text-sm">${areaData.waterSources}</div>
             </div>
             <div class="bg-red-50 p-4 rounded-lg">
                 <div class="text-sm text-gray-600">Risk Factors</div>
-                <div class="font-semibold text-gray-800 text-sm">${areaData.riskFactors || 'Standard urban risks'}</div>
+                <div class="font-semibold text-gray-800 text-sm">${areaData.riskFactors}</div>
             </div>
         `;
 
-        // Determine risk color
         const riskColor = predictionData.riskLevel === 'High' ? 'red' : 
                          predictionData.riskLevel === 'Medium' ? 'yellow' : 'green';
 
-        // Display prediction results from ML API
         document.getElementById('predictionResults').innerHTML = `
             <div class="bg-blue-50 p-4 rounded-lg">
                 <div class="text-sm text-gray-600">Current Cases</div>
@@ -407,46 +500,45 @@
                 <div class="text-2xl font-bold text-gray-600">${predictionData.dailyGrowthRate}%</div>
             </div>
         `;
-
-        // Fetch and display patient statistics
-        fetchPatientStats();
+        fetchPatientStats(predictionData.currentCases);
     }
 
-    async function fetchPatientStats() {
-        try {
-            const response = await fetch('/api/patient_stats');
-            if (response.ok) {
-                const stats = await response.json();
-                
-                document.getElementById('patientStats').innerHTML = `
-                    <div class="flex justify-between py-2 border-b">
-                        <span class="text-gray-600">Active Patients:</span>
-                        <span class="font-semibold">${stats.active}</span>
-                    </div>
-                    <div class="flex justify-between py-2 border-b">
-                        <span class="text-gray-600">Recovered:</span>
-                        <span class="font-semibold text-green-600">${stats.recovered}</span>
-                    </div>
-                    <div class="flex justify-between py-2 border-b">
-                        <span class="text-gray-600">Critical:</span>
-                        <span class="font-semibold text-red-600">${stats.critical}</span>
-                    </div>
-                    <div class="flex justify-between py-2">
-                        <span class="text-gray-600">Avg Age:</span>
-                        <span class="font-semibold">${stats.averageAge} years</span>
-                    </div>
-                `;
-            }
-        } catch (error) {
-            console.error('Error fetching patient stats:', error);
-        }
+    function fetchPatientStats(currentCases) {
+        // Mock patient stats based on current cases
+        const active = currentCases;
+        const recovered = Math.floor(active * (Math.random() * 1.5 + 2)); // Recovered are 2x-3.5x active
+        const critical = Math.floor(active * (Math.random() * 0.05 + 0.02)); // 2-7% are critical
+        const stats = {
+            active: active,
+            recovered: recovered,
+            critical: critical,
+            averageAge: (Math.random() * 10 + 25).toFixed(1) // Avg age between 25 and 35
+        };
+        
+        document.getElementById('patientStats').innerHTML = `
+            <div class="flex justify-between py-2 border-b">
+                <span class="text-gray-600">Active Patients:</span>
+                <span class="font-semibold">${stats.active}</span>
+            </div>
+            <div class="flex justify-between py-2 border-b">
+                <span class="text-gray-600">Recovered:</span>
+                <span class="font-semibold text-green-600">${stats.recovered}</span>
+            </div>
+            <div class="flex justify-between py-2 border-b">
+                <span class="text-gray-600">Critical:</span>
+                <span class="font-semibold text-red-600">${stats.critical}</span>
+            </div>
+            <div class="flex justify-between py-2">
+                <span class="text-gray-600">Avg Age:</span>
+                <span class="font-semibold">${stats.averageAge} years</span>
+            </div>
+        `;
     }
 
     function accessPatientData(dataType) {
         const modal = document.getElementById('patientModal');
         const modalTitle = document.getElementById('modalTitle');
         const modalContent = document.getElementById('modalContent');
-
         let title = '';
         let content = '';
 
@@ -472,7 +564,7 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-sm text-gray-500 mt-4">⚠ Demo Data - This is sample patient demographic information for demonstration purposes.</p>
+                    <p class="text-sm text-gray-500 mt-4">⚠️ Demo Data - This is sample patient demographic information for demonstration purposes.</p>
                 `;
                 break;
             case 'symptoms':
@@ -482,10 +574,10 @@
                         <div class="bg-red-50 p-4 rounded">
                             <h4 class="font-semibold text-red-800 mb-2">Most Common Symptoms</h4>
                             <div class="grid grid-cols-2 gap-2 text-sm">
-                                <div>• Fever (85%)</div>
-                                <div>• Cough (72%)</div>
-                                <div>• Fatigue (68%)</div>
-                                <div>• Headache (45%)</div>
+                                <div>• Diarrhea (92%)</div>
+                                <div>• Vomiting (85%)</div>
+                                <div>• Dehydration (78%)</div>
+                                <div>• Fever (65%)</div>
                             </div>
                         </div>
                         <div class="bg-yellow-50 p-4 rounded">
@@ -497,7 +589,7 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-sm text-gray-500 mt-4">⚠ Demo Data - This is sample symptoms analysis for demonstration purposes.</p>
+                    <p class="text-sm text-gray-500 mt-4">⚠️ Demo Data - This is sample symptoms analysis for demonstration purposes.</p>
                 `;
                 break;
             case 'treatment':
@@ -507,21 +599,22 @@
                         <div class="bg-green-50 p-4 rounded">
                             <h4 class="font-semibold text-green-800 mb-2">Treatment Protocols</h4>
                             <div class="text-sm space-y-1">
-                                <div>• Home isolation: 60%</div>
-                                <div>• Outpatient care: 30%</div>
+                                <div>• Oral Rehydration Solution (ORS): 95%</div>
+                                <div>• IV Fluids: 20%</div>
+                                <div>• Antibiotics: 40%</div>
                                 <div>• Hospitalization: 10%</div>
                             </div>
                         </div>
                         <div class="bg-blue-50 p-4 rounded">
                             <h4 class="font-semibold text-blue-800 mb-2">Recovery Rates</h4>
                             <div class="text-sm space-y-1">
-                                <div>• Average recovery time: 7-14 days</div>
-                                <div>• Full recovery rate: 95%</div>
-                                <div>• Readmission rate: 2%</div>
+                                <div>• Average recovery time: 5-10 days</div>
+                                <div>• Full recovery rate: 98%</div>
+                                <div>• Readmission rate: 1.5%</div>
                             </div>
                         </div>
                     </div>
-                    <p class="text-sm text-gray-500 mt-4">⚠ Demo Data - This is sample treatment data for demonstration purposes.</p>
+                    <p class="text-sm text-gray-500 mt-4">⚠️ Demo Data - This is sample treatment data for demonstration purposes.</p>
                 `;
                 break;
         }
@@ -538,12 +631,11 @@
         modal.classList.remove('flex');
     }
 
-    // Close modal when clicking outside
     document.getElementById('patientModal').addEventListener('click', function(e) {
         if (e.target === this) {
             closeModal();
         }
     });
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97bd170920a73b34',t:'MTc1NzMyMDI5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>

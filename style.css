@@ -248,20 +248,33 @@ body {
     background: rgba(255, 255, 255, 0.15);
 }
 
+/* === MODIFIED TYPING ANIMATION === */
+
+
 .typing-animation {
-    border-right: 2px solid #667eea;
-    animation: typing 4s steps(40, end) infinite, blink 1s step-end infinite;
+  display: inline-block;        /* required so width: ...ch works as expected */
+  white-space: nowrap;          /* prevent wrapping */
+  overflow: hidden;             /* hide the unseen characters */
+  width: 0ch;                   /* start closed (0 characters visible) */
+  border-right: .15em solid #fde047;
+  /* steps(62,end) → 62 character steps; adjust if you change the text */
+  animation:
+    typing-lifecycle 8.5s steps(52,end) infinite,
+    blink 0.7s step-end infinite;
 }
 
-@keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
+/* Type (4.5s) then hold (remaining time). Keep final width at 62ch until loop resets. */
+@keyframes typing-lifecycle {
+  0%    { width: 0ch;                    } /* start */
+  52.941% { width: 52ch;                 } /* typed after 4.5s (4.5/8.5*100 ≈ 52.941%) */
+  100%  { width: 52ch;                   } /* hold the fully-typed state until loop resets */
 }
 
+/* Cursor blink */
 @keyframes blink {
-    from, to { border-color: transparent }
-   50% { border-color: #667eea; }
+  50% { border-color: transparent; }
 }
+
 
 .modal-backdrop {
     backdrop-filter: blur(8px);
