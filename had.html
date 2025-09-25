@@ -6,6 +6,10 @@
     <title>Health Administrator Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Google Maps API - Replace YOUR_API_KEY with your actual key -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZWZXkBxdSevip6RNE6NpiyvHiV6SP9nw&callback=initMap&libraries=visualization"></script>
+    
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -51,9 +55,201 @@
         .dark ::-webkit-scrollbar-thumb {
             background: #475569;
         }
+        
+        /* Profile sidebar styles - Updated to open from right */
+        .profile-sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%; /* Changed from left to right */
+            width: 320px;
+            height: 100vh;
+            background: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: right 0.3s ease; /* Changed from left to right */
+            overflow-y: auto;
+        }
+        
+        .dark .profile-sidebar {
+            background: #1f2937;
+        }
+        
+        .profile-sidebar.active {
+            right: 0; /* Changed from left to right */
+            left: auto;
+        }
+        
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Profile dropdown animation */
+        .profile-dropdown {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .profile-dropdown.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+        
+        /* Map styles */
+        #hotspot-map {
+            height: 256px;
+            width: 100%;
+            border-radius: 0.5rem;
+        }
+        
+        .map-container {
+            position: relative;
+        }
+        
+        .map-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 100;
+            background: white;
+            border-radius: 4px;
+            padding: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .dark .map-controls {
+            background: #374151;
+            color: white;
+        }
+        
+        .map-legend {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 100;
+            background: white;
+            border-radius: 4px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-size: 12px;
+        }
+        
+        .dark .map-legend {
+            background: #374151;
+            color: white;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900">
+    <!-- Profile Sidebar -->
+    <div id="profile-sidebar" class="profile-sidebar">
+        <div class="p-6 border-b dark:border-gray-700">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-gray-50">Profile</h2>
+                <button id="close-sidebar" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5 text-gray-700 dark:text-gray-300"></i>
+                </button>
+            </div>
+            
+            <div class="flex flex-col items-center mb-6">
+                <div class="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-4">
+                    <i data-lucide="user" class="w-10 h-10 text-white"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-50">Admin User</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Health Administrator</p>
+            </div>
+        </div>
+        
+        <div class="p-6">
+            <div class="mb-6">
+                <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">ACCOUNT</h4>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="flex items-center gap-3 p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                            <span>My Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center gap-3 p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <i data-lucide="settings" class="w-5 h-5"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center gap-3 p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <i data-lucide="bell" class="w-5 h-5"></i>
+                            <span>Notifications</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="mb-6">
+                <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">DASHBOARD</h4>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="flex items-center gap-3 p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <i data-lucide="activity" class="w-5 h-5"></i>
+                            <span>Analytics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center gap-3 p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center gap-3 p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <i data-lucide="file-text" class="w-5 h-5"></i>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t dark:border-gray-700">
+                <a href="index.html" class="flex items-center gap-3 p-2 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                    <span>Log Out</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
     <!-- Header -->
     <header class="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
         <div class="container mx-auto px-6 py-4 flex items-center justify-between">
@@ -71,6 +267,13 @@
                     <i data-lucide="home" class="w-4 h-4"></i>
                     <span>Home</span>
                 </a>
+                
+                <!-- Profile Button -->
+                <button id="profile-btn" class="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors text-gray-700 dark:text-gray-300">
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                    <span>Admin User</span>
+                </button>
+                
                 <!-- Dark Mode Toggle -->
                 <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors duration-300">
                     <i data-lucide="sun" id="sun-icon" class="w-5 h-5"></i>
@@ -107,7 +310,7 @@
                 </div>
             </div>
 
-            <!-- Card: Hotspot Visualization -->
+            <!-- Card: Hotspot Visualization with Google Maps -->
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="p-3 rounded-full bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300">
@@ -115,8 +318,25 @@
                     </div>
                     <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Outbreak Hotspots</h2>
                 </div>
-                <div class="h-64 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                    <p class="text-gray-500 dark:text-gray-400">Map Visualization Placeholder</p>
+                <div class="map-container">
+                    <div id="hotspot-map"></div>
+                    <div class="map-controls">
+                        <button id="toggle-heatmap" class="px-2 py-1 bg-indigo-500 text-white rounded text-xs">Toggle Heatmap</button>
+                    </div>
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <div class="legend-color bg-green-500"></div>
+                            <span>Low Risk</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color bg-yellow-500"></div>
+                            <span>Medium Risk</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color bg-red-500"></div>
+                            <span>High Risk</span>
+                        </div>
+                    </div>
                 </div>
                 <ul class="mt-4 space-y-2">
                     <li class="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg flex justify-between items-center">
@@ -243,6 +463,159 @@
     </div>
 
     <script>
+        // Google Maps initialization
+        let map;
+        let heatmap;
+        let markers = [];
+        
+        function initMap() {
+            // Create a map centered on a sample location
+            map = new google.maps.Map(document.getElementById('hotspot-map'), {
+                zoom: 12,
+                center: { lat: 40.7128, lng: -74.0060 }, // New York coordinates as example
+                styles: [
+                    {
+                        "featureType": "all",
+                        "elementType": "geometry",
+                        "stylers": [{ "color": "#f5f5f5" }]
+                    },
+                    {
+                        "featureType": "all",
+                        "elementType": "labels.text.fill",
+                        "stylers": [{ "gamma": 0.01 }, { "lightness": 20 }]
+                    },
+                    {
+                        "featureType": "all",
+                        "elementType": "labels.text.stroke",
+                        "stylers": [{ "saturation": -31 }, { "lightness": -33 }, { "weight": 2 }, { "gamma": 0.8 }]
+                    },
+                    {
+                        "featureType": "all",
+                        "elementType": "labels.icon",
+                        "stylers": [{ "visibility": "off" }]
+                    },
+                    {
+                        "featureType": "landscape",
+                        "elementType": "geometry",
+                        "stylers": [{ "lightness": 30 }, { "saturation": 30 }, { "color": "#f0f0f0" }]
+                    },
+                    {
+                        "featureType": "poi",
+                        "elementType": "geometry",
+                        "stylers": [{ "saturation": 20 }]
+                    },
+                    {
+                        "featureType": "poi.park",
+                        "elementType": "geometry",
+                        "stylers": [{ "lightness": 20 }, { "saturation": -20 }]
+                    },
+                    {
+                        "featureType": "road",
+                        "elementType": "geometry",
+                        "stylers": [{ "lightness": 10 }, { "saturation": -30 }]
+                    },
+                    {
+                        "featureType": "road",
+                        "elementType": "geometry.stroke",
+                        "stylers": [{ "saturation": 25 }, { "lightness": 25 }]
+                    },
+                    {
+                        "featureType": "water",
+                        "elementType": "all",
+                        "stylers": [{ "lightness": -20 }]
+                    }
+                ]
+            });
+            
+            // Add outbreak hotspots with different colors based on risk level
+            const hotspots = [
+                { lat: 40.7128, lng: -74.0060, title: 'North Sector', risk: 'high', cases: 42 },
+                { lat: 40.7282, lng: -73.9942, title: 'Village 3A', risk: 'medium', cases: 18 },
+                { lat: 40.7505, lng: -73.9934, title: 'East District', risk: 'low', cases: 5 },
+                { lat: 40.7589, lng: -73.9851, title: 'Central Hospital', risk: 'high', cases: 35 },
+                { lat: 40.6892, lng: -74.0445, title: 'South Waterfront', risk: 'medium', cases: 12 }
+            ];
+            
+            // Create markers for each hotspot
+            hotspots.forEach(hotspot => {
+                let iconColor;
+                switch(hotspot.risk) {
+                    case 'high': iconColor = 'red'; break;
+                    case 'medium': iconColor = 'yellow'; break;
+                    case 'low': iconColor = 'green'; break;
+                    default: iconColor = 'gray';
+                }
+                
+                const marker = new google.maps.Marker({
+                    position: { lat: hotspot.lat, lng: hotspot.lng },
+                    map: map,
+                    title: hotspot.title,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 10,
+                        fillColor: iconColor,
+                        fillOpacity: 0.7,
+                        strokeWeight: 2,
+                        strokeColor: 'white'
+                    }
+                });
+                
+                // Add info window
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `
+                        <div class="p-2">
+                            <h3 class="font-bold">${hotspot.title}</h3>
+                            <p>Risk Level: <span class="font-semibold ${hotspot.risk === 'high' ? 'text-red-600' : hotspot.risk === 'medium' ? 'text-yellow-600' : 'text-green-600'}">${hotspot.risk.toUpperCase()}</span></p>
+                            <p>Reported Cases: ${hotspot.cases}</p>
+                        </div>
+                    `
+                });
+                
+                marker.addListener('click', () => {
+                    infoWindow.open(map, marker);
+                });
+                
+                markers.push(marker);
+            });
+            
+            // Prepare heatmap data
+            const heatmapData = hotspots.map(hotspot => {
+                return {
+                    location: new google.maps.LatLng(hotspot.lat, hotspot.lng),
+                    weight: hotspot.cases
+                };
+            });
+            
+            // Create heatmap layer
+            heatmap = new google.maps.visualization.HeatmapLayer({
+                data: heatmapData,
+                map: null, // Initially not shown
+                radius: 30,
+                opacity: 0.6
+            });
+            
+            // Toggle heatmap button functionality
+            document.getElementById('toggle-heatmap').addEventListener('click', () => {
+                if (heatmap.getMap()) {
+                    heatmap.setMap(null);
+                } else {
+                    heatmap.setMap(map);
+                }
+            });
+        }
+        
+        // If the Google Maps API fails to load
+        window.gm_authFailure = function() {
+            document.getElementById('hotspot-map').innerHTML = `
+                <div class="h-full bg-gray-200 dark:bg-gray-700 rounded-lg flex flex-col items-center justify-center p-4">
+                    <i data-lucide="alert-triangle" class="w-10 h-10 text-yellow-500 mb-2"></i>
+                    <p class="text-gray-500 dark:text-gray-400 text-center">Google Maps failed to load. Please check your API key.</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">Replace YOUR_API_KEY in the script tag with your actual Google Maps API key.</p>
+                </div>
+            `;
+            lucide.createIcons();
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
             // Initialize Lucide icons
             if (typeof lucide !== 'undefined' && lucide.createIcons) {
@@ -307,6 +680,34 @@
             messageModal.addEventListener('click', (e) => {
                 if (e.target === messageModal) {
                     messageModal.classList.add('hidden');
+                }
+            });
+
+            // Profile Sidebar Logic
+            const profileBtn = document.getElementById('profile-btn');
+            const profileSidebar = document.getElementById('profile-sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            
+            // Open sidebar
+            profileBtn.addEventListener('click', () => {
+                profileSidebar.classList.add('active');
+                sidebarOverlay.classList.add('active');
+            });
+            
+            // Close sidebar
+            function closeSidebar() {
+                profileSidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            }
+            
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+            
+            // Close sidebar with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeSidebar();
                 }
             });
         });
