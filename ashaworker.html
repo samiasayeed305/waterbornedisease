@@ -473,6 +473,256 @@
             background: #ef4444;
             color: white;
         }
+        
+        /* Profile Sidebar Styles */
+        .profile-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .dark .profile-sidebar {
+            background: #1f2937;
+        }
+        
+        .profile-sidebar.open {
+            right: 0;
+        }
+        
+        .profile-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .profile-header {
+            background: linear-gradient(135deg, #0f766e 0%, #059669 100%);
+            padding: 2rem;
+            color: white;
+            text-align: center;
+        }
+        
+        .dark .profile-header {
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .profile-content {
+            padding: 1.5rem;
+        }
+        
+        .profile-section {
+            margin-bottom: 2rem;
+        }
+        
+        .profile-section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .dark .profile-section-title {
+            color: #f9fafb;
+        }
+        
+        .profile-info-item {
+            display: flex;
+            justify-content: between;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .dark .profile-info-item {
+            border-bottom: 1px solid #374151;
+        }
+        
+        .profile-info-label {
+            font-weight: 500;
+            color: #6b7280;
+            flex: 1;
+        }
+        
+        .dark .profile-info-label {
+            color: #9ca3af;
+        }
+        
+        .profile-info-value {
+            flex: 2;
+            color: #1f2937;
+            text-align: right;
+        }
+        
+        .dark .profile-info-value {
+            color: #f9fafb;
+        }
+        
+        .profile-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: none;
+            border-radius: 0.5rem;
+            color: #1f2937;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-action-btn:hover {
+            background: #f3f4f6;
+        }
+        
+        .dark .profile-action-btn {
+            color: #f9fafb;
+        }
+        
+        .dark .profile-action-btn:hover {
+            background: #374151;
+        }
+        
+        .profile-action-btn.logout {
+            color: #ef4444;
+        }
+        
+        .dark .profile-action-btn.logout {
+            color: #f87171;
+        }
+        
+        .profile-action-btn.logout:hover {
+            background: #fef2f2;
+        }
+        
+        .dark .profile-action-btn.logout:hover {
+            background: #7f1d1d;
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .profile-stat {
+            background: #f9fafb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .dark .profile-stat {
+            background: #374151;
+        }
+        
+        .profile-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #059669;
+        }
+        
+        .dark .profile-stat-value {
+            color: #10b981;
+        }
+        
+        .profile-stat-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+        
+        .dark .profile-stat-label {
+            color: #9ca3af;
+        }
+        
+        .setting-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #10b981;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
     </style>
 </head>
 <body class="min-h-screen theme-transition bg-gray-50 dark:bg-gray-900">
@@ -508,10 +758,183 @@
                     <button id="help-btn" class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
                         <i data-lucide="help-circle" class="w-5 h-5 text-white"></i>
                     </button>
+                    <!-- Profile Button -->
+                    <button id="profile-btn" class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
+                        <i data-lucide="user" class="w-5 h-5 text-white"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </header>
+
+    <!-- Profile Sidebar -->
+    <div id="profile-backdrop" class="profile-backdrop"></div>
+    <div id="profile-sidebar" class="profile-sidebar">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <i data-lucide="user" class="w-8 h-8 text-white"></i>
+            </div>
+            <h2 class="text-xl font-bold">Meera Gogoi</h2>
+            <p class="text-emerald-100">ASHA Worker • Majuli Village</p>
+        </div>
+        
+        <div class="profile-content">
+            <!-- Personal Details Section -->
+            <div class="profile-section">
+                <h3 class="profile-section-title">
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                    Personal Details
+                </h3>
+                
+                <div class="profile-info-item">
+                    <span class="profile-info-label">Full Name</span>
+                    <span class="profile-info-value">Meera Gogoi</span>
+                </div>
+                
+                <div class="profile-info-item">
+                    <span class="profile-info-label">ASHA ID</span>
+                    <span class="profile-info-value">ASHA-NE-7824</span>
+                </div>
+                
+                <div class="profile-info-item">
+                    <span class="profile-info-label">Phone</span>
+                    <span class="profile-info-value">+91 98765 43210</span>
+                </div>
+                
+                <div class="profile-info-item">
+                    <span class="profile-info-label">Email</span>
+                    <span class="profile-info-value">meera.gogoi@asha.ne</span>
+                </div>
+                
+                <div class="profile-info-item">
+                    <span class="profile-info-label">Region</span>
+                    <span class="profile-info-value">Majuli, Assam</span>
+                </div>
+                
+                <div class="profile-info-item">
+                    <span class="profile-info-label">Joined</span>
+                    <span class="profile-info-value">March 2021</span>
+                </div>
+            </div>
+            
+            <!-- Work Statistics -->
+            <div class="profile-section">
+                <h3 class="profile-section-title">
+                    <i data-lucide="bar-chart" class="w-4 h-4"></i>
+                    Work Statistics
+                </h3>
+                
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <div class="profile-stat-value">45</div>
+                        <div class="profile-stat-label">Households</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-value">1,240</div>
+                        <div class="profile-stat-label">Surveys</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-value">98%</div>
+                        <div class="profile-stat-label">Completion</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-value">4.8</div>
+                        <div class="profile-stat-label">Rating</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Section -->
+            <div class="profile-section">
+                <h3 class="profile-section-title">
+                    <i data-lucide="settings" class="w-4 h-4"></i>
+                    Settings
+                </h3>
+                
+                <button class="profile-action-btn">
+                    <i data-lucide="bell" class="w-4 h-4"></i>
+                    Notifications
+                    <div class="flex-1"></div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </button>
+                
+                <button class="profile-action-btn">
+                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                    Location Tracking
+                    <div class="flex-1"></div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </button>
+                
+                <button class="profile-action-btn">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    Auto-download Updates
+                    <div class="flex-1"></div>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </button>
+                
+                <button class="profile-action-btn">
+                    <i data-lucide="shield" class="w-4 h-4"></i>
+                    Privacy Settings
+                    <div class="flex-1"></div>
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+                
+                <button class="profile-action-btn">
+                    <i data-lucide="help-circle" class="w-4 h-4"></i>
+                    Help & Support
+                    <div class="flex-1"></div>
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+            
+            <!-- Actions Section -->
+            <div class="profile-section">
+                <h3 class="profile-section-title">
+                    <i data-lucide="zap" class="w-4 h-4"></i>
+                    Quick Actions
+                </h3>
+                
+                <button class="profile-action-btn">
+                    <i data-lucide="edit" class="w-4 h-4"></i>
+                    Edit Profile
+                    <div class="flex-1"></div>
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+                
+                <button class="profile-action-btn">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    Download Reports
+                    <div class="flex-1"></div>
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+                
+                <button class="profile-action-btn">
+                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                    Training Materials
+                    <div class="flex-1"></div>
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+            
+            <!-- Logout Section -->
+            <div class="profile-section">
+                <button class="profile-action-btn logout" id="logout-btn" >
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    Log Out
+                    <div class="flex-1"></div>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Main Dashboard -->
     <main class="container mx-auto px-4 py-8">
@@ -1379,6 +1802,25 @@
             }
         }
 
+        // Profile sidebar functions
+        function openProfileSidebar() {
+            document.getElementById('profile-sidebar').classList.add('open');
+            document.getElementById('profile-backdrop').classList.add('active');
+        }
+
+        function closeProfileSidebar() {
+            document.getElementById('profile-sidebar').classList.remove('open');
+            document.getElementById('profile-backdrop').classList.remove('active');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                alert('Logging out... Redirecting to login page.');
+                // In a real app, you would redirect to login page
+                // window.location.href = '/login';
+            }
+        }
+
         // Initialize the app
         function initializeApp() {
             createIconsSafely();
@@ -1664,6 +2106,11 @@
         function setupEventListeners() {
             // Theme toggle
             document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+            
+            // Profile button
+            document.getElementById('profile-btn').addEventListener('click', openProfileSidebar);
+            document.getElementById('profile-backdrop').addEventListener('click', closeProfileSidebar);
+            document.getElementById('logout-btn').addEventListener('click', logout);
             
             // Modal controls
             document.getElementById('quick-survey-btn').addEventListener('click', showQuickSurveyModal);
