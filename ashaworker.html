@@ -742,7 +742,7 @@
                 <div class="flex items-center gap-3">
                     <div class="hidden md:flex items-center gap-4 mr-4">
                         <div class="text-white text-sm">
-                            <div class="font-medium">Meera Gogoi</div>
+                            <div class="font-medium">Samia Sayeed</div>
                             <div class="text-emerald-200">Majuli Village</div>
                         </div>
                     </div>
@@ -774,7 +774,7 @@
             <div class="profile-avatar">
                 <i data-lucide="user" class="w-8 h-8 text-white"></i>
             </div>
-            <h2 class="text-xl font-bold">Meera Gogoi</h2>
+            <h2 class="text-xl font-bold">Samia Sayeed</h2>
             <p class="text-emerald-100">ASHA Worker • Majuli Village</p>
         </div>
         
@@ -788,7 +788,7 @@
                 
                 <div class="profile-info-item">
                     <span class="profile-info-label">Full Name</span>
-                    <span class="profile-info-value">Meera Gogoi</span>
+                    <span class="profile-info-value">Samia Sayeed</span>
                 </div>
                 
                 <div class="profile-info-item">
@@ -803,7 +803,7 @@
                 
                 <div class="profile-info-item">
                     <span class="profile-info-label">Email</span>
-                    <span class="profile-info-value">meera.gogoi@asha.ne</span>
+                    <span class="profile-info-value">samia.sayeed@asha.ne</span>
                 </div>
                 
                 <div class="profile-info-item">
@@ -926,12 +926,16 @@
             </div>
             
             <!-- Logout Section -->
-            <div class="profile-section">
-                <button class="profile-action-btn logout" id="logout-btn" >
-                    <i data-lucide="log-out" class="w-4 h-4"></i>
-                    Log Out
-                    <div class="flex-1"></div>
-                </button>
+           <div class="profile-section">
+    <button 
+        class="profile-action-btn logout" 
+        id="logout-btn" 
+        **onclick="logout()"** > 
+        <i data-lucide="log-out" class="w-4 h-4"></i>
+        Log Out
+        <div class="flex-1"></div>
+    </button>
+</div>
             </div>
         </div>
     </div>
@@ -1818,6 +1822,7 @@
                 alert('Logging out... Redirecting to login page.');
                 // In a real app, you would redirect to login page
                 // window.location.href = '/login';
+                window.location.href = 'index.html'; 
             }
         }
 
