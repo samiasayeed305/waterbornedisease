@@ -14,9 +14,12 @@
         .theme-transition {
             transition: background-color 0.5s ease, color 0.5s ease;
         }
+        /* Dark mode gradient */
         .gradient-bg {
             background: linear-gradient(135deg, #1f2937, #0f172a);
         }
+        /* REMOVED: Adjusted Light mode background (.light-bg) */
+        
         .glass-effect {
             background-color: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -81,51 +84,55 @@
 </head>
 <body class="min-h-screen theme-transition gradient-bg text-white">
     <header class="relative z-30 p-6">
-        <div class="container mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-4 animate-slide-in-left">
-                <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center floating-animation">
-                    <i data-lucide="heart-pulse" class="w-6 h-6 text-white"></i>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold text-white">Samaj Health Suraksha</h1>
-                    <p class="text-white/80 text-sm">Northeast India Health Initiative</p>
+    <div class="container mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-4 animate-slide-in-left">
+            <div id="logo-container" class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center floating-animation">
+                <i data-lucide="heart-pulse" id="logo-icon" class="w-6 h-6 text-white"></i>
+            </div>
+            <div>
+                <h1 id="header-title" class="text-xl font-bold text-white">Samaj Health Suraksha</h1>
+                <p id="header-tagline" class="text-white/80 text-sm">Northeast India Health Initiative</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-4 animate-slide-in-right">
+            
+            <a href="index.html" class="p-2 rounded-lg transition-all duration-300 hover:scale-110 flex items-center gap-1 header-button">
+                <i data-lucide="home" class="w-5 h-5 header-icon"></i>
+                <span class="hidden sm:inline header-text">Home</span>
+            </a>
+            
+            <div class="language-selector relative">
+                <button id="language-btn" class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 header-button">
+                    <i data-lucide="globe" class="w-4 h-4 header-icon"></i>
+                    <span id="current-language" class="header-text">English</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 header-icon"></i>
+                </button>
+                <div id="language-dropdown" class="absolute right-0 mt-2 w-48 bg-gray-800/80 rounded-lg shadow-lg hidden">
+                    <div class="p-2">
+                        <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="en">English</button>
+                        <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="as">অসমীয়া (Assamese)</button>
+                        <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="bn">বাংলা (Bengali)</button>
+                        <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="hi">हिंदी (Hindi)</button>
+                    </div>
                 </div>
             </div>
             
-            <div class="flex items-center gap-4 animate-slide-in-right">
-                <div class="language-selector relative">
-                    <button id="language-btn" class="flex items-center gap-2 px-3 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 text-white">
-                        <i data-lucide="globe" class="w-4 h-4"></i>
-                        <span id="current-language">English</span>
-                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                    </button>
-                    <div id="language-dropdown" class="absolute right-0 mt-2 w-48 bg-gray-800/80 rounded-lg shadow-lg hidden">
-                        <div class="p-2">
-                            <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="en">English</button>
-                            <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="as">অসমীয়া (Assamese)</button>
-                            <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="bn">বাংলা (Bengali)</button>
-                            <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="hi">हिंदी (Hindi)</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <button id="theme-toggle" class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
-                    <i data-lucide="sun" class="w-5 h-5 text-white"></i>
+            <button id="theme-toggle" class="p-2 rounded-lg transition-all duration-300 hover:scale-110 header-button">
                 </button>
-                
-                <button id="help-btn" class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
-                    <i data-lucide="help-circle" class="w-5 h-5 text-white"></i>
-                </button>
-            </div>
+            
+            <button id="help-btn" class="p-2 rounded-lg transition-all duration-300 hover:scale-110 header-button">
+                <i data-lucide="help-circle" class="w-5 h-5 header-icon"></i>
+            </button>
         </div>
-    </header>
-
+    </div>
+</header>
     <main class="container mx-auto px-6 py-12">
         <section class="text-center mb-16 animate-fade-in">
             <div class="max-w-4xl mx-auto">
-                <h1 id="main-heading" class="text-4xl md:text-6xl font-bold text-white mb-6"></h1>
-                <p id="main-tagline" class="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed"></p>
-                <div id="sub-tagline" class="text-lg text-white/80 typing-animation overflow-hidden whitespace-nowrap max-w-md mx-auto"></div>
+                <h1 id="main-heading" class="text-4xl md:text-6xl font-bold mb-6"></h1>
+                <p id="main-tagline" class="text-xl mb-8 max-w-2xl mx-auto leading-relaxed opacity-90"></p>
+                <div id="sub-tagline" class="text-lg opacity-80 typing-animation overflow-hidden whitespace-nowrap max-w-md mx-auto"></div>
             </div>
         </section>
 
@@ -206,7 +213,7 @@
                 handwashingSectionTitle: 'হাত ধোৱাৰ গুৰুত্ব',
                 handwashingSectionContent: 'চাবোন আৰু পৰিষ্কাৰ পানীৰে হাত ধোৱাটো বহুতো ৰোগ প্ৰতিৰোধ কৰাৰ অন্যতম সহজ উপায়। খোৱাৰ আগতে, শৌচাগাৰ ব্যৱহাৰ কৰাৰ পিছত, আৰু বাহিৰত খেলাৰ পিছত হাত ধুব লাগে। পৰিষ্কাৰ হাতে ডায়েৰিয়া, কলেৰা, আৰু টাইফইডৰ দৰে ৰোগ সৃষ্টিকাৰী বীজাণুৰ বিস্তাৰ বন্ধ কৰে।',
                 waterSectionTitle: 'নিৰাপদ খোৱা পানী',
-                waterSectionContent: 'সুস্বাস্থ্যৰ বাবে পৰিষ্কাৰ আৰু নিৰাপদ পানী খোৱাটো অত্যাৱশ্যক। খোৱাৰ আগতে পানী সদায় উতলাই লওক বা ফিল্টাৰ ব্যৱহাৰ কৰক। পানী যাতে দূষিত নহয় তাৰ বাবে পৰিষ্কাৰ, ঢকা পাত্ৰত সংৰক্ষণ কৰক। পুখুৰী, নদী, বা অপৰিষ্কাৰ উৎসৰ পৰা পানী খোৱা পৰিহাৰ কৰক।',
+                waterSectionContent: 'সুস্বাস্থ্যৰ বাবে পৰিষ্কাৰ আৰু নিৰাপদ পানী খোৱাটো অত্যাৱশ্যক। খোৱাৰ আগতে পানী সদায় উতলাই লওক বা ফিল্টাৰ ব্যৱহাৰ কৰক। পানী যাতে দূষিত নহয় তাৰ বাবে পৰিষ্কাৰ, ঢকা পাত্ৰত সংৰক্ষণ কৰক। পুখুৰী, নদী, বা অপৰিষ্কাৰ উৎসৰ পৰা পানী খোৱা পৰিহাৰ কৰক।',
                 preventiveMeasuresTitle: 'জলজনিত ৰোগৰ বাবে প্ৰতিৰোধমূলক ব্যৱস্থা',
                 preventiveMeasuresItems: [
                     'পানী উতলাওক: পানী খোৱাৰ আগতে সদায় উতলাই লওক বা পানী পৰিষ্কাৰ কৰা যন্ত্ৰ ব্যৱহাৰ কৰক।',
@@ -343,6 +350,7 @@
             }
         };
 
+        // --- Element Selections ---
         const moduleContent = document.getElementById('module-content');
         const mainHeading = document.getElementById('main-heading');
         const mainTagline = document.getElementById('main-tagline');
@@ -350,7 +358,25 @@
         const langDropdown = document.getElementById('language-dropdown');
         const langBtn = document.getElementById('language-btn');
         const currentLangSpan = document.getElementById('current-language');
+        
+        // Elements for Theme Toggle
+        const header = document.querySelector('header'); 
+        const footer = document.querySelector('footer'); 
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        let isDark = true; 
 
+        // New selectors for interactive header elements
+        const logoContainer = document.getElementById('logo-container'); 
+        const logoIcon = document.getElementById('logo-icon'); 
+        const headerTitle = document.getElementById('header-title'); 
+        const headerTagline = document.getElementById('header-tagline'); 
+
+        const headerButtons = document.querySelectorAll('.header-button');
+        const headerIcons = document.querySelectorAll('.header-icon');
+        const headerTexts = document.querySelectorAll('.header-text');
+
+        // --- Function to Render Content (Language) ---
         function renderContent(lang) {
             const data = translations[lang];
             
@@ -363,69 +389,69 @@
                 <div class="space-y-12">
                     <div class="animate-fade-in">
                         <div class="text-center mb-6">
-                            <h2 class="text-3xl font-bold text-white mb-2">${data.introSectionTitle}</h2>
-                            <p class="text-white/80 text-lg">${data.introSectionContent}</p>
+                            <h2 class="text-3xl font-bold mb-2">${data.introSectionTitle}</h2>
+                            <p class="text-lg opacity-80">${data.introSectionContent}</p>
                         </div>
                     </div>
                     
                     <div class="animate-fade-in" style="--delay: 0.2s;">
                         <div class="text-center mb-6">
-                            <h2 class="text-3xl font-bold text-white mb-2">${data.handwashingSectionTitle}</h2>
-                            <p class="text-white/80 text-lg">${data.handwashingSectionContent}</p>
+                            <h2 class="text-3xl font-bold mb-2">${data.handwashingSectionTitle}</h2>
+                            <p class="text-lg opacity-80">${data.handwashingSectionContent}</p>
                         </div>
                     </div>
 
                     <div class="animate-fade-in" style="--delay: 0.4s;">
                         <div class="text-center mb-6">
-                            <h2 class="text-3xl font-bold text-white mb-2">${data.waterSectionTitle}</h2>
-                            <p class="text-white/80 text-lg">${data.waterSectionContent}</p>
+                            <h2 class="text-3xl font-bold mb-2">${data.waterSectionTitle}</h2>
+                            <p class="text-lg opacity-80">${data.waterSectionContent}</p>
                         </div>
                     </div>
 
                     <div class="animate-fade-in" style="--delay: 0.6s;">
                         <div class="text-center mb-6">
-                            <h2 class="text-3xl font-bold text-white mb-2">${data.preventiveMeasuresTitle}</h2>
+                            <h2 class="text-3xl font-bold mb-2">${data.preventiveMeasuresTitle}</h2>
                         </div>
                         <ul class="max-w-xl mx-auto space-y-4">
-                            ${data.preventiveMeasuresItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-white/90 text-lg">${item}</p></li>`).join('')}
+                            ${data.preventiveMeasuresItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-lg opacity-90">${item}</p></li>`).join('')}
                         </ul>
                     </div>
                     
                     <div class="animate-fade-in" style="--delay: 0.8s;">
                         <div class="text-center mb-6">
-                            <h2 class="text-3xl font-bold text-white mb-2">${data.sanitationTitle}</h2>
+                            <h2 class="text-3xl font-bold mb-2">${data.sanitationTitle}</h2>
                         </div>
                         <ul class="max-w-xl mx-auto space-y-4">
-                            ${data.sanitationItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-white/90 text-lg">${item}</p></li>`).join('')}
+                            ${data.sanitationItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-lg opacity-90">${item}</p></li>`).join('')}
                         </ul>
                     </div>
 
                     <div class="animate-fade-in" style="--delay: 1.0s;">
                         <div class="text-center mb-6">
-                            <h2 class="text-3xl font-bold text-white mb-2">${data.healthyHabitsTitle}</h2>
+                            <h2 class="text-3xl font-bold mb-2">${data.healthyHabitsTitle}</h2>
                         </div>
                         <ul class="max-w-xl mx-auto space-y-4">
-                            ${data.healthyHabitsItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-white/90 text-lg">${item}</p></li>`).join('')}
+                            ${data.healthyHabitsItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-lg opacity-90">${item}</p></li>`).join('')}
                         </ul>
                     </div>
                     
                     <div class="animate-fade-in" style="--delay: 1.2s;">
                         <div class="text-center mb-6">
-                            <h2 class="text-3xl font-bold text-white mb-2">${data.awarenessActivitiesTitle}</h2>
+                            <h2 class="text-3xl font-bold mb-2">${data.awarenessActivitiesTitle}</h2>
                         </div>
                         <ul class="max-w-xl mx-auto space-y-4">
-                            ${data.awarenessActivitiesItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-white/90 text-lg">${item}</p></li>`).join('')}
+                            ${data.awarenessActivitiesItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-lg opacity-90">${item}</p></li>`).join('')}
                         </ul>
                     </div>
 
                     <div class="animate-fade-in" style="--delay: 1.4s;">
                         <div class="text-center mb-6">
-                            <h2 class="text-3xl font-bold text-white mb-2">${data.immediateActionsTitle}</h2>
+                            <h2 class="text-3xl font-bold mb-2">${data.immediateActionsTitle}</h2>
                         </div>
                         <div class="max-w-xl mx-auto space-y-6">
-                            <p class="text-white/90 text-lg">${data.immediateActionsHelpline}</p>
-                            <p class="text-white/90 text-lg">${data.immediateActionsEmergency}</p>
-                            <p class="text-white/90 text-lg">${data.immediateActionsFacility}</p>
+                            <p class="text-lg opacity-90">${data.immediateActionsHelpline}</p>
+                            <p class="text-lg opacity-90">${data.immediateActionsEmergency}</p>
+                            <p class="text-lg opacity-90">${data.immediateActionsFacility}</p>
                         </div>
                     </div>
 
@@ -439,6 +465,7 @@
             lucide.createIcons();
         }
 
+        // --- Event Listeners for Language ---
         renderContent('en');
 
         langBtn.addEventListener('click', () => {
@@ -452,12 +479,128 @@
                 langDropdown.classList.add('hidden');
             });
         });
-
+        
         document.addEventListener('click', (e) => {
             if (!langBtn.contains(e.target) && !langDropdown.contains(e.target)) {
                 langDropdown.classList.add('hidden');
             }
         });
+
+        // --- THEME TOGGLE LOGIC (COMPLETE & FIXED) ---
+        // Gradient classes for the logo in Light Mode (matches key message)
+        const logoGradientClasses = ['text-transparent', 'bg-clip-text', 'bg-gradient-to-r', 'from-yellow-300', 'to-pink-300'];
+        
+        // Gradient classes for the light background (New: Subtle Light Gradient for Body)
+        const lightBackgroundClasses = ['bg-gradient-to-br', 'from-gray-50', 'to-indigo-100'];
+        // Gradient classes for the light header/footer (Subtle, for better shadow contrast)
+        const lightHeaderFooterClasses = ['bg-gradient-to-r', 'from-white', 'to-gray-100'];
+
+
+        function applyTheme(isDark) {
+            if (isDark) {
+                // --- DARK MODE ---
+                body.classList.remove(...lightBackgroundClasses, 'text-gray-900'); // Clean up light background classes
+                body.classList.add('gradient-bg', 'text-white');
+                
+                // Header: transparent/glass background
+                header.classList.remove(...lightHeaderFooterClasses, 'text-gray-900', 'shadow-md'); // Clean up light header classes
+                header.classList.add('bg-transparent', 'text-white');
+
+                // Footer: dark text color
+                footer.classList.remove(...lightHeaderFooterClasses, 'text-gray-800', 'shadow-inner'); // Clean up light footer classes
+                footer.classList.add('text-white/70');
+
+                // LEFT HEADER BLOCK FIX (Dark Mode)
+                logoContainer.classList.remove('bg-purple-200/50');
+                logoContainer.classList.add('bg-white/20');
+
+                // LOGO ICON FIX: Remove Gradient, Apply White
+                logoIcon.classList.remove(...logoGradientClasses);
+                logoIcon.classList.add('text-white');
+
+                headerTitle.classList.remove('text-gray-900');
+                headerTitle.classList.add('text-white');
+
+                headerTagline.classList.remove('text-gray-700');
+                headerTagline.classList.add('text-white/80');
+
+                // Right-Side Interactive Elements
+                headerButtons.forEach(btn => {
+                    btn.classList.remove('bg-gray-200', 'hover:bg-gray-300');
+                    btn.classList.add('bg-white/20', 'hover:bg-white/30');
+                });
+                headerIcons.forEach(icon => {
+                    icon.classList.remove('text-gray-800');
+                    icon.classList.add('text-white');
+                });
+                headerTexts.forEach(text => {
+                    text.classList.remove('text-gray-800');
+                    text.classList.add('text-white');
+                });
+                
+                // Language Dropdown
+                langDropdown.classList.remove('bg-white', 'shadow-lg');
+                langDropdown.classList.add('bg-gray-800/80', 'text-white');
+
+                themeToggle.innerHTML = '<i data-lucide="sun" class="w-5 h-5 text-white"></i>';
+            } else {
+                // --- LIGHT MODE (New Gradient Background) ---
+                body.classList.remove('gradient-bg', 'text-white');
+                body.classList.add(...lightBackgroundClasses, 'text-gray-900'); // Apply light gradient background
+                
+                // Header: Apply light gradient background
+                header.classList.remove('bg-transparent', 'text-white');
+                header.classList.add(...lightHeaderFooterClasses, 'text-gray-900', 'shadow-md'); 
+
+                // Footer: Apply light gradient background
+                footer.classList.remove('text-white/70');
+                footer.classList.add(...lightHeaderFooterClasses, 'text-gray-800', 'shadow-inner'); 
+                
+                // LEFT HEADER BLOCK FIX (Light Mode)
+                logoContainer.classList.remove('bg-white/20');
+                logoContainer.classList.add('bg-purple-200/50'); 
+
+                // LOGO ICON FIX: Apply Gradient (MATCHING KEY MESSAGE)
+                logoIcon.classList.remove('text-white');
+                logoIcon.classList.add(...logoGradientClasses); 
+
+                headerTitle.classList.remove('text-white');
+                headerTitle.classList.add('text-gray-900');
+
+                headerTagline.classList.remove('text-white/80');
+                headerTagline.classList.add('text-gray-700'); 
+                
+                // Right-Side Interactive Elements
+                headerButtons.forEach(btn => {
+                    btn.classList.remove('bg-white/20', 'hover:bg-white/30');
+                    btn.classList.add('bg-gray-200', 'hover:bg-gray-300');
+                });
+                headerIcons.forEach(icon => {
+                    icon.classList.remove('text-white');
+                    icon.classList.add('text-gray-800');
+                });
+                headerTexts.forEach(text => {
+                    text.classList.remove('text-white');
+                    text.classList.add('text-gray-800');
+                });
+
+                // Language Dropdown
+                langDropdown.classList.remove('bg-gray-800/80', 'text-white');
+                langDropdown.classList.add('bg-white', 'shadow-lg');
+
+                themeToggle.innerHTML = '<i data-lucide="moon" class="w-5 h-5 text-gray-800"></i>';
+            }
+            // Re-render icons after changing the toggle button's content
+            lucide.createIcons();
+        }
+
+        themeToggle.addEventListener('click', () => {
+            isDark = !isDark;
+            applyTheme(isDark);
+        });
+
+        // Apply initial theme settings on load
+        applyTheme(isDark);
         
     </script>
 </body>
