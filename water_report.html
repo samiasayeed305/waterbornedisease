@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Water Testing Report - AI Enhanced</title>
+    <!-- Load Tailwind CSS and Inter font -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-green': '#059669',
+                        'secondary-blue': '#0ea5e9',
+                        'accent-red': '#ef4444',
+                        'background-light': '#f8fafc',
+                        'warning-yellow': '#facc15',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for professional look and feel and touch targets */
+        .report-card {
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        .input-group label {
+            @apply block text-sm font-semibold text-gray-700 mb-1;
+        }
+        .input-field, .select-field {
+            @apply w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-primary-green transition duration-150 text-base;
+        }
+        .select-field {
+            @apply appearance-none bg-white pr-8; 
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236b7280'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z' clip-rule='evenodd' /%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em 1.5em;
+        }
+        #map {
+            height: 320px; /* Standard map height */
+        }
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+        .map-error-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 20px;
+            background-color: #ffeccf; /* Light Yellow */
+            color: #b45309; /* Dark Orange */
+            border-radius: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+    
+    <!-- Load Google Maps API -->
+    <!-- CRITICAL: REPLACE 'YOUR_GOOGLE_MAPS_API_KEY' BELOW WITH YOUR ACTUAL KEY -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZWZXkBxdSevip6RNE6NpiyvHiV6SP9nw&callback=initMap"></script>
+
+    <!-- IBM Cloudant Database Integration -->
+    <script>
+        // IBM Cloudant Configuration
+        const cloudantConfig = {
+            // Replace these with your actual IBM Cloudant credentials
+            url: 'https://your-account.cloudantnosqldb.appdomain.cloud',
+            database: 'water_reports',
+            username: 'your-username',
+            password: 'your-password',
+            apiKey: 'your-api-key' // Optional: if using API key authentication
+        };
+
+        // Global flag to check if Cloudant is ready
+        window.cloudantReady = false;
+        window.volunteerId = 'Not Authenticated';
+
+        // Initialize Cloudant connection
+        async function initCloudant() {
+            try {
+                // Generate a unique volunteer ID (you can replace this with actual authentication)
+                window.volunteerId = generateVolunteerId();
+                document.getElementById('volunteerIdDisplay').textContent = window.volunteerId;
+                window.cloudantReady = true;
+                
+                console.log("Cloudant initialized with Volunteer ID:", window.volunteerId);
+            } catch (error) {
+                console.error("Cloudant Initialization Error:", error);
+            }
+        }
+
+        // Generate a unique volunteer ID (persistent using localStorage)
+        function generateVolunteerId() {
+            let volunteerId = localStorage.getItem('volunteerId');
+            if (!volunteerId) {
+                volunteerId = 'volunteer_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('volunteerId', volunteerId);
+            }
+            return volunteerId;
+        }
+
+        // Submit report to IBM Cloudant
+        window.submitReportToCloudant = async function(reportData) {
+            if (!window.cloudantReady) {
+                return { success: false, message: "System not ready. Please wait for initialization." };
+            }
+
+            try {
+                // Add metadata to the report
+                reportData._id = 'report_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                reportData.timestamp = new Date().toISOString();
+                reportData.volunteerId = window.volunteerId;
+                reportData.type = 'water_quality_report';
+
+                // For production, you would use your Cloudant credentials here
+                // This is a simplified version - in production, you should use a backend API
+                const response = await submitToCloudantAPI(reportData);
+                
+                return response;
+            } catch (error) {
+                console.error("Error submitting to Cloudant: ", error);
+                return { 
+                    success: false, 
+                    message: `Error submitting report: ${error.message}` 
+                };
+            }
+        }
+
+        // This function would be replaced with actual Cloudant API calls
+        // For security reasons, you should implement this on your backend server
+        async function submitToCloudantAPI(reportData) {
+            // In a real implementation, you would make a request to your backend API
+            // which would then securely communicate with IBM Cloudant
+            
+            // For demonstration purposes, we'll simulate a successful submission
+            // Replace this with actual API call to your backend
+            
+            try {
+                // Example of what your backend API call might look like:
+                /*
+                const response = await fetch('/api/submit-report', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(reportData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                return { success: true, message: `Report saved successfully! Doc ID: ${result.id}` };
+                */
+                
+                // Simulate API delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Simulate successful submission
+                return { 
+                    success: true, 
+                    message: `Report saved successfully to Cloudant! Doc ID: ${reportData._id}` 
+                };
+                
+            } catch (error) {
+                // In a real implementation, you would handle different error scenarios
+                return { 
+                    success: false, 
+                    message: `Cloudant submission failed: ${error.message}` 
+                };
+            }
+        }
+
+        // Initialize Cloudant when the page loads
+        document.addEventListener('DOMContentLoaded', initCloudant);
+    </script>
+</head>
+<body class="bg-background-light font-sans min-h-screen p-4 sm:p-8">
+
+    <div id="app" class="max-w-4xl mx-auto">
+        
+        <!-- Header Section -->
+        <header class="text-center mb-6 pt-2">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800">
+                <span class="text-primary-green">Jal Suraksha</span> Water Report
+            </h1>
+            <p class="text-gray-600 mt-1 text-lg">Community Water Surveillance</p>
+            <div class="mt-4 p-2 bg-secondary-blue/10 rounded-lg text-sm text-secondary-blue font-medium">
+                Volunteer ID: <span id="volunteerIdDisplay">Initializing...</span>
+            </div>
+        </header>
+
+        <!-- Main Report Card -->
+        <div class="report-card bg-white p-6 sm:p-10 rounded-2xl">
+            
+            <form id="waterReportForm" onsubmit="submitReport(event)">
+                
+                <!-- Section 1: Source & Geolocation -->
+                <h2 class="text-2xl font-bold mb-5 pb-2 border-b-2 border-primary-green text-gray-700">1. Source & Site Identification</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    
+                    <div class="input-group">
+                        <label for="sourceId">Water Source Name/Code (Required)</label>
+                        <input type="text" id="sourceId" name="sourceId" required placeholder="E.g., Village Well 5, Pumping Station A" class="input-field">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="sourceType">Water Source Type</label>
+                        <select id="sourceType" name="sourceType" required class="select-field">
+                            <option value="">-- Select Type --</option>
+                            <option value="Tube_Well">Tube Well / Borewell</option>
+                            <option value="Open_Well">Open Public Well</option>
+                            <option value="Hand_Pump">Hand Pump</option>
+                            <option value="River_Pond">River / Pond / Lake</option>
+                            <option value="Tap_Pipe">Piped Water / Tap</option>
+                            <option value="Cistern_Tank">Rainwater Cistern / Storage Tank</option>
+                            <option value="Other">Other / Unknown</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="testDateTime">Date & Time of Test</label>
+                        <input type="datetime-local" id="testDateTime" name="testDateTime" required class="input-field">
+                        <p class="text-xs text-gray-500 mt-1">Auto-populated to current time for quick entry.</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="liveDataStatus">Data Capture Method</label>
+                        <select id="liveDataStatus" name="liveDataStatus" required class="select-field">
+                            <option value="Manual">Manual Entry (Default)</option>
+                            <option value="Live_Connected">Live Kit Connected</option>
+                            <option value="Live_Failed">Live Connection Failed</option>
+                        </select>
+                        <p class="text-xs text-gray-500 mt-1">Manual, or Live Sensor data used.</p>
+                    </div>
+
+                    <!-- Map Container for Visual Location Selection -->
+                    <div class="input-group md:col-span-2">
+                        <label>Select Water Source Location (Click or Drag Marker)</label>
+                        <div id="map" class="w-full h-80 rounded-xl shadow-inner border border-gray-300">
+                             <!-- Fallback/Error message will be inserted here if map fails to load -->
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Latitude and Longitude will be set automatically when you place the marker.</p>
+                    </div>
+                    
+                    <!-- Geolocation Inputs (Read-only, populated by map interaction) -->
+                    <div class="input-group">
+                        <label for="latitude">Latitude (Degrees)</label>
+                        <input type="text" id="latitude" name="latitude" required readonly placeholder="Set location on map..." class="input-field bg-gray-100">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="longitude">Longitude (Degrees)</label>
+                        <input type="text" id="longitude" name="longitude" required readonly placeholder="Set location on map..." class="input-field bg-gray-100">
+                    </div>
+                </div>
+
+                <!-- Section 2: Quantitative Test Readings -->
+                <h2 class="text-2xl font-bold mb-5 pb-2 border-b-2 border-primary-green text-gray-700">2. Quantitative Test Readings</h2>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                    
+                    <div class="input-group">
+                        <label for="chlorine">Residual Chlorine ($\text{mg/L}$)</label>
+                        <input type="number" step="0.01" min="0" id="chlorine" name="chlorine" required placeholder="E.g., 0.25" class="input-field">
+                        <p class="text-xs text-gray-500 mt-1">Ideal $\ge 0.2 \text{ mg/L}$</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="turbidity">Turbidity (NTU)</label>
+                        <input type="number" step="0.1" min="0" id="turbidity" name="turbidity" required placeholder="E.g., 5.5" class="input-field">
+                        <p class="text-xs text-gray-500 mt-1">WHO Recommended $\le 5 \text{ NTU}$</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="ph">pH Level</label>
+                        <input type="number" step="0.1" min="0" max="14" id="ph" name="ph" required placeholder="E.g., 7.1" class="input-field">
+                        <p class="text-xs text-gray-500 mt-1">Standard range $6.5 \text{ to } 8.5$</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="temperature">Temperature ($^\circ\text{C}$)</label>
+                        <input type="number" step="0.1" min="-10" id="temperature" name="temperature" required placeholder="E.g., 24.8" class="input-field">
+                        <p class="text-xs text-gray-500 mt-1">Crucial for microbial growth assessment.</p>
+                    </div>
+                </div>
+
+                <!-- Microbiological Tests (Disease Indicators) -->
+                <h3 class="text-xl font-semibold mt-6 mb-3 text-gray-700">Microbiological Indicators</h3>
+                <div class="grid grid-cols-1 md:col-span-2 gap-6 mb-8">
+                    
+                    <div class="input-group">
+                        <label for="microbeTestType">Test Performed</label>
+                        <select id="microbeTestType" name="microbeTestType" required class="select-field">
+                            <option value="E_coli">E. coli (Fecal Indicator)</option>
+                            <option value="Total_Coliform">Total Coliform Bacteria</option>
+                            <option value="Vibrio_cholerae">Vibrio cholerae (Cholera)</option>
+                            <option value="Salmonella">Salmonella (Typhoid)</option>
+                            <option value="Not_Tested">Not Tested</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="microbeTestStatus">Result Status</label>
+                        <select id="microbeTestStatus" name="microbeTestStatus" required class="select-field">
+                            <option value="safe">SAFE (Not Detected / Negative)</option>
+                            <option value="unsafe">UNSAFE (Detected / Positive)</option>
+                            <option value="inconclusive">Inconclusive / Pending</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Section 3: Sanitary Inspection Checklist -->
+                <h2 class="text-2xl font-bold mb-5 pb-2 border-b-2 border-primary-green text-gray-700">3. Sanitary Inspection Checklist (Risks)</h2>
+                <p class="text-gray-600 mb-4">Indicate 'Yes' if the risk is present or 'No' if secure/clean.</p>
+
+                <div class="space-y-4 mb-8">
+                    <!-- Checkpoint 1: Protection -->
+                    <div class="flex justify-between items-center p-4 bg-gray-50 rounded-xl border border-gray-200">
+                        <label class="text-base font-medium text-gray-700">Source uncovered, unprotected, or prone to surface runoff?</label>
+                        <select name="check_uncovered" required class="p-2 border rounded-lg bg-white w-20 text-center select-field">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+
+                    <!-- Checkpoint 2: Proximity to Contamination -->
+                    <div class="flex justify-between items-center p-4 bg-gray-50 rounded-xl border border-gray-200">
+                        <label class="text-base font-medium text-gray-700">Latrine/sewage drain located within 15 meters ($50 \text{ feet}$) proximity?</label>
+                        <select name="check_latrine_proximity" required class="p-2 border rounded-lg bg-white w-20 text-center select-field">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Checkpoint 3: Stagnant water / Debris -->
+                    <div class="flex justify-between items-center p-4 bg-gray-50 rounded-xl border border-gray-200">
+                        <label class="text-base font-medium text-gray-700">Visible debris, animal waste, or stagnant water nearby?</label>
+                        <select name="check_debris_stagnant" required class="p-2 border rounded-lg bg-white w-20 text-center select-field">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Section 4: Photo Proof and Observations -->
+                <h2 class="text-2xl font-bold mb-5 pb-2 border-b-2 border-primary-green text-gray-700">4. Visual Proof & Observations</h2>
+
+                <div class="mb-6">
+                    <label for="photoProof" class="input-group">Photo Evidence (Optional, simulated file upload)</label>
+                    <input type="file" id="photoProof" name="photoProof" accept="image/*" class="input-field pt-2 pb-2">
+                </div>
+
+                <div class="mb-8">
+                    <label for="notes" class="input-group">General Observations / Community Concerns</label>
+                    <textarea id="notes" name="notes" rows="5" placeholder="Describe any unusual smell, color, infrastructure damage, or local health concerns." class="input-field"></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" 
+                        id="submitButton"
+                        class="w-full bg-primary-green hover:bg-secondary-blue text-white font-bold py-4 px-4 rounded-xl text-lg transition duration-300 ease-in-out transform hover:scale-[1.01] shadow-xl">
+                    ANALYZE & SUBMIT REPORT
+                </button>
+            </form>
+
+            <!-- Message Box for Alerts and Status -->
+            <div id="messageBox" class="mt-8 hidden p-4 rounded-xl text-center shadow-lg" role="alert"></div>
+            
+        </div>
+    </div>
+
+    <!-- AI Analysis and Recipient Selection Modal -->
+    <div id="submissionModal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 sm:p-8 m-4">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                <span id="modalRiskIcon" class="mr-3 text-3xl"></span> AI Report Analysis
+            </h3>
+            
+            <div class="space-y-4 mb-6 p-4 rounded-lg border bg-gray-50">
+                <div class="text-lg font-semibold text-gray-700">Risk Level: <span id="modalRiskLevel" class="ml-2 font-extrabold"></span></div>
+                <p id="modalSummary" class="text-gray-600 italic"></p>
+                <div class="border-t pt-3 mt-3">
+                    <p class="font-bold text-gray-700">Recommended Action:</p>
+                    <p id="modalRecommendation" class="text-sm text-gray-600 mt-1"></p>
+                </div>
+            </div>
+
+            <p class="text-lg font-semibold text-gray-700 mb-3">5. Select Report Recipient (Required)</p>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="finalSubmission('Hospital/Clinic')" 
+                        class="p-4 bg-secondary-blue hover:bg-secondary-blue/80 text-white font-bold rounded-lg transition duration-150">
+                    Submit to Hospital/Clinic
+                </button>
+                <button onclick="finalSubmission('Health Minister')" 
+                        class="p-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-lg transition duration-150">
+                    Submit to Health Minister
+                </button>
+            </div>
+            <button onclick="closeModal()" class="w-full mt-4 p-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition duration-150">
+                Cancel Submission
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Global variables for map functionality
+        let map;
+        let marker;
+        let currentReportData = {}; // Stores data + AI analysis before final submission
+        let isMapReady = false; // Flag to track successful map initialization
+
+        // Polyfill for simple non-blocking alert replacement
+        function alert(message, isError = false) {
+            const messageBox = document.getElementById('messageBox');
+            messageBox.classList.remove('hidden');
+            
+            if (isError) {
+                messageBox.className = 'mt-8 p-4 rounded-xl text-center shadow-lg bg-accent-red/10 text-accent-red border border-accent-red';
+                messageBox.innerHTML = `<p class="font-bold">🚨 Error</p><p>${message}</p>`;
+            } else {
+                messageBox.className = 'mt-8 p-4 rounded-xl text-center shadow-lg bg-yellow-100 text-yellow-700';
+                messageBox.innerHTML = `<p class="font-bold">⚠️ Warning</p><p>${message}</p>`;
+            }
+        }
+        
+        function showSuccess(message, docId) {
+            const messageBox = document.getElementById('messageBox');
+            messageBox.classList.remove('hidden');
+            messageBox.className = 'mt-8 p-4 rounded-xl text-center shadow-lg bg-primary-green/10 text-primary-green border border-primary-green';
+            messageBox.innerHTML = `<p class="text-xl font-bold">✅ Report Submitted Successfully!</p><p class="mt-2 text-sm">${message}</p><p class="mt-1 text-xs">Doc ID: ${docId}</p>`;
+        }
+
+        function showLoading(text) {
+            const messageBox = document.getElementById('messageBox');
+            messageBox.classList.remove('hidden');
+            messageBox.className = 'mt-8 p-4 rounded-xl text-center shadow-lg bg-secondary-blue/10 text-secondary-blue border border-secondary-blue';
+            messageBox.innerHTML = `<span class="animate-pulse font-bold">${text}</span>`;
+        }
+
+        // --- MAP FUNCTIONS ---
+        window.initMap = function() {
+            // Check if the google.maps object is available (it won't be if the API key is invalid)
+            if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
+                document.getElementById('map').innerHTML = `
+                    <div class="map-error-overlay">
+                        Map failed to load! Please ensure you have replaced 
+                        <code class="font-mono bg-yellow-300 p-1 rounded">YOUR_GOOGLE_MAPS_API_KEY</code> 
+                        in the HTML &lt;script&gt; tag with a valid key.
+                    </div>
+                `;
+                isMapReady = false;
+                return;
+            }
+
+            const defaultPos = { lat: 20.5937, lng: 78.9629 }; // Center of India as default fallback
+            
+            // Try to get current GPS location to center the map
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const initialPos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    initializeMapInstance(initialPos);
+                }, (error) => {
+                    console.error("Geolocation denied or failed:", error); // Improved logging
+                    alert('Could not automatically retrieve current location. Please use the map to select the water source position.');
+                    initializeMapInstance(defaultPos);
+                });
+            } else {
+                alert('Geolocation is not supported by this browser. Map will load at a default location.');
+                initializeMapInstance(defaultPos);
+            }
+        }
+        
+        // Helper function to create the map instance
+        function initializeMapInstance(centerPosition) {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: centerPosition,
+                fullscreenControl: false,
+                streetViewControl: false,
+                mapTypeControl: true,
+                mapTypeControlOptions: {
+                    style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+                    position: google.maps.ControlPosition.TOP_RIGHT
+                }
+            });
+
+            marker = new google.maps.Marker({
+                position: centerPosition,
+                map: map,
+                title: 'Water Source Location',
+                draggable: true
+            });
+            
+            updateLocationInputs(centerPosition.lat, centerPosition.lng);
+
+            map.addListener('click', (event) => {
+                const lat = event.latLng.lat();
+                const lng = event.latLng.lng();
+                
+                marker.setPosition({ lat, lng });
+                updateLocationInputs(lat, lng);
+            });
+            
+            marker.addListener('dragend', (event) => {
+                const lat = event.latLng.lat();
+                const lng = event.latLng.lng();
+                updateLocationInputs(lat, lng);
+            });
+            isMapReady = true;
+        }
+        
+        function updateLocationInputs(lat, lng) {
+            document.getElementById('latitude').value = lat.toFixed(6);
+            document.getElementById('longitude').value = lng.toFixed(6);
+        }
+
+        // Set the test date and time to the current local time
+        document.addEventListener('DOMContentLoaded', () => {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            
+            const testDateTimeInput = document.getElementById('testDateTime');
+            if (testDateTimeInput) {
+                testDateTimeInput.value = now.toISOString().slice(0, 16);
+            }
+            
+            document.getElementById('liveDataStatus').value = 'Manual';
+        });
+
+        // --- GEMINI AI ANALYSIS FUNCTION ---
+        async function analyzeReportWithAI(reportData) {
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            const userQuery = `Analyze the following water quality report data:
+- Source: ${reportData.sourceId} (${reportData.sourceType})
+- Coordinates: Lat ${reportData.latitude}, Lon ${reportData.longitude}
+- Residual Chlorine: ${reportData.chlorine} mg/L (Target: >= 0.2 mg/L)
+- Turbidity: ${reportData.turbidity} NTU (Target: <= 5.0 NTU)
+- pH: ${reportData.ph} (Target: 6.5 to 8.5)
+- Temperature: ${reportData.temperature} °C
+- Microbial Test (${reportData.microbeTestType}): ${reportData.microbeTestStatus}
+- Environmental Risks (Uncovered, Latrine Proximity, Debris): Uncovered=${reportData.check_uncovered}, Latrine=${reportData.check_latrine_proximity}, Debris=${reportData.check_debris_stagnant}
+
+Provide the analysis as a JSON object based on WHO and standard drinking water guidelines.`;
+            
+            const systemPrompt = "You are an expert public health and water quality analyst. Your task is to review the provided water test data and generate a concise, professional assessment. The response must be a single JSON object. Analyze the parameters (Chlorine, Turbidity, pH, Temperature, and Microbial Status) against WHO/standard drinking water guidelines. Determine the overall risk level (LOW, MODERATE, or HIGH) and provide a 2-3 sentence recommendation for action.";
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            "riskLevel": { "type": "STRING", "enum": ["LOW", "MODERATE", "HIGH"] },
+                            "summary": { "type": "STRING", "description": "A 1-2 sentence summary of the findings." },
+                            "recommendation": { "type": "STRING", "description": "A 2-3 sentence recommendation for immediate action or follow-up." }
+                        },
+                        required: ["riskLevel", "summary", "recommendation"]
+                    }
+                }
+            };
+            
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API call failed with status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!jsonText) throw new Error("AI response format was invalid or empty.");
+
+                const parsedResult = JSON.parse(jsonText);
+                // Return the whole object as the analysis
+                return parsedResult;
+
+            } catch (error) {
+                console.error("AI Analysis Error:", error);
+                // Return a default, safe, high-risk analysis on failure
+                return {
+                    riskLevel: "HIGH",
+                    summary: "AI analysis failed to run due to a technical error.",
+                    recommendation: "Please proceed with manual submission. Report immediately to local health authorities for verification due to technical analysis failure."
+                };
+            }
+        }
+
+        // --- SUBMISSION FLOW CONTROL ---
+        async function submitReport(event) {
+            event.preventDefault();
+            const form = document.getElementById('waterReportForm');
+            const submitButton = document.getElementById('submitButton');
+
+            // 1. Gather Data
+            const formData = new FormData(form);
+            const reportData = {};
+            formData.forEach((value, key) => { reportData[key] = value; });
+            reportData.test_date_iso = new Date(reportData.testDateTime).toISOString();
+            
+            // Check required fields (map coordinates)
+            if (!reportData.latitude || !reportData.longitude || reportData.latitude === '' || reportData.longitude === '') {
+                 alert("Please select the location on the map before proceeding (Latitude/Longitude are currently empty).", true);
+                 return;
+            }
+            
+            if (!isMapReady) {
+                alert("Map is not fully initialized. Please ensure the Google Maps API key is correct and try again.", true);
+            }
+
+            // 2. Initial Setup & Loading
+            document.getElementById('messageBox').classList.add('hidden');
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span class="animate-spin mr-2">&#9696;</span> Analyzing Report with AI...';
+
+            // 3. AI Analysis
+            const aiAnalysis = await analyzeReportWithAI(reportData);
+            
+            // Combine data and analysis
+            currentReportData = { ...reportData, aiAnalysis: aiAnalysis };
+
+            // 4. Update Modal and Show
+            showAnalysisModal(aiAnalysis);
+            
+            submitButton.disabled = false;
+            submitButton.innerHTML = 'ANALYZE & SUBMIT REPORT';
+        }
+
+        function showAnalysisModal(analysis) {
+            const modal = document.getElementById('submissionModal');
+            const icon = document.getElementById('modalRiskIcon');
+            const level = document.getElementById('modalRiskLevel');
+
+            // Set content
+            level.textContent = analysis.riskLevel.toUpperCase();
+            document.getElementById('modalSummary').textContent = analysis.summary;
+            document.getElementById('modalRecommendation').textContent = analysis.recommendation;
+
+            // Set styling based on risk level
+            level.className = 'ml-2 font-extrabold';
+            icon.textContent = '';
+            
+            const risk = analysis.riskLevel.toUpperCase();
+
+            if (risk === 'HIGH') {
+                level.classList.add('text-accent-red');
+                icon.textContent = '🚨';
+            } else if (risk === 'MODERATE') {
+                level.classList.add('text-orange-500');
+                icon.textContent = '⚠️';
+            } else { // LOW or default
+                level.classList.add('text-primary-green');
+                icon.textContent = '✅';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('submissionModal').classList.add('hidden');
+            document.getElementById('messageBox').classList.add('hidden');
+        }
+
+        // Final submission function called by modal buttons
+        async function finalSubmission(recipient) {
+            closeModal();
+            const submitButton = document.getElementById('submitButton');
+            
+            submitButton.disabled = true;
+            showLoading(`Submitting to ${recipient}...`);
+
+            // Add final recipient choice to the data
+            currentReportData.recipient = recipient;
+
+            // 5. Cloudant Submission
+            if (typeof window.submitReportToCloudant === 'function') {
+                const result = await window.submitReportToCloudant(currentReportData);
+
+                submitButton.disabled = false;
+                submitButton.innerHTML = 'ANALYZE & SUBMIT REPORT';
+                
+                if (result.success) {
+                    document.getElementById('waterReportForm').reset(); // Clear form on success
+                    
+                    // Reset map marker and inputs
+                    const defaultPos = { lat: 20.5937, lng: 78.9629 };
+                    if (map && marker) {
+                        map.setCenter(defaultPos);
+                        marker.setPosition(defaultPos);
+                        updateLocationInputs(defaultPos.lat, defaultPos.lng);
+                    }
+                    
+                    // Display Success Feedback
+                    showSuccess(`Report sent to ${recipient}. Risk Level: ${currentReportData.aiAnalysis.riskLevel.toUpperCase()}`, result.message.split(': ')[1]);
+                    currentReportData = {}; // Clear cached data
+                    
+                } else {
+                    // Submission Error
+                    alert(result.message, true);
+                }
+            } else {
+                 submitButton.disabled = false;
+                 submitButton.innerHTML = 'ANALYZE & SUBMIT REPORT';
+                 alert("Cloudant module not loaded or not ready. Check console for initialization errors.", true);
+            }
+        }
+    </script>
+</body>
+</html>
