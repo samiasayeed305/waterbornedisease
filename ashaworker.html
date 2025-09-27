@@ -8,7 +8,6 @@
     <title>ASHA Workers Dashboard - Smart Health Monitor</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <!-- Google Maps API -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZWZXkBxdSevip6RNE6NpiyvHiV6SP9nw&libraries=geometry&callback=initMap" async defer></script>
     <script>
         tailwind.config = {
@@ -179,6 +178,7 @@
         .modal-backdrop {
             backdrop-filter: blur(8px);
             background: rgba(0, 0, 0, 0.4);
+            transition: opacity 0.3s ease;
         }
         
         .dark .modal-backdrop {
@@ -723,10 +723,437 @@
         input:checked + .toggle-slider:before {
             transform: translateX(26px);
         }
+        
+        /* Patient Registration Form Styles */
+        .sms-status {
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+            font-size: 0.9rem;
+        }
+        
+        .sms-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .dark .sms-success {
+            background-color: #064e3b;
+            color: #6ee7b7;
+            border: 1px solid #10b981;
+        }
+        
+        .sms-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        .dark .sms-error {
+            background-color: #7f1d1d;
+            color: #fca5a5;
+            border: 1px solid #ef4444;
+        }
+        
+        /* Modal for Incomplete Tasks */
+        #task-reminder-modal {
+            z-index: 50;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.6);
+            transition: opacity 0.3s ease;
+        }
+
+        #task-reminder-content {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .dark #task-reminder-content {
+            background: #1f2937;
+        }
+
+        #incomplete-tasks-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        #incomplete-tasks-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.9rem;
+            color: #ef4444;
+        }
+
+        .dark #incomplete-tasks-list li {
+            border-bottom: 1px solid #374151;
+            color: #fca5a5;
+        }
+        
+        /* Checklist Item Style for Edit Button */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .edit-task-btn {
+            padding: 0.25rem;
+            border-radius: 0.375rem;
+            color: #4f46e5;
+            background: #eef2ff;
+            transition: all 0.2s;
+        }
+
+        .edit-task-btn:hover {
+            background: #e0e7ff;
+            transform: scale(1.1);
+        }
+
+        .dark .edit-task-btn {
+            color: #a5b4fc;
+            background: #312e81;
+        }
+        
+        .dark .edit-task-btn:hover {
+            background: #4338ca;
+        }
+        
+        /* Messaging Modal Styles */
+        #messaging-modal {
+            z-index: 100;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.6);
+            transition: opacity 0.3s ease;
+        }
+
+        #messaging-content {
+            background: white;
+            border-radius: 1rem;
+            padding: 0;
+            max-width: 800px;
+            width: 90%;
+            height: 80%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dark #messaging-content {
+            background: #1f2937;
+        }
+
+        .messaging-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dark .messaging-header {
+            border-bottom: 1px solid #374151;
+        }
+
+        .messaging-body {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .messaging-sidebar {
+            width: 250px;
+            border-right: 1px solid #e5e7eb;
+            overflow-y: auto;
+        }
+
+        .dark .messaging-sidebar {
+            border-right: 1px solid #374151;
+        }
+
+        .messaging-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .message-compose {
+            padding: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .dark .message-compose {
+            border-top: 1px solid #374151;
+        }
+
+        .message-item {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .message-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .dark .message-item:hover {
+            background-color: #374151;
+        }
+
+        .message-item.active {
+            background-color: #e0f2fe;
+        }
+
+        .dark .message-item.active {
+            background-color: #1e3a8a;
+        }
+
+        .message-sender {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .message-preview {
+            font-size: 0.875rem;
+            color: #6b7280;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dark .message-preview {
+            color: #9ca3af;
+        }
+
+        .message-content {
+            padding: 1rem;
+            background-color: #f9fafb;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .dark .message-content {
+            background-color: #374151;
+        }
+
+        .message-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .dark .message-meta {
+            color: #9ca3af;
+        }
+
+        .message-text {
+            line-height: 1.5;
+        }
+
+        /* Help Modal Styles */
+        #help-modal {
+            z-index: 100;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.6);
+            transition: opacity 0.3s ease;
+        }
+
+        #help-content {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .dark #help-content {
+            background: #1f2937;
+        }
+
+        .help-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .help-section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dark .help-section-title {
+            color: #f9fafb;
+        }
+
+        .help-item {
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            background-color: #f9fafb;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dark .help-item {
+            background-color: #374151;
+        }
+
+        .help-item:hover {
+            background-color: #e5e7eb;
+        }
+
+        .dark .help-item:hover {
+            background-color: #4b5563;
+        }
+
+        .help-item-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .help-item-description {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .dark .help-item-description {
+            color: #9ca3af;
+        }
+
+        /* Notification Panel Styles */
+        #notification-panel {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 350px;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            max-height: 400px;
+            overflow: hidden;
+        }
+
+        .dark #notification-panel {
+            background: #1f2937;
+        }
+
+        .notification-header {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dark .notification-header {
+            border-bottom: 1px solid #374151;
+        }
+
+        .notification-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .notification-item {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            background-color: #f9fafb;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dark .notification-item {
+            background-color: #374151;
+        }
+
+        .notification-item:hover {
+            background-color: #e5e7eb;
+        }
+
+        .dark .notification-item:hover {
+            background-color: #4b5563;
+        }
+
+        .notification-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .notification-message {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .dark .notification-message {
+            color: #9ca3af;
+        }
+
+        .notification-time {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            text-align: right;
+            margin-top: 0.25rem;
+        }
+
+        .dark .notification-time {
+            color: #6b7280;
+        }
     </style>
 </head>
 <body class="min-h-screen theme-transition bg-gray-50 dark:bg-gray-900">
-    <!-- Header -->
     <header class="gradient-bg shadow-lg sticky top-0 z-40">
         <div class="container mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
@@ -758,7 +1185,6 @@
                     <button id="help-btn" class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
                         <i data-lucide="help-circle" class="w-5 h-5 text-white"></i>
                     </button>
-                    <!-- Profile Button -->
                     <button id="profile-btn" class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
                         <i data-lucide="user" class="w-5 h-5 text-white"></i>
                     </button>
@@ -767,7 +1193,38 @@
         </div>
     </header>
 
-    <!-- Profile Sidebar -->
+    <!-- Notification Panel -->
+    <div id="notification-panel">
+        <div class="notification-header">
+            <h3 class="font-semibold text-gray-900 dark:text-white">Notifications</h3>
+            <button id="close-notifications" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <div class="notification-list">
+            <div class="notification-item">
+                <div class="notification-title">New Patient Registration</div>
+                <div class="notification-message">Rina Begum has been registered successfully.</div>
+                <div class="notification-time">10 min ago</div>
+            </div>
+            <div class="notification-item">
+                <div class="notification-title">Follow-up Reminder</div>
+                <div class="notification-message">Kiran Singh's follow-up is scheduled for tomorrow.</div>
+                <div class="notification-time">1 hour ago</div>
+            </div>
+            <div class="notification-item">
+                <div class="notification-title">Critical Alert</div>
+                <div class="notification-message">Household 104 (Ray) has reported severe symptoms.</div>
+                <div class="notification-time">2 hours ago</div>
+            </div>
+            <div class="notification-item">
+                <div class="notification-title">Training Update</div>
+                <div class="notification-message">New training module on maternal health is available.</div>
+                <div class="notification-time">5 hours ago</div>
+            </div>
+        </div>
+    </div>
+
     <div id="profile-backdrop" class="profile-backdrop"></div>
     <div id="profile-sidebar" class="profile-sidebar">
         <div class="profile-header">
@@ -779,7 +1236,6 @@
         </div>
         
         <div class="profile-content">
-            <!-- Personal Details Section -->
             <div class="profile-section">
                 <h3 class="profile-section-title">
                     <i data-lucide="user" class="w-4 h-4"></i>
@@ -817,7 +1273,6 @@
                 </div>
             </div>
             
-            <!-- Work Statistics -->
             <div class="profile-section">
                 <h3 class="profile-section-title">
                     <i data-lucide="bar-chart" class="w-4 h-4"></i>
@@ -844,7 +1299,6 @@
                 </div>
             </div>
             
-            <!-- Settings Section -->
             <div class="profile-section">
                 <h3 class="profile-section-title">
                     <i data-lucide="settings" class="w-4 h-4"></i>
@@ -881,9 +1335,9 @@
                     </label>
                 </button>
                 
-                <button class="profile-action-btn">
+                <button class="profile-action-btn" onclick="window.location.href='dataacess.html'">
                     <i data-lucide="shield" class="w-4 h-4"></i>
-                    Privacy Settings
+                    Patient Record Access
                     <div class="flex-1"></div>
                     <i data-lucide="chevron-right" class="w-4 h-4"></i>
                 </button>
@@ -896,7 +1350,6 @@
                 </button>
             </div>
             
-            <!-- Actions Section -->
             <div class="profile-section">
                 <h3 class="profile-section-title">
                     <i data-lucide="zap" class="w-4 h-4"></i>
@@ -925,131 +1378,234 @@
                 </button>
             </div>
             
-            <!-- Logout Section -->
-           <div class="profile-section">
-    <button 
-        class="profile-action-btn logout" 
-        id="logout-btn" 
-        **onclick="logout()"** > 
-        <i data-lucide="log-out" class="w-4 h-4"></i>
-        Log Out
-        <div class="flex-1"></div>
-    </button>
-</div>
+            <div class="profile-section">
+                <button class="profile-action-btn logout" id="logout-btn" onclick="logout()">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    Log Out
+                    <div class="flex-1"></div>
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Main Dashboard -->
+    <!-- Messaging Modal -->
+    <div id="messaging-modal" class="modal-backdrop hidden">
+        <div id="messaging-content" class="modal-enter">
+            <div class="messaging-header">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Messages</h3>
+                <button id="close-messaging" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="messaging-body">
+                <div class="messaging-sidebar">
+                    <div class="message-item active">
+                        <div class="message-sender">Dr. Anjali Sharma</div>
+                        <div class="message-preview">Regarding patient Rina Begum's follow-up...</div>
+                    </div>
+                    <div class="message-item">
+                        <div class="message-sender">Health Department</div>
+                        <div class="message-preview">New guidelines for maternal health...</div>
+                    </div>
+                    <div class="message-item">
+                        <div class="message-sender">Training Coordinator</div>
+                        <div class="message-preview">Upcoming training session on...</div>
+                    </div>
+                    <div class="message-item">
+                        <div class="message-sender">PHC Majuli</div>
+                        <div class="message-preview">Vaccine stock update for this week...</div>
+                    </div>
+                </div>
+                <div class="messaging-main">
+                    <div class="message-list">
+                        <div class="message-meta">
+                            <span>Dr. Anjali Sharma</span>
+                            <span>Today, 10:30 AM</span>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-text">
+                                <p>Hello Samia,</p>
+                                <p>I've reviewed the case report for Rina Begum. Her symptoms seem to be improving, but I recommend a follow-up visit in 2 days to ensure complete recovery.</p>
+                                <p>Please continue monitoring her temperature twice daily.</p>
+                                <p>Best regards,<br>Dr. Anjali Sharma</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="message-compose">
+                        <div class="flex gap-2">
+                            <input type="text" placeholder="Type your message..." class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="help-modal" class="modal-backdrop hidden">
+        <div id="help-content" class="modal-enter">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Help & Support</h3>
+                <button id="close-help" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="help-section">
+                <h4 class="help-section-title">
+                    <i data-lucide="file-plus" class="w-5 h-5"></i>
+                    Case Reporting
+                </h4>
+                <div class="help-item">
+                    <div class="help-item-title">How to register a new patient?</div>
+                    <div class="help-item-description">Fill in the patient details form with required information and submit the case report.</div>
+                </div>
+                <div class="help-item">
+                    <div class="help-item-title">What symptoms should I report?</div>
+                    <div class="help-item-description">Report all observed symptoms, especially fever, cough, breathing difficulties, or pregnancy-related issues.</div>
+                </div>
+            </div>
+            
+            <div class="help-section">
+                <h4 class="help-section-title">
+                    <i data-lucide="map-pin" class="w-5 h-5"></i>
+                    Location Tracking
+                </h4>
+                <div class="help-item">
+                    <div class="help-item-title">How does location tracking work?</div>
+                    <div class="help-item-description">The system uses GPS to track your location during field visits for accurate reporting.</div>
+                </div>
+                <div class="help-item">
+                    <div class="help-item-title">Can I disable location tracking?</div>
+                    <div class="help-item-description">Yes, you can disable it in your profile settings, but it's recommended for accurate data.</div>
+                </div>
+            </div>
+            
+            <div class="help-section">
+                <h4 class="help-section-title">
+                    <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                    Daily Checklist
+                </h4>
+                <div class="help-item">
+                    <div class="help-item-title">How to mark tasks as completed?</div>
+                    <div class="help-item-description">Click the checkbox next to each task to mark it as completed.</div>
+                </div>
+                <div class="help-item">
+                    <div class="help-item-title">What happens if I don't complete all tasks?</div>
+                    <div class="help-item-description">Incomplete tasks will be carried over to the next day with a reminder.</div>
+                </div>
+            </div>
+            
+            <div class="mt-6 text-center">
+                <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    <i data-lucide="message-circle" class="w-4 h-4 inline mr-2"></i>
+                    Contact Support
+                </button>
+            </div>
+        </div>
+    </div>
+
     <main class="container mx-auto px-4 py-8">
-        <!-- Quick Stats -->
         <section class="mb-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="glass-effect rounded-xl p-4 card-hover animate-fade-in stagger-animation" style="--delay: 0.1s;">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Households</p>
-                            <p class="text-2xl font-bold text-gray-900 dark:text-white">45</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Registered Patients</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">124</p>
                         </div>
                         <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center floating-animation">
-                            <i data-lucide="home" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
+                            <i data-lucide="users" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
                         </div>
                     </div>
                 </div>
                 <div class="glass-effect rounded-xl p-4 card-hover animate-fade-in stagger-animation" style="--delay: 0.2s;">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Cases Today</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">New Today</p>
                             <p class="text-2xl font-bold text-gray-900 dark:text-white">3</p>
                         </div>
-                        <div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center floating-animation" style="animation-delay: 1s;">
-                            <i data-lucide="alert-circle" class="w-5 h-5 text-red-600 dark:text-red-400"></i>
+                        <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center floating-animation" style="animation-delay: 1s;">
+                            <i data-lucide="user-plus" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
                         </div>
                     </div>
                 </div>
                 <div class="glass-effect rounded-xl p-4 card-hover animate-fade-in stagger-animation" style="--delay: 0.3s;">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Surveys Done</p>
-                            <p class="text-2xl font-bold text-gray-900 dark:text-white">12</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">SMS Sent</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">89</p>
                         </div>
-                        <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center floating-animation" style="animation-delay: 2s;">
-                            <i data-lucide="clipboard-check" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
+                        <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center floating-animation" style="animation-delay: 2s;">
+                            <i data-lucide="message-square" class="w-5 h-5 text-purple-600 dark:text-purple-400"></i>
                         </div>
                     </div>
                 </div>
                 <div class="glass-effect rounded-xl p-4 card-hover animate-fade-in stagger-animation" style="--delay: 0.4s;">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Notifications</p>
-                            <p class="text-2xl font-bold text-gray-900 dark:text-white">5</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Follow-ups</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">12</p>
                         </div>
-                        <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center floating-animation" style="animation-delay: 3s;">
-                            <i data-lucide="message-square" class="w-5 h-5 text-purple-600 dark:text-purple-400"></i>
+                        <div class="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center floating-animation" style="animation-delay: 3s;">
+                            <i data-lucide="calendar" class="w-5 h-5 text-orange-600 dark:text-orange-400"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Main Content Grid -->
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-            <!-- Left Column - Forms -->
             <div class="xl:col-span-2 space-y-8">
-                <!-- Case Reporting Form -->
+                
                 <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-left">
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                            <i data-lucide="file-plus" class="w-5 h-5 text-red-600 dark:text-red-400"></i>
-                            Case Reporting Form
+                            <i data-lucide="file-plus" class="w-5 h-5 text-red-600 dark:text-red-400"></i> Case Reporting & Patient Registration 
                         </h2>
-                        <span class="px-3 py-1 bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300 rounded-full text-sm">
-                            Priority: High
-                        </span>
+                        <span class="px-3 py-1 bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300 rounded-full text-sm"> Priority: High </span>
                     </div>
-
-                    <form class="space-y-6 form-section rounded-lg p-4">
-                        <!-- Patient Information -->
+                    
+                    <form id="case-reporting-form" class="space-y-6 form-section rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
+                        
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 mb-4">Patient Details (Required for Dashboard Access)</h3>
+                        
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Patient Name</label>
-                                <input type="text" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Enter patient name">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Age</label>
-                                <input type="number" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Age">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Gender</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                                    <option>Select Gender</option>
-                                    <option>Male</option>
-                                    <option>Female</option>
-                                    <option>Other</option>
-                                </select>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Patient Full Name</label>
+                                <input type="text" id="patient-name" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Enter patient name">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Contact Number</label>
-                                <input type="tel" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Phone number">
+                                <input type="tel" id="patient-contact" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Phone number">
                             </div>
                         </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Age</label>
+                                <input type="number" id="patient-age" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Age">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Village/Area</label>
+                                <input type="text" id="patient-area" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Village or Area">
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 mb-4 pt-4">Symptom & Case Report</h3>
 
-                        <!-- Symptoms Checklist -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">Symptoms (Check all that apply)</label>
                             <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="symptoms-checklist">
-                                <!-- Symptoms will be populated by JavaScript -->
-                            </div>
+                                </div>
                         </div>
-
-                        <!-- Severity and Duration -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Severity Level</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
                                     <option>Select Severity</option>
                                     <option>Mild</option>
                                     <option>Moderate</option>
@@ -1059,7 +1615,7 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Duration of Symptoms</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
                                     <option>Select Duration</option>
                                     <option>Less than 24 hours</option>
                                     <option>1-3 days</option>
@@ -1068,550 +1624,368 @@
                                 </select>
                             </div>
                         </div>
-
-                        <!-- Additional Information -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Additional Notes</label>
-                            <textarea class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white" rows="3" placeholder="Any additional observations or patient history..."></textarea>
+                            <textarea class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white" rows="3" placeholder="Any additional observations or patient history..."></textarea>
                         </div>
-
+                        
                         <div class="flex gap-3">
                             <button type="submit" class="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
-                                <i data-lucide="send" class="w-4 h-4 inline mr-2"></i>
-                                Submit Case Report
+                                <i data-lucide="send" class="w-4 h-4 inline mr-2"></i> **Submit Case Report & Register Patient**
                             </button>
-                            <button type="button" class="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                                Save Draft
-                            </button>
+                            <button type="button" class="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"> Save Draft </button>
                         </div>
+
+                        <div id="sms-status-message" class="sms-status" style="display: none;"></div>
+
+                        <div id="credential-output" class="hidden mt-4 p-4 border border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950 rounded-lg animate-fade-in">
+                            <p class="text-sm font-semibold text-emerald-800 dark:text-emerald-200 flex items-center gap-2">
+                                <i data-lucide="shield-check" class="w-4 h-4"></i> **Patient Login Credentials Generated:**
+                            </p>
+                            <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4 text-emerald-900 dark:text-emerald-100 text-sm">
+                                <div>
+                                    <span class="font-bold">Username:</span> <code id="output-username" class="ml-2 bg-emerald-200 dark:bg-emerald-800 p-1 rounded font-mono"></code>
+                                </div>
+                                <div>
+                                    <span class="font-bold">Password:</span> <code id="output-password" class="ml-2 bg-emerald-200 dark:bg-emerald-800 p-1 rounded font-mono"></code>
+                                </div>
+                            </div>
+                            <p class="text-xs text-emerald-600 dark:text-emerald-300 mt-2">**IMPORTANT:** Please share these unique credentials with the patient so they can check their details in their dashboard.</p>
+                        </div>
+                        
                     </form>
                 </section>
-
-                <!-- Household Survey Form -->
+                
+                
                 <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-left">
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                            <i data-lucide="home" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
-                            Household Survey
+                            <i data-lucide="clipboard-list" class="w-5 h-5 text-orange-600 dark:text-orange-400"></i> Pending Follow-ups 
                         </h2>
-                        <button id="quick-survey-btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
-                            Quick Survey
-                        </button>
+                        <a href="#" class="text-sm text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-300"> View All (12) </a>
                     </div>
-
-                    <form class="space-y-6 form-section rounded-lg p-4">
-                        <!-- Household Basic Info -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    
+                    <ul class="space-y-4">
+                        <li class="p-4 tribal-accent rounded-lg flex items-center justify-between priority-high">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Household Head Name</label>
-                                <input type="text" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Head of household">
+                                <p class="font-medium text-gray-900 dark:text-white">Rina Begum (Age 65)</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Severe fever & body ache. Follow-up today!</p>
                             </div>
+                            <button class="p-2 bg-orange-100 dark:bg-orange-900/50 rounded-full hover:bg-orange-200 dark:hover:bg-orange-800 text-orange-600 dark:text-orange-400">
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
+                        </li>
+                        <li class="p-4 tribal-accent rounded-lg flex items-center justify-between priority-medium">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Family Members</label>
-                                <input type="number" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Number of members">
+                                <p class="font-medium text-gray-900 dark:text-white">Kiran Singh (Pregnant)</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Routine check (Month 7). Appointment in 2 days.</p>
                             </div>
-                        </div>
-
-                        <!-- Water Source Information -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Primary Water Source</label>
-                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                                <label class="flex items-center gap-2 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                                    <input type="radio" name="water_source" value="well" class="text-emerald-600">
-                                    <span class="text-gray-700 dark:text-gray-300">Well</span>
-                                </label>
-                                <label class="flex items-center gap-2 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                                    <input type="radio" name="water_source" value="tube_well" class="text-emerald-600">
-                                    <span class="text-gray-700 dark:text-gray-300">Tube Well</span>
-                                </label>
-                                <label class="flex items-center gap-2 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                                    <input type="radio" name="water_source" value="river" class="text-emerald-600">
-                                    <span class="text-gray-700 dark:text-gray-300">River</span>
-                                </label>
-                                <label class="flex items-center gap-2 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                                    <input type="radio" name="water_source" value="pond" class="text-emerald-600">
-                                    <span class="text-gray-700 dark:text-gray-300">Pond</span>
-                                </label>
-                                <label class="flex items-center gap-2 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                                    <input type="radio" name="water_source" value="tap" class="text-emerald-600">
-                                    <span class="text-gray-700 dark:text-gray-300">Tap Water</span>
-                                </label>
-                                <label class="flex items-center gap-2 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                                    <input type="radio" name="water_source" value="other" class="text-emerald-600">
-                                    <span class="text-gray-700 dark:text-gray-300">Other</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Sanitation Facilities -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Sanitation Facilities</label>
-                            <div class="space-y-3">
-                                <label class="flex items-center gap-3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                                    <input type="checkbox" class="symptom-checkbox">
-                                    <span class="text-gray-700 dark:text-gray-300">Private toilet</span>
-                                </label>
-                                <label class="flex items-center gap-3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                                    <input type="checkbox" class="symptom-checkbox">
-                                    <span class="text-gray-700 dark:text-gray-300">Shared toilet</span>
-                                </label>
-                                <label class="flex items-center gap-3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                                    <input type="checkbox" class="symptom-checkbox">
-                                    <span class="text-gray-700 dark:text-gray-300">Hand washing facility</span>
-                                </label>
-                                <label class="flex items-center gap-3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                                    <input type="checkbox" class="symptom-checkbox">
-                                    <span class="text-gray-700 dark:text-gray-300">Waste disposal system</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Health Status -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Any family member with symptoms in last 7 days?</label>
-                            <div class="flex gap-4">
-                                <label class="flex items-center gap-2">
-                                    <input type="radio" name="symptoms_present" value="yes" class="text-emerald-600">
-                                    <span class="text-gray-700 dark:text-gray-300">Yes</span>
-                                </label>
-                                <label class="flex items-center gap-2">
-                                    <input type="radio" name="symptoms_present" value="no" class="text-emerald-600">
-                                    <span class="text-gray-700 dark:text-gray-300">No</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-3">
-                            <button type="submit" class="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                                <i data-lucide="save" class="w-4 h-4 inline mr-2"></i>
-                                Submit Survey
+                            <button class="p-2 bg-orange-100 dark:bg-orange-900/50 rounded-full hover:bg-orange-200 dark:hover:bg-orange-800 text-orange-600 dark:text-orange-400">
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
                             </button>
-                            <button type="button" class="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                                Save Draft
+                        </li>
+                        <li class="p-4 tribal-accent rounded-lg flex items-center justify-between priority-low">
+                            <div>
+                                <p class="font-medium text-gray-900 dark:text-white">Bikash Ray (Child)</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Vaccination reminder. Follow-up next week.</p>
+                            </div>
+                            <button class="p-2 bg-orange-100 dark:bg-orange-900/50 rounded-full hover:bg-orange-200 dark:hover:bg-orange-800 text-orange-600 dark:text-orange-400">
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
                             </button>
-                        </div>
-                    </form>
+                        </li>
+                    </ul>
                 </section>
+                
+                <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-left">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="book-open-text" class="w-5 h-5 text-purple-600 dark:text-purple-400"></i> Training & Resources 
+                        </h2>
+                        <a href="#" class="text-sm text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300"> Go to Library </a>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-purple-50 dark:bg-purple-900/50 rounded-lg training-card">
+                            <p class="font-medium text-purple-800 dark:text-purple-300 flex items-center gap-2">
+                                <i data-lucide="graduation-cap" class="w-5 h-5"></i> Module 4: Maternal Health 
+                            </p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Review guidelines for prenatal and postnatal care.</p>
+                            <button class="mt-3 text-xs text-white bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded-full transition-colors"> Start Reading </button>
+                        </div>
+                        <div class="p-4 bg-purple-50 dark:bg-purple-900/50 rounded-lg training-card">
+                            <p class="font-medium text-purple-800 dark:text-purple-300 flex items-center gap-2">
+                                <i data-lucide="video" class="w-5 h-5"></i> Video: Malaria Prevention 
+                            </p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Short video on symptom identification and treatment.</p>
+                            <button class="mt-3 text-xs text-white bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded-full transition-colors"> Watch Now </button>
+                        </div>
+                    </div>
+                </section>
+
             </div>
 
-            <!-- Right Column - Notifications, Training, Map -->
             <div class="space-y-8">
-                <!-- Notifications from Clinics -->
                 <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-right">
-                    <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center justify-between mb-4">
                         <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                            <i data-lucide="bell" class="w-5 h-5 text-purple-600 dark:text-purple-400"></i>
-                            Clinic Notifications
+                            <i data-lucide="map-pin" class="w-5 h-5 text-emerald-600 dark:text-emerald-400"></i> Real-time Location Tracking
                         </h2>
-                        <button class="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 text-sm">View All</button>
                     </div>
-                    <div class="space-y-4" id="notifications-panel">
-                        <!-- Notifications will be populated by JavaScript -->
-                    </div>
-                </section>
-
-                <!-- Training Materials -->
-                <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-right">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                            <i data-lucide="book-open" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
-                            Training & Guidelines
-                        </h2>
-                        <button id="download-all-btn" class="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 text-sm">Download All</button>
-                    </div>
-                    <div class="space-y-3" id="training-materials">
-                        <!-- Training materials will be populated by JavaScript -->
-                    </div>
-                </section>
-
-                <!-- Community Map -->
-                <section class="glass-effect rounded-xl p-6 card-hover animate-scale-in">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-orange-600 dark:text-orange-400"></i>
-                            Community Health Map
-                        </h2>
-                        <div class="flex gap-2">
-                            <button id="add-marker-btn" class="px-3 py-1 bg-orange-600 text-white rounded text-sm hover:bg-orange-700 transition-colors">
-                                Add Marker
-                            </button>
-                            <button id="map-legend-btn" class="px-3 py-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                                Legend
-                            </button>
+                    
+                    <div class="map-container">
+                        <div id="google-map">
+                            <!-- Map will be initialized here -->
                         </div>
-                    </div>
-                    <div class="map-container relative">
-                        <div id="google-map"></div>
-                        
-                        <!-- Location Tracker -->
                         <div class="location-tracker">
-                            <i data-lucide="map-pin" class="w-4 h-4 text-red-500"></i>
-                            <div>
-                                <div class="text-sm font-medium">Your Location</div>
-                                <span id="tracking-status" class="tracking-status tracking-active">Live</span>
-                            </div>
+                            <i data-lucide="crosshair" class="w-5 h-5 text-emerald-600 dark:text-emerald-400"></i>
+                            <span id="tracking-status" class="tracking-status tracking-active">Live</span>
+                            <span class="text-xs text-gray-600 dark:text-gray-400">Majuli Village, Assam</span>
                         </div>
-                        
-                        <!-- Map Controls -->
-                        <div class="map-controls">
-                            <button id="locate-me" class="map-control-btn" title="Locate Me">
-                                <i data-lucide="navigation" class="w-5 h-5"></i>
-                            </button>
-                            <button id="toggle-live-tracking" class="map-control-btn" title="Toggle Live Tracking">
-                                <i data-lucide="radio" class="w-5 h-5"></i>
-                            </button>
-                            <button id="zoom-in" class="map-control-btn" title="Zoom In">
-                                <i data-lucide="plus" class="w-5 h-5"></i>
-                            </button>
-                            <button id="zoom-out" class="map-control-btn" title="Zoom Out">
-                                <i data-lucide="minus" class="w-5 h-5"></i>
-                            </button>
-                        </div>
-                        
-                        <!-- Map Legend -->
                         <div class="map-legend">
-                            <div class="font-medium text-sm mb-2">Health Status</div>
                             <div class="legend-item">
-                                <div class="legend-color bg-green-500"></div>
+                                <span class="legend-color bg-green-500"></span>
                                 <span class="text-xs">Healthy</span>
                             </div>
                             <div class="legend-item">
-                                <div class="legend-color bg-yellow-500"></div>
-                                <span class="text-xs">At Risk</span>
+                                <span class="legend-color bg-yellow-500"></span>
+                                <span class="text-xs">At-Risk</span>
                             </div>
                             <div class="legend-item">
-                                <div class="legend-color bg-red-500"></div>
-                                <span class="text-xs">Affected</span>
+                                <span class="legend-color bg-red-500"></span>
+                                <span class="text-xs">Critical</span>
                             </div>
                         </div>
+                        <div class="map-controls">
+                            <button id="zoom-in" class="map-control-btn">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                            </button>
+                            <button id="zoom-out" class="map-control-btn">
+                                <i data-lucide="minus" class="w-4 h-4"></i>
+                            </button>
+                            <button id="current-location" class="map-control-btn">
+                                <i data-lucide="crosshair" class="w-4 h-4"></i>
+                            </button>
+                        </div>
                     </div>
+                    
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-4">
+                        *Map displays household health status based on recent reports. Coordinates are approximate for privacy.
+                    </p>
+                </section>
+                
+                <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-right">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="home-run" class="w-5 h-5 text-red-600 dark:text-red-400"></i> Critical Households 
+                        </h2>
+                        <span class="px-3 py-1 bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300 rounded-full text-sm"> 4 Alerts </span>
+                    </div>
+                    
+                    <div class="household-grid">
+                        <div class="p-4 rounded-lg priority-high tribal-accent card-hover">
+                            <p class="font-medium text-gray-900 dark:text-white">H No: 104 (Ray)</p>
+                            <p class="text-sm text-red-600 dark:text-red-400">Fever & Cough</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Reported 2 hours ago</p>
+                        </div>
+                        <div class="p-4 rounded-lg priority-high tribal-accent card-hover">
+                            <p class="font-medium text-gray-900 dark:text-white">H No: 211 (Devi)</p>
+                            <p class="text-sm text-red-600 dark:text-red-400">Pregnancy Risk</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Last Visit: 5 days ago</p>
+                        </div>
+                        <div class="p-4 rounded-lg priority-medium tribal-accent card-hover">
+                            <p class="font-medium text-gray-900 dark:text-white">H No: 055 (Singh)</p>
+                            <p class="text-sm text-yellow-600 dark:text-yellow-400">High Blood Pressure</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Needs follow-up</p>
+                        </div>
+                        <div class="p-4 rounded-lg priority-high tribal-accent card-hover">
+                            <p class="font-medium text-gray-900 dark:text-white">H No: 189 (Ali)</p>
+                            <p class="text-sm text-red-600 dark:text-red-400">Gastro Symptoms</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Reported 1 day ago</p>
+                        </div>
+                    </div>
+                    
+                    <button class="mt-4 w-full py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900 transition-colors text-sm">
+                        <i data-lucide="eye" class="w-4 h-4 inline mr-2"></i> View Action Plan
+                    </button>
+                </section>
+                
+                <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-right">
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
+                        <i data-lucide="list-checks" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i> Daily Action Checklist 
+                    </h2>
+                    
+                    <ul class="space-y-3" id="daily-checklist">
+                        </ul>
+                    
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-4">
+                        *Complete all tasks to ensure a 5-star daily rating.
+                    </p>
                 </section>
             </div>
         </div>
     </main>
 
-    <!-- Modals -->
-    <!-- Quick Survey Modal -->
-    <div id="quick-survey-modal" class="hidden fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-50">
-        <div class="glass-effect bg-white dark:bg-gray-800 rounded-2xl max-w-lg w-full modal-enter">
-            <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Quick Household Survey</h3>
-                <button id="close-quick-survey" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                    <i data-lucide="x" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
-                </button>
-            </div>
-            <div class="p-6" id="quick-survey-content">
-                <!-- Quick survey content will be populated here -->
-            </div>
-        </div>
-    </div>
+    <footer class="container mx-auto px-4 py-4 mt-8 border-t border-gray-200 dark:border-gray-800">
+        <p class="text-center text-sm text-gray-500 dark:text-gray-400">
+            &copy; 2024 Smart Community Health Monitor. Powered by dedicated ASHA Workers.
+        </p>
+    </footer>
 
-    <!-- Add Marker Modal -->
-    <div id="add-marker-modal" class="hidden fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-50">
-        <div class="glass-effect bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full modal-enter">
-            <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Add Health Marker</h3>
-                <button id="close-add-marker" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                    <i data-lucide="x" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
+    <div id="task-reminder-modal" class="modal-backdrop hidden">
+        <div id="task-reminder-content" class="modal-enter">
+            <h3 class="text-2xl font-bold text-red-600 dark:text-red-400 mb-3 flex items-center gap-2">
+                <i data-lucide="alert-triangle" class="w-6 h-6"></i> Important Reminder
+            </h3>
+            <p class="text-gray-700 dark:text-gray-300">
+                You had **incomplete tasks** from your last session. Please review and prioritize these today:
+            </p>
+            <ul id="incomplete-tasks-list">
+                </ul>
+            <div class="mt-4 text-right">
+                <button onclick="document.getElementById('task-reminder-modal').classList.add('hidden')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
+                    Acknowledge & Close
                 </button>
-            </div>
-            <div class="p-6" id="add-marker-content">
-                <!-- Add marker content will be populated here -->
             </div>
         </div>
     </div>
 
     <script>
-        // Mock data
-        const symptoms = [
-            'Diarrhea', 'Vomiting', 'Fever', 'Abdominal Pain', 'Dehydration', 'Nausea',
-            'Headache', 'Fatigue', 'Loss of Appetite', 'Muscle Cramps', 'Jaundice', 'Dark Urine'
+        // --- Global State for Checklist ---
+        let dailyTasks = [
+            // id: unique number, text: task description, completed: boolean (today's status)
+            { id: 1, text: "Visit Rina Begum (H No: 104)", completed: false, priority: 'Urgent' },
+            { id: 2, text: "Submit 3 pending survey reports", completed: false, priority: 'Normal' },
+            { id: 3, text: "Distribute mosquito nets in Sector B", completed: true, priority: 'Completed' },
+            { id: 4, text: "Check vaccine stock at PHC", completed: false, priority: 'Normal' }
         ];
 
-        const mockNotifications = [
-            {
-                id: 1,
-                type: 'urgent',
-                title: 'Water Contamination Alert',
-                message: 'Avoid using water from the main well near the market area. Alternative sources have been arranged.',
-                time: '15 minutes ago',
-                priority: 'high'
-            },
-            {
-                id: 2,
-                type: 'info',
-                title: 'New Treatment Protocol',
-                message: 'Updated guidelines for cholera treatment have been shared. Please review the attached document.',
-                time: '2 hours ago',
-                priority: 'medium'
-            },
-            {
-                id: 3,
-                type: 'reminder',
-                title: 'Weekly Report Due',
-                message: 'Your weekly community health report is due tomorrow. Please submit before 5 PM.',
-                time: '1 day ago',
-                priority: 'low'
-            },
-            {
-                id: 4,
-                type: 'training',
-                title: 'Training Session Tomorrow',
-                message: 'Mandatory training on water-borne disease prevention at 10 AM in the community center.',
-                time: '1 day ago',
-                priority: 'medium'
-            }
-        ];
-
-        const mockTrainingMaterials = [
-            {
-                id: 1,
-                title: 'Cholera Prevention Guidelines',
-                type: 'PDF',
-                size: '2.4 MB',
-                updated: '2 days ago',
-                category: 'prevention'
-            },
-            {
-                id: 2,
-                title: 'Water Quality Testing Procedures',
-                type: 'Video',
-                size: '45 MB',
-                updated: '1 week ago',
-                category: 'testing'
-            },
-            {
-                id: 3,
-                title: 'Symptom Recognition Chart',
-                type: 'Image',
-                size: '1.2 MB',
-                updated: '3 days ago',
-                category: 'diagnosis'
-            },
-            {
-                id: 4,
-                title: 'Emergency Response Protocol',
-                type: 'PDF',
-                size: '3.1 MB',
-                updated: '5 days ago',
-                category: 'emergency'
-            },
-            {
-                id: 5,
-                title: 'Community Awareness Toolkit',
-                type: 'ZIP',
-                size: '12.5 MB',
-                updated: '1 week ago',
-                category: 'awareness'
-            }
-        ];
-
-        // Google Maps related variables
+        // --- Google Maps Variables ---
         let map;
         let markers = [];
-        let userMarker;
-        let watchId;
-        let isTracking = false;
-        let userLocation = null;
+        let currentLocationMarker;
 
-        // Mock household data with real coordinates for Majuli, Assam
-        const mockHouseholds = [
-            { 
-                id: 1, 
-                lat: 26.9578, 
-                lng: 94.1571, 
-                status: 'healthy', 
-                household: 'Sharma Family', 
-                members: 5,
-                address: 'Near Kamalabari Satra, Majuli'
-            },
-            { 
-                id: 2, 
-                lat: 26.9632, 
-                lng: 94.1684, 
-                status: 'warning', 
-                household: 'Das Family', 
-                members: 7,
-                address: 'Garhmur, Majuli'
-            },
-            { 
-                id: 3, 
-                lat: 26.9695, 
-                lng: 94.1523, 
-                status: 'critical', 
-                household: 'Kumar Family', 
-                members: 4,
-                address: 'Auniati Satra Road, Majuli'
-            },
-            { 
-                id: 4, 
-                lat: 26.9512, 
-                lng: 94.1728, 
-                status: 'healthy', 
-                household: 'Singh Family', 
-                members: 6,
-                address: 'Near Dakhinpat Satra, Majuli'
-            },
-            { 
-                id: 5, 
-                lat: 26.9746, 
-                lng: 94.1621, 
-                status: 'warning', 
-                household: 'Patel Family', 
-                members: 3,
-                address: 'Bongaon, Majuli'
-            },
-            { 
-                id: 6, 
-                lat: 26.9478, 
-                lng: 94.1489, 
-                status: 'healthy', 
-                household: 'Gogoi Family', 
-                members: 8,
-                address: 'Salmora, Majuli'
-            },
-            { 
-                id: 7, 
-                lat: 26.9591, 
-                lng: 94.1782, 
-                status: 'critical', 
-                household: 'Devi Family', 
-                members: 5,
-                address: 'Near Bengenati, Majuli'
+        // --- Utility Functions ---
+
+        function getTodayDateString() {
+            return new Date().toDateString();
+        }
+
+        function saveTasks(tasks) {
+            localStorage.setItem('dailyTasks', JSON.stringify(tasks));
+        }
+
+        function loadTasks() {
+            const savedTasks = localStorage.getItem('dailyTasks');
+            if (savedTasks) {
+                dailyTasks = JSON.parse(savedTasks);
+            } else {
+                saveTasks(dailyTasks); // Save initial set if none found
             }
-        ];
-
-        // Global state
-        let isDarkMode = false;
-
-        // Initialize Google Map
+        }
+        
+        // --- Google Maps Functions ---
+        
         function initMap() {
-            // Default center to Majuli, Assam
-            const majuli = { lat: 26.9578, lng: 94.1571 };
+            // Majuli, Assam coordinates
+            const majuli = { lat: 26.998, lng: 94.221 };
             
             // Create the map
             map = new google.maps.Map(document.getElementById('google-map'), {
-                zoom: 13,
+                zoom: 12,
                 center: majuli,
-                mapTypeId: 'roadmap',
-                styles: getMapStyle(isDarkMode),
-                disableDefaultUI: true,
-                zoomControl: true,
                 mapTypeControl: false,
-                scaleControl: true,
                 streetViewControl: false,
-                rotateControl: true,
-                fullscreenControl: false
+                fullscreenControl: true,
+                styles: [
+                    {
+                        "featureType": "administrative",
+                        "elementType": "geometry",
+                        "stylers": [{"visibility": "off"}]
+                    },
+                    {
+                        "featureType": "poi",
+                        "stylers": [{"visibility": "off"}]
+                    },
+                    {
+                        "featureType": "road",
+                        "elementType": "labels.icon",
+                        "stylers": [{"visibility": "off"}]
+                    },
+                    {
+                        "featureType": "transit",
+                        "stylers": [{"visibility": "off"}]
+                    }
+                ]
             });
             
-            // Add household markers
+            // Add map controls
+            document.getElementById('zoom-in').addEventListener('click', function() {
+                map.setZoom(map.getZoom() + 1);
+            });
+            
+            document.getElementById('zoom-out').addEventListener('click', function() {
+                map.setZoom(map.getZoom() - 1);
+            });
+            
+            document.getElementById('current-location').addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        const pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        
+                        // Remove existing current location marker
+                        if (currentLocationMarker) {
+                            currentLocationMarker.setMap(null);
+                        }
+                        
+                        // Add new current location marker
+                        currentLocationMarker = new google.maps.Marker({
+                            position: pos,
+                            map: map,
+                            title: 'Your Current Location',
+                            icon: {
+                                url: 'data:image/svg+xml;base64,' + btoa(`
+                                    <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="10" cy="10" r="8" fill="#10b981" stroke="white" stroke-width="2"/>
+                                        <circle cx="10" cy="10" r="3" fill="white"/>
+                                    </svg>
+                                `),
+                                scaledSize: new google.maps.Size(20, 20),
+                                anchor: new google.maps.Point(10, 10)
+                            }
+                        });
+                        
+                        // Center map on current location
+                        map.setCenter(pos);
+                    }, function() {
+                        alert('Unable to get your current location. Please check your browser permissions.');
+                    });
+                } else {
+                    alert('Geolocation is not supported by this browser.');
+                }
+            });
+            
+            // Add sample household markers
             addHouseholdMarkers();
-            
-            // Try to get user's current location
-            getUserLocation();
         }
-
-        // Get map style based on theme
-        function getMapStyle(isDark) {
-            if (isDark) {
-                return [
-                    { elementType: 'geometry', stylers: [{ color: '#242f3e' }] },
-                    { elementType: 'labels.text.stroke', stylers: [{ color: '#242f3e' }] },
-                    { elementType: 'labels.text.fill', stylers: [{ color: '#746855' }] },
-                    {
-                        featureType: 'administrative.locality',
-                        elementType: 'labels.text.fill',
-                        stylers: [{ color: '#d59563' }]
-                    },
-                    {
-                        featureType: 'poi',
-                        elementType: 'labels.text.fill',
-                        stylers: [{ color: '#d59563' }]
-                    },
-                    {
-                        featureType: 'poi.park',
-                        elementType: 'geometry',
-                        stylers: [{ color: '#263c3f' }]
-                    },
-                    {
-                        featureType: 'poi.park',
-                        elementType: 'labels.text.fill',
-                        stylers: [{ color: '#6b9a76' }]
-                    },
-                    {
-                        featureType: 'road',
-                        elementType: 'geometry',
-                        stylers: [{ color: '#38414e' }]
-                    },
-                    {
-                        featureType: 'road',
-                        elementType: 'geometry.stroke',
-                        stylers: [{ color: '#212a37' }]
-                    },
-                    {
-                        featureType: 'road',
-                        elementType: 'labels.text.fill',
-                        stylers: [{ color: '#9ca5b3' }]
-                    },
-                    {
-                        featureType: 'road.highway',
-                        elementType: 'geometry',
-                        stylers: [{ color: '#746855' }]
-                    },
-                    {
-                        featureType: 'road.highway',
-                        elementType: 'geometry.stroke',
-                        stylers: [{ color: '#1f2835' }]
-                    },
-                    {
-                        featureType: 'road.highway',
-                        elementType: 'labels.text.fill',
-                        stylers: [{ color: '#f3d19c' }]
-                    },
-                    {
-                        featureType: 'transit',
-                        elementType: 'geometry',
-                        stylers: [{ color: '#2f3948' }]
-                    },
-                    {
-                        featureType: 'transit.station',
-                        elementType: 'labels.text.fill',
-                        stylers: [{ color: '#d59563' }]
-                    },
-                    {
-                        featureType: 'water',
-                        elementType: 'geometry',
-                        stylers: [{ color: '#17263c' }]
-                    },
-                    {
-                        featureType: 'water',
-                        elementType: 'labels.text.fill',
-                        stylers: [{ color: '#515c6d' }]
-                    },
-                    {
-                        featureType: 'water',
-                        elementType: 'labels.text.stroke',
-                        stylers: [{ color: '#17263c' }]
-                    }
-                ];
-            } else {
-                // Light theme (standard map)
-                return [];
-            }
-        }
-
-        // Add household markers to the map
+        
         function addHouseholdMarkers() {
-            // Clear existing markers
-            markers.forEach(marker => marker.setMap(null));
-            markers = [];
+            // Sample household data
+            const households = [
+                { lat: 26.998, lng: 94.221, status: 'healthy', name: 'H No: 104 (Ray)', details: 'Healthy household' },
+                { lat: 27.008, lng: 94.231, status: 'at-risk', name: 'H No: 211 (Devi)', details: 'At-risk household' },
+                { lat: 26.988, lng: 94.211, status: 'critical', name: 'H No: 055 (Singh)', details: 'Critical household' },
+                { lat: 27.015, lng: 94.201, status: 'healthy', name: 'H No: 189 (Ali)', details: 'Healthy household' },
+                { lat: 26.975, lng: 94.241, status: 'at-risk', name: 'H No: 067 (Sharma)', details: 'At-risk household' }
+            ];
             
-            // Add new markers
-            mockHouseholds.forEach(household => {
+            households.forEach(household => {
                 let iconColor;
                 switch(household.status) {
                     case 'healthy': iconColor = '#10b981'; break;
-                    case 'warning': iconColor = '#f59e0b'; break;
+                    case 'at-risk': iconColor = '#f59e0b'; break;
                     case 'critical': iconColor = '#ef4444'; break;
                     default: iconColor = '#6b7280';
                 }
@@ -1619,572 +1993,355 @@
                 const marker = new google.maps.Marker({
                     position: { lat: household.lat, lng: household.lng },
                     map: map,
-                    title: `${household.household} (${household.members} members)`,
+                    title: household.name,
                     icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 10,
-                        fillColor: iconColor,
-                        fillOpacity: 1,
-                        strokeColor: '#ffffff',
-                        strokeWeight: 2
+                        url: 'data:image/svg+xml;base64,' + btoa(`
+                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" fill="${iconColor}" stroke="white" stroke-width="2"/>
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="white"/>
+                            </svg>
+                        `),
+                        scaledSize: new google.maps.Size(24, 24),
+                        anchor: new google.maps.Point(12, 12)
                     }
                 });
                 
-                // Create info window content
-                const infoWindowContent = `
-                    <div class="custom-info-window">
-                        <div class="info-window-title">${household.household}</div>
-                        <div class="info-window-details">
-                            <div>Members: ${household.members}</div>
-                            <div>${household.address}</div>
-                            <span class="info-window-status ${'status-' + household.status}">${household.status.toUpperCase()}</span>
-                        </div>
-                    </div>
-                `;
-                
                 const infoWindow = new google.maps.InfoWindow({
-                    content: infoWindowContent
+                    content: `
+                        <div class="custom-info-window">
+                            <div class="info-window-title">${household.name}</div>
+                            <div class="info-window-details">${household.details}</div>
+                            <div class="info-window-status status-${household.status}">${household.status.toUpperCase()}</div>
+                        </div>
+                    `
                 });
                 
-                marker.addListener('click', () => {
+                marker.addListener('click', function() {
                     infoWindow.open(map, marker);
                 });
                 
                 markers.push(marker);
             });
         }
+        
+        // --- Core Application Logic ---
+        
+        function renderChecklist() {
+            const checklistContainer = document.getElementById('daily-checklist');
+            if (!checklistContainer) return;
 
-        // Get user's current location
-        function getUserLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    position => {
-                        userLocation = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
+            checklistContainer.innerHTML = dailyTasks.map(task => {
+                const checked = task.completed ? 'checked' : '';
+                const lineThrough = task.completed ? 'line-through text-gray-500 dark:text-gray-500' : 'text-gray-700 dark:text-gray-300';
+                const priorityBadge = task.priority !== 'Normal' ? 
+                    `<span class="text-xs px-2 py-0.5 bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300 rounded">${task.priority}</span>` : '';
+
+                return `
+                    <li class="checklist-item">
+                        <input 
+                            type="checkbox" 
+                            class="symptom-checkbox" 
+                            id="task-${task.id}" 
+                            data-id="${task.id}" 
+                            ${checked}
+                            onchange="toggleTaskCompletion(${task.id})"
+                        >
+                        <span class="flex-1 ${lineThrough}">${task.text}</span>
                         
-                        // Add user marker
-                        addUserMarker(userLocation);
-                        
-                        // Center map on user location
-                        map.setCenter(userLocation);
-                        map.setZoom(15);
-                    },
-                    error => {
-                        console.error('Error getting location:', error);
-                        // If location access is denied, use default location
-                        userLocation = { lat: 26.9578, lng: 94.1571 };
-                        addUserMarker(userLocation);
-                    }
-                );
-            } else {
-                console.error('Geolocation is not supported by this browser.');
-                // Use default location
-                userLocation = { lat: 26.9578, lng: 94.1571 };
-                addUserMarker(userLocation);
-            }
-        }
+                        ${priorityBadge}
 
-        // Add user marker to the map
-        function addUserMarker(position) {
-            if (userMarker) {
-                userMarker.setMap(null);
-            }
-            
-            userMarker = new google.maps.Marker({
-                position: position,
-                map: map,
-                title: 'Your Location',
-                icon: {
-                    path: google.maps.SymbolPath.CIRCLE,
-                    scale: 8,
-                    fillColor: '#3b82f6',
-                    fillOpacity: 1,
-                    strokeColor: '#ffffff',
-                    strokeWeight: 2
-                },
-                zIndex: 1000
-            });
-            
-            // Add pulsing animation to user marker
-            setInterval(() => {
-                if (userMarker) {
-                    const scale = userMarker.getIcon().scale;
-                    userMarker.setIcon({
-                        ...userMarker.getIcon(),
-                        scale: scale === 8 ? 10 : 8
-                    });
-                }
-            }, 1000);
-        }
-
-        // Start live location tracking
-        function startLiveTracking() {
-            if (navigator.geolocation) {
-                watchId = navigator.geolocation.watchPosition(
-                    position => {
-                        userLocation = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-                        
-                        // Update user marker position
-                        if (userMarker) {
-                            userMarker.setPosition(userLocation);
-                        } else {
-                            addUserMarker(userLocation);
-                        }
-                        
-                        // Update tracking status
-                        document.getElementById('tracking-status').textContent = 'Live';
-                        document.getElementById('tracking-status').className = 'tracking-status tracking-active';
-                    },
-                    error => {
-                        console.error('Error tracking location:', error);
-                        document.getElementById('tracking-status').textContent = 'Offline';
-                        document.getElementById('tracking-status').className = 'tracking-status tracking-inactive';
-                    },
-                    {
-                        enableHighAccuracy: true,
-                        timeout: 5000,
-                        maximumAge: 0
-                    }
-                );
-                
-                isTracking = true;
-            }
-        }
-
-        // Stop live location tracking
-        function stopLiveTracking() {
-            if (watchId) {
-                navigator.geolocation.clearWatch(watchId);
-                watchId = null;
-            }
-            
-            isTracking = false;
-            document.getElementById('tracking-status').textContent = 'Paused';
-            document.getElementById('tracking-status').className = 'tracking-status tracking-inactive';
-        }
-
-        // Toggle live tracking
-        function toggleLiveTracking() {
-            if (isTracking) {
-                stopLiveTracking();
-            } else {
-                startLiveTracking();
-            }
-        }
-
-        // Center map on user location
-        function centerOnUser() {
-            if (userLocation) {
-                map.setCenter(userLocation);
-                map.setZoom(15);
-            }
-        }
-
-        // Safe icon creation function
-        function createIconsSafely() {
-            if (typeof lucide !== 'undefined' && lucide.createIcons) {
-                try {
-                    lucide.createIcons();
-                } catch (error) {
-                    console.warn('Error creating Lucide icons:', error);
-                    setTimeout(() => {
-                        try {
-                            lucide.createIcons();
-                        } catch (retryError) {
-                            console.warn('Retry failed for Lucide icons:', retryError);
-                        }
-                    }, 1000);
-                }
-            } else {
-                console.warn('Lucide not available, retrying...');
-                setTimeout(createIconsSafely, 500);
-            }
-        }
-
-        // Profile sidebar functions
-        function openProfileSidebar() {
-            document.getElementById('profile-sidebar').classList.add('open');
-            document.getElementById('profile-backdrop').classList.add('active');
-        }
-
-        function closeProfileSidebar() {
-            document.getElementById('profile-sidebar').classList.remove('open');
-            document.getElementById('profile-backdrop').classList.remove('active');
-        }
-
-        function logout() {
-            if (confirm('Are you sure you want to log out?')) {
-                alert('Logging out... Redirecting to login page.');
-                // In a real app, you would redirect to login page
-                // window.location.href = '/login';
-                window.location.href = 'index.html'; 
-            }
-        }
-
-        // Initialize the app
-        function initializeApp() {
-            createIconsSafely();
-            populateSymptoms();
-            populateNotifications();
-            populateTrainingMaterials();
-            setupEventListeners();
-        }
-
-        // Populate symptoms checklist
-        function populateSymptoms() {
-            const symptomsContainer = document.getElementById('symptoms-checklist');
-            symptomsContainer.innerHTML = '';
-            
-            symptoms.forEach(symptom => {
-                const symptomElement = document.createElement('label');
-                symptomElement.className = 'flex items-center gap-3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors';
-                
-                symptomElement.innerHTML = `
-                    <input type="checkbox" class="symptom-checkbox" value="${symptom.toLowerCase().replace(' ', '_')}">
-                    <span class="text-gray-700 dark:text-gray-300 text-sm">${symptom}</span>
-                `;
-                
-                symptomsContainer.appendChild(symptomElement);
-            });
-        }
-
-        // Populate notifications
-        function populateNotifications() {
-            const notificationsPanel = document.getElementById('notifications-panel');
-            notificationsPanel.innerHTML = '';
-            
-            mockNotifications.forEach(notification => {
-                const notificationElement = document.createElement('div');
-                
-                let priorityClass = '';
-                let iconName = '';
-                
-                switch(notification.type) {
-                    case 'urgent':
-                        priorityClass = 'priority-high';
-                        iconName = 'alert-triangle';
-                        break;
-                    case 'info':
-                        priorityClass = 'priority-medium';
-                        iconName = 'info';
-                        break;
-                    case 'reminder':
-                        priorityClass = 'priority-low';
-                        iconName = 'clock';
-                        break;
-                    case 'training':
-                        priorityClass = 'priority-medium';
-                        iconName = 'book-open';
-                        break;
-                }
-                
-                notificationElement.className = `${priorityClass} rounded-lg p-4 transition-all duration-300 hover:shadow-md cursor-pointer`;
-                
-                notificationElement.innerHTML = `
-                    <div class="flex items-start gap-3">
-                        <i data-lucide="${iconName}" class="w-5 h-5 mt-0.5 ${notification.priority === 'high' ? 'text-red-600 dark:text-red-400' : notification.priority === 'medium' ? 'text-yellow-600 dark:text-yellow-400' : 'text-green-600 dark:text-green-400'}"></i>
-                        <div class="flex-1">
-                            <h4 class="font-medium text-gray-900 dark:text-white text-sm">${notification.title}</h4>
-                            <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">${notification.message}</p>
-                            <div class="flex justify-between items-center mt-2">
-                                <span class="text-gray-500 dark:text-gray-500 text-xs">${notification.time}</span>
-                                <span class="px-2 py-1 text-xs rounded-full ${notification.priority === 'high' ? 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300' : notification.priority === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300' : 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300'}">${notification.priority}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                notificationElement.addEventListener('click', () => showNotificationDetails(notification));
-                notificationsPanel.appendChild(notificationElement);
-            });
-            
-            createIconsSafely();
-        }
-
-        // Populate training materials
-        function populateTrainingMaterials() {
-            const trainingContainer = document.getElementById('training-materials');
-            trainingContainer.innerHTML = '';
-            
-            mockTrainingMaterials.forEach(material => {
-                const materialElement = document.createElement('div');
-                materialElement.className = 'training-card glass-effect rounded-lg p-4 hover:bg-white/20 dark:hover:bg-black/20 transition-all duration-300 cursor-pointer card-hover';
-                
-                let iconName = '';
-                let iconColor = '';
-                
-                switch(material.type) {
-                    case 'PDF':
-                        iconName = 'file-text';
-                        iconColor = 'text-red-600 dark:text-red-400';
-                        break;
-                    case 'Video':
-                        iconName = 'play-circle';
-                        iconColor = 'text-blue-600 dark:text-blue-400';
-                        break;
-                    case 'Image':
-                        iconName = 'image';
-                        iconColor = 'text-green-600 dark:text-green-400';
-                        break;
-                    case 'ZIP':
-                        iconName = 'archive';
-                        iconColor = 'text-purple-600 dark:text-purple-400';
-                        break;
-                }
-                
-                materialElement.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="${iconName}" class="w-5 h-5 ${iconColor}"></i>
-                        <div class="flex-1">
-                            <h4 class="font-medium text-gray-900 dark:text-white text-sm">${material.title}</h4>
-                            <div class="flex justify-between items-center mt-1">
-                                <span class="text-gray-500 dark:text-gray-400 text-xs">${material.size} • ${material.updated}</span>
-                                <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs">${material.type}</span>
-                            </div>
-                        </div>
-                        <button class="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors" onclick="downloadMaterial(${material.id})">
-                            <i data-lucide="download" class="w-4 h-4 text-gray-600 dark:text-gray-400"></i>
+                        <button 
+                            class="edit-task-btn"
+                            title="Edit task"
+                            onclick="promptEditTask(${task.id}, '${task.text.replace(/'/g, "\\'")}')"
+                        >
+                            <i data-lucide="pencil" class="w-4 h-4"></i>
                         </button>
-                    </div>
+                    </li>
                 `;
-                
-                materialElement.addEventListener('click', () => openTrainingMaterial(material));
-                trainingContainer.appendChild(materialElement);
-            });
+            }).join('');
             
-            createIconsSafely();
+            // Re-render lucide icons after injecting new HTML
+            lucide.createIcons();
         }
 
-        // Toggle theme
-        function toggleTheme() {
-            isDarkMode = !isDarkMode;
-            document.documentElement.classList.toggle('dark', isDarkMode);
-            
-            // Update map style
-            if (map) {
-                map.setOptions({ styles: getMapStyle(isDarkMode) });
+        function toggleTaskCompletion(id) {
+            const task = dailyTasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                saveTasks(dailyTasks);
+                renderChecklist(); // Re-render to apply line-through styling
             }
+        }
+        
+        function promptEditTask(id, currentText) {
+            const newText = prompt("Edit the task description:", currentText);
             
-            const themeIcon = document.querySelector('#theme-toggle i');
-            themeIcon.setAttribute('data-lucide', isDarkMode ? 'moon' : 'sun');
-            createIconsSafely();
-            
-            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            if (newText !== null && newText.trim() !== "" && newText.trim() !== currentText.trim()) {
+                const task = dailyTasks.find(t => t.id === id);
+                if (task) {
+                    task.text = newText.trim();
+                    saveTasks(dailyTasks);
+                    renderChecklist();
+                }
+            }
         }
 
-        // Load theme preference
+        function checkCompletionAndResetDay() {
+            const lastCheckDate = localStorage.getItem('lastCheckDate');
+            const today = getTodayDateString();
+
+            if (lastCheckDate && lastCheckDate !== today) {
+                // A new day has begun! Check for incomplete tasks from the previous day.
+                
+                // Note: dailyTasks at this point holds the saved state from the previous day/session
+                const incompleteTasks = dailyTasks.filter(task => !task.completed);
+
+                if (incompleteTasks.length > 0) {
+                    showIncompleteTaskReminder(incompleteTasks);
+                }
+                
+                // IMPORTANT: Reset the tasks for the new day, keeping the original definitions but resetting completion status
+                dailyTasks = dailyTasks.map(task => ({
+                    ...task,
+                    completed: false
+                }));
+
+            } else if (!lastCheckDate) {
+                // First time visit or local storage was cleared - initialize
+                loadTasks();
+            }
+
+            // Always update the check date and save the *new* daily tasks
+            localStorage.setItem('lastCheckDate', today);
+            saveTasks(dailyTasks);
+        }
+        
+        function showIncompleteTaskReminder(incompleteTasks) {
+            const modal = document.getElementById('task-reminder-modal');
+            const list = document.getElementById('incomplete-tasks-list');
+            
+            list.innerHTML = incompleteTasks.map(task => 
+                `<li>- ${task.text} 
+                    <span class="text-xs text-red-500 ml-2">(${task.priority})</span>
+                </li>`
+            ).join('');
+
+            modal.classList.remove('hidden');
+            lucide.createIcons(); // Ensure icons in the modal header are rendered
+        }
+        
+        // --- Theme Toggle Functions ---
+
+        function toggleTheme() {
+            const htmlElement = document.documentElement;
+            const isDarkMode = htmlElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            updateThemeIcon(isDarkMode);
+        }
+
         function loadTheme() {
             const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                isDarkMode = true;
-                document.documentElement.classList.add('dark');
-                const themeIcon = document.querySelector('#theme-toggle i');
-                if (themeIcon) {
-                    themeIcon.setAttribute('data-lucide', 'moon');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const htmlElement = document.documentElement;
+
+            // Determine which theme to apply
+            const shouldApplyDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+            
+            if (shouldApplyDark) {
+                htmlElement.classList.add('dark');
+            } else {
+                htmlElement.classList.remove('dark');
+            }
+            
+            updateThemeIcon(shouldApplyDark);
+        }
+
+        function updateThemeIcon(isDarkMode) {
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                // Clear existing content and create new icon
+                themeToggle.innerHTML = '';
+                const icon = document.createElement('i');
+                icon.setAttribute('data-lucide', isDarkMode ? 'moon' : 'sun');
+                icon.className = 'w-5 h-5 text-white';
+                themeToggle.appendChild(icon);
+                
+                // Re-render Lucide icons
+                lucide.createIcons();
+            }
+        }
+        
+        function toggleProfileSidebar() {
+            const sidebar = document.getElementById('profile-sidebar');
+            const backdrop = document.getElementById('profile-backdrop');
+            sidebar.classList.toggle('open');
+            backdrop.classList.toggle('active');
+        }
+        
+        function logout() {
+            alert('Logging out...');
+            // In a real app, this would clear session/token and redirect to login page
+        }
+
+        let trackingInterval = null;
+        function startLiveTracking() {
+            const statusElement = document.getElementById('tracking-status');
+            if (statusElement) {
+                statusElement.textContent = 'Live';
+                statusElement.classList.remove('tracking-inactive');
+                statusElement.classList.add('tracking-active');
+                
+                if (!trackingInterval) {
+                    trackingInterval = setInterval(() => {
+                        console.log('Tracking: Location updated...');
+                    }, 5000);
                 }
             }
         }
+        
+        const commonSymptoms = ["Fever", "Cough", "Headache", "Fatigue", "Diarrhea", "Vomiting", "Difficulty Breathing", "Body Ache"];
+        function populateSymptomChecklist() {
+            const container = document.getElementById('symptoms-checklist');
+            if (container) {
+                container.innerHTML = commonSymptoms.map(symptom => `
+                    <div class="flex items-center">
+                        <input type="checkbox" id="symptom-${symptom.toLowerCase().replace(/\s/g, '-')}" class="symptom-checkbox mr-2">
+                        <label for="symptom-${symptom.toLowerCase().replace(/\s/g, '-')}" class="text-sm text-gray-700 dark:text-gray-300">${symptom}</label>
+                    </div>
+                `).join('');
+            }
+        }
 
-        // Show quick survey modal
-        function showQuickSurveyModal() {
-            const modal = document.getElementById('quick-survey-modal');
-            const content = document.getElementById('quick-survey-content');
+        function generateUniqueCredentials(patientName) {
+            const cleanName = patientName.toLowerCase().replace(/[^a-z\s]/g, '').trim();
+            const parts = cleanName.split(/\s+/).filter(p => p.length > 0);
+            let usernameBase = 'patient'; 
+
+            if (parts.length > 1) {
+                usernameBase = parts[0][0] + parts.slice(-1)[0]; 
+            } else if (parts.length === 1) {
+                usernameBase = parts[0].substring(0, 8); 
+            }
             
-            content.innerHTML = `
-                <form class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Household Head</label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Name">
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Members</label>
-                            <input type="number" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Count">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Water Source</label>
-                            <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                                <option>Well</option>
-                                <option>Tube Well</option>
-                                <option>River</option>
-                                <option>Tap</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Any symptoms in family?</label>
-                        <div class="flex gap-4">
-                            <label class="flex items-center gap-2">
-                                <input type="radio" name="quick_symptoms" value="yes" class="text-emerald-600">
-                                <span class="text-gray-700 dark:text-gray-300">Yes</span>
-                            </label>
-                            <label class="flex items-center gap-2">
-                                <input type="radio" name="quick_symptoms" value="no" class="text-emerald-600">
-                                <span class="text-gray-700 dark:text-gray-300">No</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="flex gap-3 pt-4">
-                        <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                            Submit Quick Survey
-                        </button>
-                        <button type="button" onclick="closeQuickSurveyModal()" class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-            `;
+            const uniqueifier = Math.floor(Math.random() * 9000) + 1000; 
             
-            modal.classList.remove('hidden');
-        }
+            const uniqueUsername = (usernameBase.substring(0, 8) + uniqueifier).toLowerCase();
 
-        // Show add marker modal
-        function showAddMarkerModal() {
-            const modal = document.getElementById('add-marker-modal');
-            const content = document.getElementById('add-marker-content');
+            const length = 10;
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+            let password = "";
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset[randomIndex];
+            }
             
-            content.innerHTML = `
-                <form class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Household Name</label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Family name">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Health Status</label>
-                        <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                            <option value="healthy">Healthy</option>
-                            <option value="warning">At Risk</option>
-                            <option value="critical">Affected</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Number of Members</label>
-                        <input type="number" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Family size">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Notes</label>
-                        <textarea class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white" rows="2" placeholder="Additional information..."></textarea>
-                    </div>
-                    <div class="flex gap-3 pt-4">
-                        <button type="submit" class="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
-                            Add Marker
-                        </button>
-                        <button type="button" onclick="closeAddMarkerModal()" class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-            `;
+            return {
+                username: uniqueUsername,
+                password: password
+            };
+        }
+
+        // --- Messaging and Help Functions ---
+        
+        function toggleNotifications() {
+            const panel = document.getElementById('notification-panel');
+            panel.style.display = panel.style.display === 'flex' ? 'none' : 'flex';
+        }
+        
+        function toggleMessaging() {
+            const modal = document.getElementById('messaging-modal');
+            modal.classList.toggle('hidden');
+        }
+        
+        function toggleHelp() {
+            const modal = document.getElementById('help-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        // --- Initialization ---
+
+        function initializeApp() {
+            loadTheme();
             
-            modal.classList.remove('hidden');
-        }
-
-        // Close modals
-        function closeQuickSurveyModal() {
-            document.getElementById('quick-survey-modal').classList.add('hidden');
-        }
-
-        function closeAddMarkerModal() {
-            document.getElementById('add-marker-modal').classList.add('hidden');
-        }
-
-        // Action functions
-        function showNotificationDetails(notification) {
-            alert(`Notification Details:\n\nTitle: ${notification.title}\nMessage: ${notification.message}\nTime: ${notification.time}\nPriority: ${notification.priority}`);
-        }
-
-        function openTrainingMaterial(material) {
-            alert(`Opening: ${material.title}\nType: ${material.type}\nSize: ${material.size}\nCategory: ${material.category}`);
-        }
-
-        function downloadMaterial(id) {
-            const material = mockTrainingMaterials.find(m => m.id === id);
-            alert(`Downloading: ${material.title}\nThis would start the download process.`);
-        }
-
-        // Setup event listeners
-        function setupEventListeners() {
-            // Theme toggle
+            // Set up event listeners for notifications, messaging, and help
+            document.getElementById('notifications-btn').addEventListener('click', toggleNotifications);
+            document.getElementById('close-notifications').addEventListener('click', toggleNotifications);
+            
+            // Set up help button to open help modal
+            document.getElementById('help-btn').addEventListener('click', toggleHelp);
+            document.getElementById('close-help').addEventListener('click', toggleHelp);
+            
+            // Add messaging functionality to the SMS Sent card
+            const smsCard = document.querySelector('.glass-effect:nth-child(3)');
+            if (smsCard) {
+                smsCard.style.cursor = 'pointer';
+                smsCard.addEventListener('click', toggleMessaging);
+            }
+            
+            document.getElementById('close-messaging').addEventListener('click', toggleMessaging);
+            
+            document.getElementById('profile-btn').addEventListener('click', toggleProfileSidebar);
+            document.getElementById('profile-backdrop').addEventListener('click', toggleProfileSidebar);
             document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
             
-            // Profile button
-            document.getElementById('profile-btn').addEventListener('click', openProfileSidebar);
-            document.getElementById('profile-backdrop').addEventListener('click', closeProfileSidebar);
-            document.getElementById('logout-btn').addEventListener('click', logout);
+            populateSymptomChecklist();
             
-            // Modal controls
-            document.getElementById('quick-survey-btn').addEventListener('click', showQuickSurveyModal);
-            document.getElementById('close-quick-survey').addEventListener('click', closeQuickSurveyModal);
-            document.getElementById('add-marker-btn').addEventListener('click', showAddMarkerModal);
-            document.getElementById('close-add-marker').addEventListener('click', closeAddMarkerModal);
+            // NEW DAILY CHECK: Must run before rendering anything task-related
+            checkCompletionAndResetDay(); 
+
+            // Render the tasks (either fresh or loaded)
+            renderChecklist(); 
             
-            // Map controls
-            document.getElementById('locate-me').addEventListener('click', centerOnUser);
-            document.getElementById('toggle-live-tracking').addEventListener('click', toggleLiveTracking);
-            document.getElementById('zoom-in').addEventListener('click', () => {
-                map.setZoom(map.getZoom() + 1);
-            });
-            document.getElementById('zoom-out').addEventListener('click', () => {
-                map.setZoom(map.getZoom() - 1);
-            });
+            // Form Submission Handler for Case Reporting Form
+            const caseReportingForm = document.getElementById('case-reporting-form');
+            const credentialOutput = document.getElementById('credential-output');
+            const smsStatus = document.getElementById('sms-status-message');
+
+            if (caseReportingForm) {
+                caseReportingForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const patientNameInput = document.getElementById('patient-name');
+                    const patientName = patientNameInput.value.trim();
+                    
+                    if (!patientName) {
+                         alert('Patient Full Name is required for report submission and registration.');
+                         return;
+                    }
+
+                    console.log('Simulated Case Report and Patient Registration submission for: ' + patientName);
+                    
+                    const credentials = generateUniqueCredentials(patientName);
+                    
+                    document.getElementById('output-username').textContent = credentials.username;
+                    document.getElementById('output-password').textContent = credentials.password;
+                    
+                    smsStatus.style.display = 'block';
+                    smsStatus.className = 'sms-status sms-success animate-fade-in dark:bg-emerald-950 dark:border-emerald-700';
+                    smsStatus.innerHTML = '<i data-lucide="check-circle" class="w-4 h-4 inline mr-2"></i> **Report & Registration Submitted!** Credentials have been generated below.';
+                    
+                    credentialOutput.classList.remove('hidden');
+
+                    credentialOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    lucide.createIcons();
+                });
+            }
             
-            // Other buttons
-            document.getElementById('notifications-btn').addEventListener('click', () => {
-                alert('🔔 ASHA Worker Notifications:\n\n• 3 urgent alerts from clinic\n• 2 new training materials available\n• Weekly report reminder\n• Water quality update for your area');
-            });
-            
-            document.getElementById('help-btn').addEventListener('click', () => {
-                alert('📞 ASHA Worker Help & Support:\n\n• Emergency Hotline: 108\n• Clinic Contact: +91-9876543210\n• Technical Support: +91-9876543211\n• Training Coordinator: +91-9876543212\n\nFor immediate assistance, call the emergency hotline.');
-            });
-            
-            document.getElementById('download-all-btn').addEventListener('click', () => {
-                alert('📥 Downloading all training materials...\n\nThis would download a ZIP file containing all current training materials and guidelines for offline access.');
-            });
-            
-            document.getElementById('map-legend-btn').addEventListener('click', () => {
-                alert('🗺️ Map Legend:\n\n🟢 Green: Healthy households\n🟡 Yellow: At-risk households (symptoms reported)\n🔴 Red: Affected households (confirmed cases)\n\nClick on any marker to view household details.');
-            });
+            lucide.createIcons();
         }
 
         // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('DOM Content Loaded - Initializing ASHA Dashboard...');
-            loadTheme();
-            initializeApp();
-            
-            // Start live tracking by default
-            setTimeout(() => {
-                startLiveTracking();
-            }, 1000);
-        });
-
-        // Fallback initialization
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                console.log('DOM Content Loaded - Initializing ASHA Dashboard...');
-                loadTheme();
-                initializeApp();
-                
-                // Start live tracking by default
-                setTimeout(() => {
-                    startLiveTracking();
-                }, 1000);
-            });
+            document.addEventListener('DOMContentLoaded', initializeApp);
         } else {
-            console.log('DOM already loaded - Initializing ASHA Dashboard immediately...');
-            loadTheme();
             initializeApp();
-            
-            // Start live tracking by default
-            setTimeout(() => {
-                startLiveTracking();
-            }, 1000);
         }
+
+        // Start live tracking after a short delay
+        setTimeout(startLiveTracking, 1000);
     </script>
+
 </body>
 </html>
