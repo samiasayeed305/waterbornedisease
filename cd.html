@@ -51,6 +51,19 @@
         .dark ::-webkit-scrollbar-thumb {
             background: #475569;
         }
+        
+        /* Profile dropdown animation */
+        .profile-dropdown {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            pointer-events: none;
+        }
+        .profile-dropdown.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900">
@@ -71,6 +84,43 @@
                     <i data-lucide="home" class="w-4 h-4"></i>
                     <span>Home</span>
                 </a>
+                
+                <!-- Profile Dropdown -->
+                <div class="relative">
+                    <button id="profile-toggle" class="flex items-center gap-2 p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                        <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white font-semibold">
+                            CV
+                        </div>
+                        <span class="hidden sm:block">Community Volunteer</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    
+                    <div id="profile-dropdown" class="profile-dropdown absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border dark:border-gray-700 py-2 z-50">
+                        <div class="px-4 py-2 border-b dark:border-gray-700">
+                            <p class="text-sm font-medium text-gray-900 dark:text-gray-50">Community Volunteer</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">volunteer@community.org</p>
+                        </div>
+                        <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i data-lucide="user" class="w-4 h-4"></i>
+                            <span>My Profile</span>
+                        </a>
+                        <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i data-lucide="settings" class="w-4 h-4"></i>
+                            <span>Settings</span>
+                        </a>
+                        <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i data-lucide="help-circle" class="w-4 h-4"></i>
+                            <span>Help & Support</span>
+                        </a>
+                        <div class="border-t dark:border-gray-700 mt-2 pt-2">
+                            <button id="logout-btn" class="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20">
+                                <i data-lucide="log-out" class="w-4 h-4"></i>
+                                <span>Log Out</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Dark Mode Toggle -->
                 <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors duration-300">
                     <i data-lucide="sun" id="sun-icon" class="w-5 h-5"></i>
@@ -117,31 +167,29 @@
             </div>
 
             <!-- Card: Water Quality Report -->
-          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
-    <div class="flex items-center gap-3 mb-4">
-        <div class="p-3 rounded-full bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300">
-            <!-- Note: 'droplets' icon requires lucide-icons to be loaded in the page header -->
-            <i data-lucide="droplets" class="w-5 h-5"></i>
-        </div>
-        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Water Quality Report</h2>
-    </div>
-    <div class="space-y-4">
-        <p class="text-gray-600 dark:text-gray-300">Quickly report water contamination or issues from your testing kits.</p>
-        <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-            <p class="text-sm text-gray-600 dark:text-gray-300">Last report submitted:</p>
-            <p class="font-semibold text-gray-900 dark:text-gray-50">Water Source A3 - High Bacterial Count</p>
-        </div>
-        
-        <!-- FIXED: Changed button to anchor tag <a> with href for navigation -->
-        <a href="water_report.html" 
-           class="w-full inline-block text-center py-3 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-lg font-bold"
-           role="button">
-            Submit New Report
-        </a>
-        
-    </div>
-</div>
-
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-3 rounded-full bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300">
+                        <i data-lucide="droplets" class="w-5 h-5"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Water Quality Report</h2>
+                </div>
+                <div class="space-y-4">
+                    <p class="text-gray-600 dark:text-gray-300">Quickly report water contamination or issues from your testing kits.</p>
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Last report submitted:</p>
+                        <p class="font-semibold text-gray-900 dark:text-gray-50">Water Source A3 - High Bacterial Count</p>
+                    </div>
+                    
+                    <!-- FIXED: Changed button to anchor tag <a> with href for navigation -->
+                    <a href="water_report.html" 
+                       class="w-full inline-block text-center py-3 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-lg font-bold"
+                       role="button">
+                        Submit New Report
+                    </a>
+                    
+                </div>
+            </div>
 
             <!-- Card: Local Outbreaks & Alerts -->
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 lg:col-span-2 transition-transform hover:scale-[1.01] duration-300">
@@ -248,6 +296,55 @@
                     sunIcon.classList.remove('hidden');
                     moonIcon.classList.add('hidden');
                 }
+            });
+
+            // Profile Dropdown Logic
+            const profileToggle = document.getElementById('profile-toggle');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            const logoutBtn = document.getElementById('logout-btn');
+            
+            // Toggle profile dropdown
+            profileToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('active');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', () => {
+                profileDropdown.classList.remove('active');
+            });
+            
+            // Prevent dropdown from closing when clicking inside it
+            profileDropdown.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+            
+            // Logout functionality
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Show confirmation modal
+                const modalTitle = document.getElementById('modalTitle');
+                const modalMessage = document.getElementById('modalMessage');
+                const messageModal = document.getElementById('messageModal');
+                
+                modalTitle.textContent = 'Confirm Logout';
+                modalMessage.textContent = 'Are you sure you want to log out?';
+                messageModal.classList.remove('hidden');
+                
+                // Handle logout confirmation
+                document.getElementById('closeModal').addEventListener('click', () => {
+                    messageModal.classList.add('hidden');
+                    
+                    // Simulate logout process
+                    setTimeout(() => {
+                        // Clear any session data if needed
+                        localStorage.removeItem('userSession');
+                        
+                        // Redirect to index.html
+                        window.location.href = 'index.html';
+                    }, 500);
+                }, { once: true });
             });
 
             // Message Modal Logic
