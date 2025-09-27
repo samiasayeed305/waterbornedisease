@@ -27,7 +27,177 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        
+        body {
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f766e 0%, #059669 25%, #10b981 50%, #34d399 75%, #6ee7b7 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+        
+        .dark .gradient-bg {
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 25%, #047857 50%, #059669 75%, #0d9488 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .dark .glass-effect {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .dark .card-hover:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .animate-fade-in {
+            animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px) scale(0.95);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .animate-slide-in-left {
+            animation: slideInLeft 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        @keyframes slideInLeft {
+            from { 
+                opacity: 0; 
+                transform: translateX(-50px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(0);
+            }
+        }
+        
+        .animate-slide-in-right {
+            animation: slideInRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        @keyframes slideInRight {
+            from { 
+                opacity: 0; 
+                transform: translateX(50px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(0);
+            }
+        }
+        
+        .theme-transition {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .priority-high {
+            border-left: 4px solid #ef4444;
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, transparent 100%);
+        }
+        
+        .priority-medium {
+            border-left: 4px solid #f59e0b;
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 0%, transparent 100%);
+        }
+        
+        .priority-low {
+            border-left: 4px solid #10b981;
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);
+        }
+        
+        .tribal-accent {
+            border-left: 4px solid #059669;
+            background: linear-gradient(90deg, rgba(5, 150, 105, 0.1) 0%, transparent 100%);
+        }
+        
+        .dark .tribal-accent {
+            border-left: 4px solid #10b981;
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);
+        }
+        
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        
+        .notification-badge {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .modal-backdrop {
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.4);
+            transition: opacity 0.3s ease;
+        }
+        
+        .dark .modal-backdrop {
+            background: rgba(0, 0, 0, 0.6);
+        }
+        
+        .modal-enter {
+            animation: modalEnter 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        @keyframes modalEnter {
+            from { 
+                opacity: 0; 
+                transform: scale(0.9) translateY(20px);
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1) translateY(0);
+            }
+        }
+        
         /* Custom scrollbar styles */
         ::-webkit-scrollbar {
             width: 8px;
@@ -46,170 +216,489 @@
         .dark ::-webkit-scrollbar-thumb {
             background: #475569;
         }
+        
+        /* Pain Level Indicator */
+        .pain-level-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+        }
+        
+        .pain-level {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .pain-level:hover {
+            transform: scale(1.1);
+        }
+        
+        .pain-level.selected {
+            transform: scale(1.2);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        }
+        
+        .pain-level-1 { background-color: #dcfce7; color: #166534; }
+        .pain-level-2 { background-color: #bbf7d0; color: #166534; }
+        .pain-level-3 { background-color: #86efac; color: #166534; }
+        .pain-level-4 { background-color: #4ade80; color: #166534; }
+        .pain-level-5 { background-color: #22c55e; color: #166534; }
+        .pain-level-6 { background-color: #fef08a; color: #854d0e; }
+        .pain-level-7 { background-color: #fde047; color: #854d0e; }
+        .pain-level-8 { background-color: #facc15; color: #854d0e; }
+        .pain-level-9 { background-color: #eab308; color: #854d0e; }
+        .pain-level-10 { background-color: #f87171; color: #991b1b; }
+        
+        /* Recipient Selection */
+        .recipient-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .recipient-option:hover {
+            border-color: #3b82f6;
+            background-color: #f0f9ff;
+        }
+        
+        .dark .recipient-option {
+            border-color: #4b5563;
+            background-color: #1f2937;
+        }
+        
+        .dark .recipient-option:hover {
+            border-color: #3b82f6;
+            background-color: #1e3a8a;
+        }
+        
+        .recipient-option.selected {
+            border-color: #3b82f6;
+            background-color: #dbeafe;
+        }
+        
+        .dark .recipient-option.selected {
+            border-color: #3b82f6;
+            background-color: #1e3a8a;
+        }
+        
+        .recipient-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+        
+        .recipient-asha .recipient-icon {
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .recipient-hospital .recipient-icon {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .recipient-doctor .recipient-icon {
+            background-color: #8b5cf6;
+            color: white;
+        }
+        
+        /* Success Message */
+        .success-message {
+            display: none;
+            padding: 1rem;
+            background-color: #d1fae5;
+            border: 1px solid #a7f3d0;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            color: #065f46;
+        }
+        
+        .dark .success-message {
+            background-color: #064e3b;
+            border-color: #10b981;
+            color: #6ee7b7;
+        }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-    <!-- Header -->
-    <header class="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
-        <div class="container mx-auto px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                    <i data-lucide="user-2" class="w-5 h-5 text-white"></i>
+<body class="min-h-screen theme-transition bg-gray-50 dark:bg-gray-900">
+    <header class="gradient-bg shadow-lg sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center floating-animation">
+                        <i data-lucide="user-2" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-white">Patient Dashboard</h1>
+                        <p class="text-emerald-100 text-sm">Your Health at a Glance • Majuli Village</p>
+                    </div>
                 </div>
-                <div>
-                    <h1 class="text-lg font-bold text-gray-900 dark:text-gray-50">Patient Dashboard</h1>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Your health at a glance</p>
+                <div class="flex items-center gap-3">
+                    <div class="hidden md:flex items-center gap-4 mr-4">
+                        <div class="text-white text-sm">
+                            <div class="font-medium">Rina Begum</div>
+                            <div class="text-emerald-200">Patient ID: PAT-7824</div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <button id="notifications-btn" class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
+                            <i data-lucide="bell" class="w-5 h-5 text-white"></i>
+                            <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full notification-badge"></span>
+                        </button>
+                    </div>
+                    <button id="theme-toggle" class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
+                        <i data-lucide="sun" class="w-5 h-5 text-white"></i>
+                    </button>
+                    <button id="help-btn" class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
+                        <i data-lucide="help-circle" class="w-5 h-5 text-white"></i>
+                    </button>
+                    <button id="profile-btn" class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
+                        <i data-lucide="user" class="w-5 h-5 text-white"></i>
+                    </button>
                 </div>
-            </div>
-            <div class="flex items-center gap-4">
-                <a href="#" class="px-4 py-2 bg-blue-100 dark:bg-gray-700 hover:bg-blue-200 dark:hover:bg-gray-600 rounded-lg transition-colors text-blue-700 dark:text-gray-300 flex items-center gap-2">
-                    <i data-lucide="home" class="w-4 h-4"></i>
-                    <span>Home</span>
-                </a>
-                <!-- Dark Mode Toggle -->
-                <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors duration-300">
-                    <i data-lucide="sun" id="sun-icon" class="w-5 h-5"></i>
-                    <i data-lucide="moon" id="moon-icon" class="w-5 h-5 hidden"></i>
-                </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-6 py-12">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                <!-- My Vitals Card (from original) -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-3">
-                            <div class="p-3 rounded-full bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300">
-                                <i data-lucide="heart" class="w-5 h-5"></i>
-                            </div>
-                            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">My Vitals</h2>
+    <main class="container mx-auto px-4 py-8">
+        <section class="mb-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="glass-effect rounded-xl p-4 card-hover animate-fade-in stagger-animation" style="--delay: 0.1s;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Health Score</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">4.5/5</p>
                         </div>
-                        <button class="text-blue-600 dark:text-blue-400 hover:underline text-sm show-modal" data-title="My Vitals" data-message="This section displays your key vital signs.">View All</button>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                            <span class="text-gray-600 dark:text-gray-300">Blood Pressure:</span>
-                            <span class="font-semibold text-gray-900 dark:text-gray-50">120/80 mmHg</span>
-                        </div>
-                        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                            <span class="text-gray-600 dark:text-gray-300">Heart Rate:</span>
-                            <span class="font-semibold text-gray-900 dark:text-gray-50">72 bpm</span>
-                        </div>
-                        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                            <span class="text-gray-600 dark:text-gray-300">Temperature:</span>
-                            <span class="font-semibold text-gray-900 dark:text-gray-50">98.6°F</span>
+                        <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center floating-animation">
+                            <i data-lucide="activity" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
                         </div>
                     </div>
                 </div>
-
-                <!-- Upcoming Appointments Card (from original) -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-3">
-                            <div class="p-3 rounded-full bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300">
-                                <i data-lucide="calendar-check-2" class="w-5 h-5"></i>
-                            </div>
-                            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Appointments</h2>
+                <div class="glass-effect rounded-xl p-4 card-hover animate-fade-in stagger-animation" style="--delay: 0.2s;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Upcoming Appointments</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">2</p>
                         </div>
-                        <button class="text-blue-600 dark:text-blue-400 hover:underline text-sm show-modal" data-title="Upcoming Appointments" data-message="This section lists your upcoming doctor appointments.">View All</button>
+                        <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center floating-animation" style="animation-delay: 1s;">
+                            <i data-lucide="calendar" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
+                        </div>
                     </div>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover animate-fade-in stagger-animation" style="--delay: 0.3s;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Active Medications</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">2</p>
+                        </div>
+                        <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center floating-animation" style="animation-delay: 2s;">
+                            <i data-lucide="pill" class="w-5 h-5 text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover animate-fade-in stagger-animation" style="--delay: 0.4s;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Symptom Reports</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">5</p>
+                        </div>
+                        <div class="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center floating-animation" style="animation-delay: 3s;">
+                            <i data-lucide="clipboard-list" class="w-5 h-5 text-orange-600 dark:text-orange-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <div class="xl:col-span-2 space-y-8">
+                
+                <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-left">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="heart" class="w-5 h-5 text-red-600 dark:text-red-400"></i> My Vitals & Health Status
+                        </h2>
+                        <span class="px-3 py-1 bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 rounded-full text-sm"> Stable </span>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Blood Pressure</p>
+                                <p class="text-xl font-bold text-gray-900 dark:text-white">120/80 mmHg</p>
+                                <p class="text-xs text-green-600 dark:text-green-400">Normal</p>
+                            </div>
+                            <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Heart Rate</p>
+                                <p class="text-xl font-bold text-gray-900 dark:text-white">72 bpm</p>
+                                <p class="text-xs text-green-600 dark:text-green-400">Normal</p>
+                            </div>
+                            <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Temperature</p>
+                                <p class="text-xl font-bold text-gray-900 dark:text-white">98.6°F</p>
+                                <p class="text-xs text-green-600 dark:text-green-400">Normal</p>
+                            </div>
+                            <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Blood Sugar</p>
+                                <p class="text-xl font-bold text-gray-900 dark:text-white">110 mg/dL</p>
+                                <p class="text-xs text-yellow-600 dark:text-yellow-400">Slightly Elevated</p>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                            <p class="text-sm font-medium text-blue-800 dark:text-blue-300 flex items-center gap-2">
+                                <i data-lucide="info" class="w-4 h-4"></i> Health Note from Dr. Sharma
+                            </p>
+                            <p class="text-sm text-blue-700 dark:text-blue-400 mt-1">Your vitals are stable. Continue with your current medication regimen. Next check-up in 2 weeks.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Enhanced Report Symptoms Section -->
+                <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-left">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="message-square-plus" class="w-5 h-5 text-orange-600 dark:text-orange-400"></i> Report Symptoms
+                        </h2>
+                    </div>
+                    
+                    <form id="symptom-report-form" class="space-y-6">
+                        <!-- Step 1: Select Recipient -->
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Who would you like to report to?</h3>
+                            <div class="recipient-options">
+                                <div class="recipient-option recipient-asha" data-recipient="asha">
+                                    <div class="recipient-icon">
+                                        <i data-lucide="heart-handshake" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-900 dark:text-white">ASHA Worker</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Report to your local community health worker</p>
+                                    </div>
+                                </div>
+                                <div class="recipient-option recipient-hospital" data-recipient="hospital">
+                                    <div class="recipient-icon">
+                                        <i data-lucide="building" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-900 dark:text-white">Local Hospital</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Report to the nearest healthcare facility</p>
+                                    </div>
+                                </div>
+                                <div class="recipient-option recipient-doctor" data-recipient="doctor">
+                                    <div class="recipient-icon">
+                                        <i data-lucide="stethoscope" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-900 dark:text-white">Your Doctor</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Report directly to your treating physician</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2: Location and Pain Level -->
+                        <div id="symptom-details" class="hidden">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Symptom Details</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Location of Symptoms</label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                        <option value="">Select location</option>
+                                        <option value="head">Head</option>
+                                        <option value="chest">Chest</option>
+                                        <option value="abdomen">Abdomen</option>
+                                        <option value="back">Back</option>
+                                        <option value="arms">Arms</option>
+                                        <option value="legs">Legs</option>
+                                        <option value="general">General/Whole Body</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pain Level (1-10)</label>
+                                    <div class="pain-level-indicator">
+                                        <div class="pain-level pain-level-1" data-level="1">1</div>
+                                        <div class="pain-level pain-level-2" data-level="2">2</div>
+                                        <div class="pain-level pain-level-3" data-level="3">3</div>
+                                        <div class="pain-level pain-level-4" data-level="4">4</div>
+                                        <div class="pain-level pain-level-5" data-level="5">5</div>
+                                        <div class="pain-level pain-level-6" data-level="6">6</div>
+                                        <div class="pain-level pain-level-7" data-level="7">7</div>
+                                        <div class="pain-level pain-level-8" data-level="8">8</div>
+                                        <div class="pain-level pain-level-9" data-level="9">9</div>
+                                        <div class="pain-level pain-level-10" data-level="10">10</div>
+                                    </div>
+                                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                        <span>Mild</span>
+                                        <span>Moderate</span>
+                                        <span>Severe</span>
+                                    </div>
+                                    <input type="hidden" id="pain-level" name="pain-level">
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Describe your symptoms</label>
+                                <textarea class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white" rows="3" placeholder="How are you feeling? Any new or worsening symptoms?"></textarea>
+                            </div>
+                            
+                            <!-- ASHA Worker Specific Fields -->
+                            <div id="asha-specific" class="hidden mt-4">
+                                <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                                    <p class="text-sm font-medium text-green-800 dark:text-green-300 flex items-center gap-2">
+                                        <i data-lucide="info" class="w-4 h-4"></i> Reporting to ASHA Worker
+                                    </p>
+                                    <p class="text-sm text-green-700 dark:text-green-400 mt-1">Your report will be sent to Samia Sayeed, your assigned ASHA worker. She will contact you within 24 hours.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Hospital Specific Fields -->
+                            <div id="hospital-specific" class="hidden mt-4">
+                                <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                                    <p class="text-sm font-medium text-blue-800 dark:text-blue-300 flex items-center gap-2">
+                                        <i data-lucide="info" class="w-4 h-4"></i> Reporting to Local Hospital
+                                    </p>
+                                    <p class="text-sm text-blue-700 dark:text-blue-400 mt-1">Your report will be sent to Majuli Community Health Center. A nurse will review your symptoms and contact you if necessary.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Doctor Specific Fields -->
+                            <div id="doctor-specific" class="hidden mt-4">
+                                <div class="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                                    <p class="text-sm font-medium text-purple-800 dark:text-purple-300 flex items-center gap-2">
+                                        <i data-lucide="info" class="w-4 h-4"></i> Reporting to Your Doctor
+                                    </p>
+                                    <p class="text-sm text-purple-700 dark:text-purple-400 mt-1">Your report will be sent directly to Dr. Anjali Sharma. She will review your symptoms and may adjust your treatment plan.</p>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="w-full mt-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium">
+                                <i data-lucide="send" class="w-4 h-4 inline mr-2"></i> Submit Symptom Report
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div id="success-message" class="success-message">
+                        <div class="flex items-center">
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-2"></i>
+                            <span>Your symptom report has been submitted successfully!</span>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-left">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="book-open-text" class="w-5 h-5 text-purple-600 dark:text-purple-400"></i> Health Resources 
+                        </h2>
+                        <a href="#" class="text-sm text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300"> View All </a>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-purple-50 dark:bg-purple-900/50 rounded-lg">
+                            <p class="font-medium text-purple-800 dark:text-purple-300 flex items-center gap-2">
+                                <i data-lucide="heart" class="w-5 h-5"></i> Managing High Blood Pressure
+                            </p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Tips for diet, exercise, and medication adherence.</p>
+                            <button class="mt-3 text-xs text-white bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded-full transition-colors"> Read More </button>
+                        </div>
+                        <div class="p-4 bg-purple-50 dark:bg-purple-900/50 rounded-lg">
+                            <p class="font-medium text-purple-800 dark:text-purple-300 flex items-center gap-2">
+                                <i data-lucide="utensils" class="w-5 h-5"></i> Healthy Eating Guide
+                            </p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Nutrition tips for maintaining a balanced diet.</p>
+                            <button class="mt-3 text-xs text-white bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded-full transition-colors"> Read More </button>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="space-y-8">
+                <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-right">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="calendar-check-2" class="w-5 h-5 text-emerald-600 dark:text-emerald-400"></i> Upcoming Appointments
+                        </h2>
+                    </div>
+                    
                     <ul class="space-y-4">
-                        <li class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                            <p class="font-semibold text-gray-900 dark:text-gray-50">Dr. Emily Carter</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Dental Check-up</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Oct 26, 2025 at 10:00 AM</p>
+                        <li class="p-4 tribal-accent rounded-lg flex items-center justify-between">
+                            <div>
+                                <p class="font-medium text-gray-900 dark:text-white">Dr. Anjali Sharma</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">General Check-up</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Oct 26, 2025 at 10:00 AM</p>
+                            </div>
+                            <button class="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-full hover:bg-emerald-200 dark:hover:bg-emerald-800 text-emerald-600 dark:text-emerald-400">
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
                         </li>
-                        <li class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                            <p class="font-semibold text-gray-900 dark:text-gray-50">Dr. James Wilson</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Cardiology</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Nov 5, 2025 at 2:30 PM</p>
+                        <li class="p-4 tribal-accent rounded-lg flex items-center justify-between">
+                            <div>
+                                <p class="font-medium text-gray-900 dark:text-white">Dr. James Wilson</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Cardiology Follow-up</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Nov 5, 2025 at 2:30 PM</p>
+                            </div>
+                            <button class="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-full hover:bg-emerald-200 dark:hover:bg-emerald-800 text-emerald-600 dark:text-emerald-400">
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
                         </li>
                     </ul>
-                </div>
-
-                <!-- Medications Card (from original) -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
+                    
+                    <button class="mt-4 w-full py-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900 transition-colors text-sm">
+                        <i data-lucide="plus" class="w-4 h-4 inline mr-2"></i> Schedule New Appointment
+                    </button>
+                </section>
+                
+                <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-right">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-3">
-                            <div class="p-3 rounded-full bg-purple-100 text-purple-600 dark:bg-purple-900 dark:text-purple-300">
-                                <i data-lucide="pill" class="w-5 h-5"></i>
-                            </div>
-                            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Medications</h2>
-                        </div>
-                        <button class="text-blue-600 dark:text-blue-400 hover:underline text-sm show-modal" data-title="My Medications" data-message="This section shows your current prescription list.">View All</button>
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="pill" class="w-5 h-5 text-purple-600 dark:text-purple-400"></i> My Medications
+                        </h2>
+                        <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300 rounded-full text-sm"> 2 Active </span>
                     </div>
+                    
                     <ul class="space-y-4">
-                        <li class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                            <p class="font-semibold text-gray-900 dark:text-gray-50">Lisinopril 10mg</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Take one tablet daily</p>
+                        <li class="p-4 rounded-lg priority-low tribal-accent card-hover">
+                            <p class="font-medium text-gray-900 dark:text-white">Lisinopril 10mg</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Take one tablet daily</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Last taken: Today, 8:00 AM</p>
                         </li>
-                        <li class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                            <p class="font-semibold text-gray-900 dark:text-gray-50">Metformin 500mg</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Take with food, twice daily</p>
+                        <li class="p-4 rounded-lg priority-low tribal-accent card-hover">
+                            <p class="font-medium text-gray-900 dark:text-white">Metformin 500mg</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Take with food, twice daily</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Next dose: Today, 7:00 PM</p>
                         </li>
                     </ul>
-                </div>
-
-                <!-- New Card: Report Symptoms -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-3">
-                            <div class="p-3 rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-300">
-                                <i data-lucide="message-square-plus" class="w-5 h-5"></i>
-                            </div>
-                            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Report Symptoms</h2>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-center justify-center p-6 bg-gray-50 dark:bg-gray-700 rounded-xl space-y-4 text-center">
-                        <p class="text-gray-600 dark:text-gray-300">Help your community stay healthy by reporting symptoms.</p>
-                        <button class="w-full py-3 px-4 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors show-modal" data-title="Report New Symptoms" data-message="A form to report symptoms will be available here.">
-                            Report Now
-                        </button>
-                    </div>
-                </div>
-
-                <!-- New Card: Local Water Quality -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-3">
-                            <div class="p-3 rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300">
-                                <i data-lucide="droplets" class="w-5 h-5"></i>
-                            </div>
-                            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Local Water Quality</h2>
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                            <span class="text-gray-600 dark:text-gray-300">Turbidity:</span>
-                            <span class="font-semibold text-green-600">3.5 NTU</span>
-                        </div>
-                        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                            <span class="text-gray-600 dark:text-gray-300">pH Level:</span>
-                            <span class="font-semibold text-green-600">7.2</span>
-                        </div>
-                        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                            <span class="text-gray-600 dark:text-gray-300">Bacterial Count:</span>
-                            <span class="font-semibold text-red-600">High</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- New Card: Community Alerts -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-3">
-                            <div class="p-3 rounded-full bg-amber-100 text-amber-600 dark:bg-amber-900 dark:text-amber-300">
-                                <i data-lucide="megaphone" class="w-5 h-5"></i>
-                            </div>
-                            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Community Health Alerts</h2>
-                        </div>
-                        <button class="text-blue-600 dark:text-blue-400 hover:underline text-sm show-modal" data-title="Community Alerts" data-message="This is a feed of real-time alerts for your area.">View All</button>
-                    </div>
+                    
+                    <button class="mt-4 w-full py-2 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900 transition-colors text-sm">
+                        <i data-lucide="clock" class="w-4 h-4 inline mr-2"></i> Set Medication Reminder
+                    </button>
+                </section>
+                
+                <section class="glass-effect rounded-xl p-6 card-hover animate-slide-in-right">
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
+                        <i data-lucide="megaphone" class="w-5 h-5 text-amber-600 dark:text-amber-400"></i> Community Health Alerts
+                    </h2>
+                    
                     <ul class="space-y-4">
                         <li class="p-4 bg-yellow-50 dark:bg-gray-700 border-l-4 border-yellow-500 rounded-xl">
                             <p class="font-semibold text-gray-900 dark:text-gray-50">High-Risk Area Identified</p>
@@ -222,125 +711,149 @@
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Oct 24, 2025</p>
                         </li>
                     </ul>
-                </div>
-
-                <!-- Health Tools Card (Corrected Layout) -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 lg:col-span-3 transition-transform hover:scale-[1.01] duration-300">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-3">
-                            <div class="p-3 rounded-full bg-cyan-100 text-cyan-600 dark:bg-cyan-900 dark:text-cyan-300">
-                                <i data-lucide="stethoscope" class="w-5 h-5"></i>
-                            </div>
-                            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Health Tools</h2>
-                        </div>
-                        <button class="text-blue-600 dark:text-blue-400 hover:underline text-sm show-modal" data-title="My Health Tools" data-message="This section contains helpful tools and resources.">View All</button>
-                    </div>
-                    <div class="flex flex-wrap justify-center gap-4">
-                        <button class="flex-1 min-w-[120px] max-w-[180px] p-4 bg-gray-50 dark:bg-gray-700 rounded-lg text-center flex flex-col items-center justify-center space-y-2 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors show-modal" data-title="Symptom Checker" data-message="Check your symptoms online. This feature is not for medical advice.">
-                            <i data-lucide="scan-search" class="w-6 h-6 text-gray-700 dark:text-gray-300"></i>
-                            <span class="text-sm font-medium text-gray-800 dark:text-gray-100">Symptom Checker</span>
-                        </button>
-                        <button class="flex-1 min-w-[120px] max-w-[180px] p-4 bg-gray-50 dark:bg-gray-700 rounded-lg text-center flex flex-col items-center justify-center space-y-2 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors show-modal" data-title="Teleconsultation" data-message="Connect with a doctor virtually.">
-                            <i data-lucide="video" class="w-6 h-6 text-gray-700 dark:text-gray-300"></i>
-                            <span class="text-sm font-medium text-gray-800 dark:text-gray-100">Teleconsultation</span>
-                        </button>
-                        <button class="flex-1 min-w-[120px] max-w-[180px] p-4 bg-gray-50 dark:bg-gray-700 rounded-lg text-center flex flex-col items-center justify-center space-y-2 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors show-modal" data-title="Health Articles" data-message="Browse articles on diet, fitness, and more.">
-                            <i data-lucide="book-open" class="w-6 h-6 text-gray-700 dark:text-gray-300"></i>
-                            <span class="text-sm font-medium text-gray-800 dark:text-gray-100">Health Articles</span>
-                        </button>
-                        <button class="flex-1 min-w-[120px] max-w-[180px] p-4 bg-gray-50 dark:bg-gray-700 rounded-lg text-center flex flex-col items-center justify-center space-y-2 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors show-modal" data-title="Exercise Tracker" data-message="Track your physical activity.">
-                            <i data-lucide="dumbbell" class="w-6 h-6 text-gray-700 dark:text-gray-300"></i>
-                            <span class="text-sm font-medium text-gray-800 dark:text-gray-100">Exercise Tracker</span>
-                        </button>
-                    </div>
-                </div>
+                </section>
             </div>
         </div>
     </main>
 
-    <!-- Message Modal -->
-    <div id="messageModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800 text-center">
-            <div class="mt-3 text-center">
-                <i data-lucide="info" class="w-16 h-16 text-blue-500 mx-auto mb-4"></i>
-                <h3 id="modalTitle" class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-50"></h3>
-                <div class="mt-2 px-7 py-3">
-                    <p id="modalMessage" class="text-sm text-gray-500 dark:text-gray-400"></p>
-                </div>
-                <div class="items-center px-4 py-3">
-                    <button id="closeModal" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-base font-medium rounded-lg w-full shadow-sm hover:from-blue-700 hover:to-purple-700 transition-all focus:outline-none focus:ring-2 focus:ring-blue-600">
-                        OK
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <footer class="container mx-auto px-4 py-4 mt-8 border-t border-gray-200 dark:border-gray-800">
+        <p class="text-center text-sm text-gray-500 dark:text-gray-400">
+            &copy; 2024 Smart Community Health Monitor. Your health is our priority.
+        </p>
+    </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialize Lucide icons
-            if (typeof lucide !== 'undefined' && lucide.createIcons) {
-                lucide.createIcons();
-            }
+        // Initialize Lucide icons
+        lucide.createIcons();
 
-            // Dark Mode Toggle Logic
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            const sunIcon = document.getElementById('sun-icon');
-            const moonIcon = document.getElementById('moon-icon');
-            
-            // Check for saved theme preference or default to system preference
-            const savedTheme = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            
-            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-                document.documentElement.classList.add('dark');
-                sunIcon.classList.add('hidden');
-                moonIcon.classList.remove('hidden');
-            } else {
-                document.documentElement.classList.remove('dark');
-                sunIcon.classList.remove('hidden');
-                moonIcon.classList.add('hidden');
-            }
+        // Theme Toggle Logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+        
+        // Check for saved theme preference or default to system preference
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            if (sunIcon) sunIcon.classList.add('hidden');
+            if (moonIcon) moonIcon.classList.remove('hidden');
+        } else {
+            document.documentElement.classList.remove('dark');
+            if (sunIcon) sunIcon.classList.remove('hidden');
+            if (moonIcon) moonIcon.classList.add('hidden');
+        }
 
+        if (themeToggleBtn) {
             themeToggleBtn.addEventListener('click', () => {
                 const isDark = document.documentElement.classList.toggle('dark');
                 if (isDark) {
                     localStorage.setItem('theme', 'dark');
-                    sunIcon.classList.add('hidden');
-                    moonIcon.classList.remove('hidden');
+                    if (sunIcon) sunIcon.classList.add('hidden');
+                    if (moonIcon) moonIcon.classList.remove('hidden');
                 } else {
                     localStorage.setItem('theme', 'light');
-                    sunIcon.classList.remove('hidden');
-                    moonIcon.classList.add('hidden');
+                    if (sunIcon) sunIcon.classList.remove('hidden');
+                    if (moonIcon) moonIcon.classList.add('hidden');
                 }
             });
+        }
 
-            // Message Modal Logic
-            const messageModal = document.getElementById('messageModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalMessage = document.getElementById('modalMessage');
-            const closeModalBtn = document.getElementById('closeModal');
+        // Symptom Reporting Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const recipientOptions = document.querySelectorAll('.recipient-option');
+            const symptomDetails = document.getElementById('symptom-details');
+            const ashaSpecific = document.getElementById('asha-specific');
+            const hospitalSpecific = document.getElementById('hospital-specific');
+            const doctorSpecific = document.getElementById('doctor-specific');
+            const painLevels = document.querySelectorAll('.pain-level');
+            const painLevelInput = document.getElementById('pain-level');
+            const symptomForm = document.getElementById('symptom-report-form');
+            const successMessage = document.getElementById('success-message');
 
-            document.querySelectorAll('.show-modal').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const title = e.currentTarget.getAttribute('data-title');
-                    const message = e.currentTarget.getAttribute('data-message');
-                    modalTitle.textContent = title;
-                    modalMessage.textContent = message;
-                    messageModal.classList.remove('hidden');
+            // Recipient selection
+            recipientOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    recipientOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Show symptom details
+                    symptomDetails.classList.remove('hidden');
+                    
+                    // Show specific information based on selection
+                    const recipientType = this.getAttribute('data-recipient');
+                    
+                    // Hide all specific sections first
+                    ashaSpecific.classList.add('hidden');
+                    hospitalSpecific.classList.add('hidden');
+                    doctorSpecific.classList.add('hidden');
+                    
+                    // Show the selected one
+                    if (recipientType === 'asha') {
+                        ashaSpecific.classList.remove('hidden');
+                    } else if (recipientType === 'hospital') {
+                        hospitalSpecific.classList.remove('hidden');
+                    } else if (recipientType === 'doctor') {
+                        doctorSpecific.classList.remove('hidden');
+                    }
                 });
             });
 
-            closeModalBtn.addEventListener('click', () => {
-                messageModal.classList.add('hidden');
+            // Pain level selection
+            painLevels.forEach(level => {
+                level.addEventListener('click', function() {
+                    // Remove selected class from all levels
+                    painLevels.forEach(l => l.classList.remove('selected'));
+                    
+                    // Add selected class to clicked level
+                    this.classList.add('selected');
+                    
+                    // Update hidden input value
+                    painLevelInput.value = this.getAttribute('data-level');
+                });
             });
 
-            // Close modal when clicking outside
-            messageModal.addEventListener('click', (e) => {
-                if (e.target === messageModal) {
-                    messageModal.classList.add('hidden');
-                }
-            });
+            // Form submission
+            if (symptomForm) {
+                symptomForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Get selected recipient
+                    const selectedRecipient = document.querySelector('.recipient-option.selected');
+                    
+                    if (!selectedRecipient) {
+                        alert('Please select who you want to report to.');
+                        return;
+                    }
+                    
+                    if (!painLevelInput.value) {
+                        alert('Please select your pain level.');
+                        return;
+                    }
+                    
+                    // In a real application, you would send the data to a server here
+                    // For this demo, we'll just show a success message
+                    
+                    // Show success message
+                    successMessage.style.display = 'block';
+                    
+                    // Reset form after 3 seconds
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                        symptomForm.reset();
+                        recipientOptions.forEach(opt => opt.classList.remove('selected'));
+                        painLevels.forEach(l => l.classList.remove('selected'));
+                        symptomDetails.classList.add('hidden');
+                        ashaSpecific.classList.add('hidden');
+                        hospitalSpecific.classList.add('hidden');
+                        doctorSpecific.classList.add('hidden');
+                    }, 3000);
+                });
+            }
         });
     </script>
 </body>
