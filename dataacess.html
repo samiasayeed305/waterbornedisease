@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="ASHA Worker Data Sharing App">
+    <title>ASHA Worker Privacy Settings</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <style>
+        .theme-transition {
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        /* Dark mode gradient */
+        .gradient-bg {
+            background: linear-gradient(135deg, #1f2937, #0f172a);
+        }
+        .glass-effect {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease-in-out;
+        }
+        .animate-fade-in {
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+        .animate-slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+        .animate-slide-in-right {
+            animation: slideInRight 0.8s ease-out forwards;
+        }
+        .floating-animation {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Styles for printing */
+        @media print {
+            body {
+                background: #fff;
+                color: #000;
+            }
+            .no-print {
+                display: none !important;
+            }
+            #app {
+                box-shadow: none;
+                padding: 0;
+            }
+            #access-result {
+                border: none;
+                background: #fff;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen theme-transition gradient-bg text-white">
+
+<header class="relative z-30 p-6 no-print">
+    <div class="container mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-4 animate-slide-in-left">
+            <div id="logo-container" class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center floating-animation">
+                <i data-lucide="shield-check" id="logo-icon" class="w-6 h-6 text-white"></i>
+            </div>
+            <div>
+                <h1 id="header-title" class="text-xl font-bold text-white">Samaj Health Suraksha</h1>
+                <p id="header-tagline" class="text-white/80 text-sm">ASHA Worker Privacy Settings</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-4 animate-slide-in-right">
+            <a href="ashaworker.html" class="p-2 rounded-lg transition-all duration-300 hover:scale-110 flex items-center gap-1 header-button bg-white/20 hover:bg-white/30">
+                <i data-lucide="arrow-left" class="w-5 h-5 header-icon text-white"></i>
+                <span id="back-to-dashboard-text" class="header-text text-white">Back to Dashboard</span>
+            </a>
+            
+            <div class="language-selector relative">
+                <button id="language-btn" class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 header-button bg-white/20 hover:bg-white/30">
+                    <i data-lucide="globe" class="w-4 h-4 header-icon text-white"></i>
+                    <span id="current-language" class="header-text text-white">English</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 header-icon text-white"></i>
+                </button>
+                <div id="language-dropdown" class="absolute right-0 mt-2 w-48 bg-gray-800/80 rounded-lg shadow-lg hidden">
+                    <div class="p-2">
+                        <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="en">English</button>
+                        <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="as">অসমীয়া (Assamese)</button>
+                        <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="bn">বাংলা (Bengali)</button>
+                        <button class="w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-sm language-option" data-lang="hi">हिंदी (Hindi)</button>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="theme-toggle" class="p-2 rounded-lg transition-all duration-300 hover:scale-110 header-button bg-white/20 hover:bg-white/30">
+            </button>
+        </div>
+    </div>
+</header>
+<main class="container mx-auto px-6 py-12">
+
+<div id="app" class="max-w-4xl mx-auto rounded-xl shadow-lg p-6 md:p-10 transition-all duration-300">
+    <h1 id="app-main-heading" class="text-3xl font-bold text-center text-blue-300 mb-6 no-print">ASHA Worker Data Sharing</h1>
+    <p id="app-tagline" class="text-center text-gray-400 mb-8 no-print">Securely share patient data with other ASHA workers using a one-time code.</p>
+    <div class="max-w-4xl mx-auto glass-effect rounded-xl p-8">
+        <!-- Authentication Status -->
+        <div id="authStatus" class="text-center text-sm text-gray-400 mb-6 no-print">Loading...</div>
+    
+        <div id="mainContent" class="hidden">
+            <!-- Share Data Section -->
+            <div class="glass-effect rounded-lg p-6 mb-8 no-print">
+                <h2 id="share-heading" class="text-xl font-semibold text-blue-300 mb-4">Share Patient Details</h2>
+                <div class="flex flex-col md:flex-row md:space-x-4">
+                    <div class="flex-1 mb-4 md:mb-0">
+                        <label id="patient-select-label" for="patient-select" class="block text-sm font-medium text-gray-300">Select Patient:</label>
+                        <select id="patient-select" class="mt-1 block w-full rounded-md border-gray-500 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border bg-gray-800/50">
+                            <option value="">-- Select a Patient --</option>
+                        </select>
+                    </div>
+                    <div class="flex-1">
+                        <label id="recipient-id-label" for="recipient-id" class="block text-sm font-medium text-gray-300">Recipient ASHA Worker ID:</label>
+                        <input type="text" id="recipient-id" placeholder="Enter recipient's ID" class="mt-1 block w-full rounded-md border-gray-500 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border bg-gray-800/50">
+                    </div>
+                </div>
+                <button id="share-btn" onclick="handleShare()" class="w-full mt-6 bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-md">Generate Share Code</button>
+                <div id="share-result" class="mt-4 p-4 rounded-lg text-sm text-gray-200 bg-gray-800/50 hidden"></div>
+            </div>
+    
+            <!-- Access Data Section -->
+            <div class="glass-effect rounded-lg p-6">
+                <h2 id="access-heading" class="text-xl font-semibold text-green-300 mb-4 no-print">Access Shared Data</h2>
+                <div class="flex flex-col md:flex-row md:space-x-4 no-print">
+                    <div class="flex-1 mb-4 md:mb-0">
+                        <label id="share-code-label" for="share-code-input" class="block text-sm font-medium text-gray-300">Enter Share Code:</label>
+                        <input type="text" id="share-code-input" placeholder="Enter the code" class="mt-1 block w-full rounded-md border-gray-500 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 border bg-gray-800/50">
+                    </div>
+                    <div class="flex-1">
+                        <label id="my-id-label" for="my-id-display" class="block text-sm font-medium text-gray-300">Your ASHA Worker ID:</label>
+                        <div id="my-id-display" class="mt-1 p-2 bg-gray-800/50 rounded-md font-mono text-xs break-all"></div>
+                    </div>
+                </div>
+                <button id="access-btn" onclick="handleAccess()" class="w-full mt-6 bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-200 shadow-md no-print">Access Details</button>
+                <div id="access-result" class="mt-4 p-4 rounded-lg text-sm text-gray-200 bg-gray-800/50 hidden">
+                    <div id="patient-details-container" class="mb-4"></div>
+                    <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4 no-print">
+                        <button id="download-btn" class="bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors duration-200 shadow-md hidden">Download Details</button>
+                        <button id="print-btn" class="bg-orange-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-orange-700 transition-colors duration-200 shadow-md hidden">Print Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</main>
+<footer class="text-center py-8 text-white/70">
+    <div class="container mx-auto px-6 no-print">
+        <p class="mb-2" id="footer-text-1">© 2025 Smart Community Health Monitoring System</p>
+        <p class="text-sm" id="footer-text-2">Developed By AJU Students for Rural Northeast India • Protecting Communities Through Technology</p>
+    </div>
+</footer>
+
+<!-- Custom Modal -->
+<div id="custom-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 hidden no-print">
+    <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">
+        <h3 id="modal-title" class="text-lg font-bold mb-2"></h3>
+        <p id="modal-message" class="text-sm text-gray-600 mb-4"></p>
+        <div class="flex justify-end">
+            <button id="modal-ok-btn" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700">OK</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, query, where, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // --- Core Firebase Initialization ---
+    // Firestore variables are automatically provided by the environment
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    
+    // Placeholder Firebase config for running outside of Canvas
+    const firebaseConfig = typeof __firebase_config !== 'undefined' && Object.keys(__firebase_config).length > 0
+        ? JSON.parse(__firebase_config)
+        : {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+    let app, auth, db, userId;
+
+    const authStatusEl = document.getElementById('authStatus');
+    const myIdDisplayEl = document.getElementById('my-id-display');
+    const mainContentEl = document.getElementById('mainContent');
+    const patientSelectEl = document.getElementById('patient-select');
+    const patientDetailsContainer = document.getElementById('patient-details-container');
+    const downloadBtn = document.getElementById('download-btn');
+    const printBtn = document.getElementById('print-btn');
+    let currentPatientData = null;
+
+    // Sample mock patient data (replace with real data from your Firestore)
+    const mockPatients = [
+        { id: 'pat_1', name: 'Rani Devi', details: { gender: 'Female', age: 35, condition: 'Fever', village: 'Malkapur' } },
+        { id: 'pat_2', name: 'Suresh Singh', details: { gender: 'Male', age: 50, condition: 'Cough & cold', village: 'Patna' } },
+        { id: 'pat_3', name: 'Pooja Kumar', details: { gender: 'Female', age: 24, condition: 'Fatigue', village: 'Ranchi' } }
+    ];
+
+    function showModal(title, message) {
+        const modal = document.getElementById('custom-modal');
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-message').innerText = message;
+        modal.classList.remove('hidden');
+        document.getElementById('modal-ok-btn').onclick = () => {
+            modal.classList.add('hidden');
+        };
+    }
+
+    async function initFirebase() {
+        try {
+            // Check if a valid firebaseConfig is present
+            if (!firebaseConfig || !firebaseConfig.apiKey) {
+                console.error('Firebase initialization failed. Missing or invalid firebaseConfig.');
+                showModal('Initialization Failed', 'Firebase could not be initialized. Please replace the placeholder values in `firebaseConfig` with your own project keys.');
+                authStatusEl.innerText = 'Initialization failed.';
+                return;
+            }
+
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+
+            // Authentication
+            if (initialAuthToken) {
+                await signInWithCustomToken(auth, initialAuthToken);
+            } else {
+                await signInAnonymously(auth);
+            }
+
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    userId = user.uid;
+                    authStatusEl.innerText = `Authenticated successfully.`;
+                    myIdDisplayEl.innerText = userId;
+                    mainContentEl.classList.remove('hidden');
+                    populatePatientDropdown();
+                } else {
+                    authStatusEl.innerText = `Authentication failed.`;
+                }
+            });
+        } catch (error) {
+            console.error('Firebase initialization failed. Please ensure your firebaseConfig has valid keys:', error);
+            showModal(
+                'Initialization Failed',
+                'Firebase could not be initialized. If you are running this locally, please replace the placeholder values in `firebaseConfig` with your own project keys.'
+            );
+            authStatusEl.innerText = 'Initialization failed.';
+        }
+    }
+
+    function populatePatientDropdown() {
+        mockPatients.forEach(patient => {
+            const option = document.createElement('option');
+            option.value = patient.id;
+            option.textContent = patient.name;
+            patientSelectEl.appendChild(option);
+        });
+    }
+
+    async function handleShare() {
+        const patientId = patientSelectEl.value;
+        const recipientId = document.getElementById('recipient-id').value;
+        const shareResultEl = document.getElementById('share-result');
+
+        if (!patientId || !recipientId) {
+            showModal('Error', translations[currentLang].modalErrorSelect);
+            return;
+        }
+
+        const selectedPatient = mockPatients.find(p => p.id === patientId);
+        if (!selectedPatient) {
+            showModal('Error', translations[currentLang].modalErrorNotFound);
+            return;
+        }
+        
+        // Generate a random, unique share code
+        const shareCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+        try {
+            // Path to the public collection for shared data
+            const sharedDataPath = `/artifacts/${appId}/public/data/shared_data`;
+            const sharedDataRef = collection(db, sharedDataPath);
+
+            await addDoc(sharedDataRef, {
+                code: shareCode,
+                recipientId: recipientId,
+                sharerId: userId,
+                data: selectedPatient.details,
+                timestamp: Date.now()
+            });
+
+            shareResultEl.innerHTML = `
+                <p class="font-bold" data-i18n="shareCodeGenerated"></p>
+                <code class="text-blue-600 text-lg font-mono">${shareCode}</code>
+                <p class="mt-2" data-i18n="shareCodeInfo"></p>
+            `;
+            shareResultEl.classList.remove('hidden');
+            renderContent(currentLang);
+
+        } catch (error) {
+            console.error("Error sharing data:", error);
+            showModal('Sharing Failed', translations[currentLang].modalSharingFailed);
+        }
+    }
+
+    function downloadDetails() {
+        if (!currentPatientData) return;
+        const jsonData = JSON.stringify(currentPatientData.data, null, 2);
+        const filename = `patient_details_${currentPatientData.sharerId.substring(0, 8)}.json`;
+        const blob = new Blob([jsonData], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+    
+    function printDetails() {
+        showModal(translations[currentLang].modalPrinting, translations[currentLang].modalPrintingMessage);
+        window.print();
+    }
+
+    async function handleAccess() {
+        const shareCode = document.getElementById('share-code-input').value.toUpperCase();
+        const accessResultEl = document.getElementById('access-result');
+        const patientDetailsContainer = document.getElementById('patient-details-container');
+
+        if (!shareCode) {
+            showModal(translations[currentLang].modalErrorTitle, translations[currentLang].modalErrorCode);
+            return;
+        }
+
+        try {
+            const sharedDataPath = `/artifacts/${appId}/public/data/shared_data`;
+            const q = query(collection(db, sharedDataPath), where("code", "==", shareCode), where("recipientId", "==", userId));
+            const querySnapshot = await getDocs(q);
+
+            if (querySnapshot.empty) {
+                showModal(translations[currentLang].modalInvalidCodeTitle, translations[currentLang].modalInvalidCodeMessage);
+                return;
+            }
+
+            const docData = querySnapshot.docs[0].data();
+            const docRef = querySnapshot.docs[0].ref;
+
+            currentPatientData = docData;
+
+            // Display the received data
+            patientDetailsContainer.innerHTML = `
+                <p class="font-bold text-green-300" data-i18n="patientDetailsFrom"></p>
+                <pre class="mt-2 p-3 bg-gray-800/50 rounded-lg text-xs md:text-sm overflow-auto">${JSON.stringify(docData.data, null, 2)}</pre>
+            `;
+            accessResultEl.classList.remove('hidden');
+            
+            // Show download and print buttons and assign event listeners
+            downloadBtn.classList.remove('hidden');
+            printBtn.classList.remove('hidden');
+
+            downloadBtn.onclick = downloadDetails;
+            printBtn.onclick = printDetails;
+
+            // Delete the document to ensure one-time use
+            await deleteDoc(docRef);
+            showModal(translations[currentLang].modalSuccessTitle, translations[currentLang].modalSuccessMessage);
+            
+            renderContent(currentLang);
+
+        } catch (error) {
+            console.error("Error accessing data:", error);
+            showModal(translations[currentLang].modalAccessFailedTitle, translations[currentLang].modalAccessFailedMessage);
+        }
+    }
+
+    // --- Theme and Language Switcher Logic ---
+    const translations = {
+        en: {
+            // Header
+            currentLanguage: 'English',
+            privacyText: 'Privacy',
+            backToDashboard: 'Back to Dashboard',
+            // Main Content
+            appMainHeading: 'ASHA Worker Data Sharing',
+            appTagline: 'Securely share patient data with other ASHA workers using a one-time code.',
+            authStatusLoading: 'Loading...',
+            shareHeading: 'Share Patient Details',
+            patientSelectLabel: 'Select Patient:',
+            recipientIdLabel: 'Recipient ASHA Worker ID:',
+            recipientIdPlaceholder: 'Enter recipient\'s ID',
+            shareBtn: 'Generate Share Code',
+            shareCodeGenerated: 'Share Code Generated:',
+            shareCodeInfo: 'Share this code with the recipient. This code is one-time use.',
+            accessHeading: 'Access Shared Data',
+            shareCodeLabel: 'Enter Share Code:',
+            shareCodePlaceholder: 'Enter the code',
+            myIdLabel: 'Your ASHA Worker ID:',
+            accessBtn: 'Access Details',
+            patientDetailsFrom: 'Patient Details (from ASHA',
+            // Footer
+            footerText1: '© 2025 Smart Community Health Monitoring System',
+            footerText2: 'Developed By AJU Students for Rural Northeast India • Protecting Communities Through Technology',
+            // Modal
+            modalErrorTitle: 'Error',
+            modalErrorSelect: 'Please select a patient and enter a recipient ID.',
+            modalErrorNotFound: 'Selected patient not found.',
+            modalSharingFailed: 'An error occurred while sharing. Please try again.',
+            modalErrorCode: 'Please enter a share code.',
+            modalInvalidCodeTitle: 'Invalid Code',
+            modalInvalidCodeMessage: 'The code is invalid, expired, or you do not have access.',
+            modalSuccessTitle: 'Success!',
+            modalSuccessMessage: 'The data has been retrieved. The share code is now invalid.',
+            modalAccessFailedTitle: 'Access Failed',
+            modalAccessFailedMessage: 'An error occurred while accessing the data. Please check the code.',
+            modalPrinting: 'Printing',
+            modalPrintingMessage: 'Your browser\'s print dialog should appear shortly. You can save as a PDF from there.'
+        },
+        as: {
+            // Header
+            currentLanguage: 'অসমীয়া',
+            privacyText: 'গোপনীয়তা',
+            backToDashboard: 'ডেছবৰ্ডলৈ উভতি যাওক',
+            // Main Content
+            appMainHeading: 'আশা কৰ্মী ডেটা শ্বেয়াৰিং',
+            appTagline: 'এককালীন কোড ব্যৱহাৰ কৰি অন্য আশা কৰ্মীৰ সৈতে ৰোগীৰ ডেটা সুৰক্ষিতভাৱে শ্বেয়াৰ কৰক।',
+            authStatusLoading: 'লোড হৈ আছে...',
+            shareHeading: 'ৰোগীৰ সবিশেষ শ্বেয়াৰ কৰক',
+            patientSelectLabel: 'ৰোগী বাছনি কৰক:',
+            recipientIdLabel: 'গ্ৰহণকাৰী আশা কৰ্মী আইডি:',
+            recipientIdPlaceholder: 'গ্ৰহণকাৰীৰ আইডি লিখক',
+            shareBtn: 'শ্বেয়াৰ কোড সৃষ্টি কৰক',
+            shareCodeGenerated: 'শ্বেয়াৰ কোড সৃষ্টি কৰা হ’ল:',
+            shareCodeInfo: 'এই কোডটো গ্ৰহণকাৰীৰ সৈতে শ্বেয়াৰ কৰক। এই কোডটো এবাৰ ব্যৱহাৰৰ বাবে।',
+            accessHeading: 'শ্বেয়াৰ কৰা ডেটা এক্সেছ কৰক',
+            shareCodeLabel: 'শ্বেয়াৰ কোড লিখক:',
+            shareCodePlaceholder: 'কোডটো লিখক',
+            myIdLabel: 'আপোনাৰ আশা কৰ্মী আইডি:',
+            accessBtn: 'সবিশেষ এক্সেছ কৰক',
+            patientDetailsFrom: 'ৰোগীৰ সবিশেষ (আশা কৰ্মী',
+            // Footer
+            footerText1: '© 2025 স্মাৰ্ট কমিউনিটি হেল্থ মণিটৰিং চিষ্টেম',
+            footerText2: 'উত্তৰ-পূব ভাৰতৰ গ্ৰাম্য অঞ্চলৰ বাবে এজেউৰ ছাত্ৰ-ছাত্ৰীৰ দ্বাৰা বিকশিত • প্ৰযুক্তিৰ জৰিয়তে সমাজক সুৰক্ষিত কৰা',
+            // Modal
+            modalErrorTitle: 'ভুল',
+            modalErrorSelect: 'অনুগ্রহ কৰি এজন ৰোগী বাছনি কৰক আৰু এজন গ্ৰহণকাৰীৰ আইডি লিখক।',
+            modalErrorNotFound: 'বাছনি কৰা ৰোগী পোৱা নগল।',
+            modalSharingFailed: 'শ্বেয়াৰ কৰোতে কিবা ভুল হৈছে। অনুগ্ৰহ কৰি পুনৰ চেষ্টা কৰক।',
+            modalErrorCode: 'অনুগ্রহ কৰি শ্বেয়াৰ কোড লিখক।',
+            modalInvalidCodeTitle: 'ভুল কোড',
+            modalInvalidCodeMessage: 'কোডটো ভুল, ম্যাদ শেষ হৈছে, অথবা আপোনাৰ এক্সেছ নাই।',
+            modalSuccessTitle: 'সফল!',
+            modalSuccessMessage: 'ডেটা লাভ কৰা হৈছে। শ্বেয়াৰ কোড এতিয়া বৈধ নহয়।',
+            modalAccessFailedTitle: 'এক্সেছ বিফল',
+            modalAccessFailedMessage: 'ডেটা এক্সেছ কৰোঁতে কিবা ভুল হৈছে। অনুগ্ৰহ কৰি কোডটো পৰীক্ষা কৰক।',
+            modalPrinting: 'প্ৰিণ্টিং',
+            modalPrintingMessage: 'শীঘ্ৰেই আপোনাৰ ব্ৰাউজাৰৰ প্ৰিণ্ট ডাইলগ দেখা যাব। তাৰ পৰা আপুনি ইয়াক পিডিএফ হিচাপে ছেভ কৰিব পাৰে।'
+        },
+        bn: {
+            // Header
+            currentLanguage: 'বাংলা',
+            privacyText: 'গোপনীয়তা',
+            backToDashboard: 'ড্যাশবোর্ডে ফিরে যান',
+            // Main Content
+            appMainHeading: 'আশা কর্মী ডেটা শেয়ারিং',
+            appTagline: 'এককালীন কোড ব্যবহার করে অন্যান্য আশা কর্মীদের সাথে রোগীর ডেটা নিরাপদে শেয়ার করুন।',
+            authStatusLoading: 'লোড হচ্ছে...',
+            shareHeading: 'রোগীর বিবরণ শেয়ার করুন',
+            patientSelectLabel: 'রোগী নির্বাচন করুন:',
+            recipientIdLabel: 'গ্রহীতা আশা কর্মী আইডি:',
+            recipientIdPlaceholder: 'গ্রহীতার আইডি লিখুন',
+            shareBtn: 'শেয়ার কোড তৈরি করুন',
+            shareCodeGenerated: 'শেয়ার কোড তৈরি করা হয়েছে:',
+            shareCodeInfo: 'এই কোডটি গ্রহীতার সাথে শেয়ার করুন। এই কোডটি এককালীন ব্যবহারের জন্য।',
+            accessHeading: 'শেয়ার করা ডেটা অ্যাক্সেস করুন',
+            shareCodeLabel: 'শেয়ার কোড লিখুন:',
+            shareCodePlaceholder: 'কোডটি লিখুন',
+            myIdLabel: 'আপনার আশা কর্মী আইডি:',
+            accessBtn: 'বিবরণ অ্যাক্সেস করুন',
+            patientDetailsFrom: 'রোগীর বিবরণ (আশা কর্মী',
+            // Footer
+            footerText1: '© 2025 স্মার্ট কমিউনিটি হেলথ মনিটরিং সিস্টেম',
+            footerText2: 'এজেউ শিক্ষার্থীদের দ্বারা উত্তর-পূর্ব ভারতের গ্রামীণ এলাকার জন্য তৈরি • প্রযুক্তির মাধ্যমে সম্প্রদায়কে রক্ষা করা',
+            // Modal
+            modalErrorTitle: 'ভুল',
+            modalErrorSelect: 'অনুগ্রহ করে একজন রোগী নির্বাচন করুন এবং গ্রহীতার আইডি লিখুন।',
+            modalErrorNotFound: 'নির্বাচিত রোগীকে পাওয়া যায়নি।',
+            modalSharingFailed: 'শেয়ার করার সময় একটি ত্রুটি হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
+            modalErrorCode: 'অনুগ্রহ করে শেয়ার কোড লিখুন।',
+            modalInvalidCodeTitle: 'অবৈধ কোড',
+            modalInvalidCodeMessage: 'কোডটি অবৈধ, মেয়াদ উত্তীর্ণ, বা আপনার অ্যাক্সেস নেই।',
+            modalSuccessTitle: 'সফল!',
+            modalSuccessMessage: 'ডেটা পুনরুদ্ধার করা হয়েছে। শেয়ার কোডটি এখন অবৈধ।',
+            modalAccessFailedTitle: 'অ্যাক্সেস ব্যর্থ হয়েছে',
+            modalAccessFailedMessage: 'ডেটা অ্যাক্সেস করার সময় একটি ত্রুটি হয়েছে। অনুগ্রহ করে কোডটি পরীক্ষা করুন।',
+            modalPrinting: 'প্রিন্টিং',
+            modalPrintingMessage: 'আপনার ব্রাউজারের প্রিন্ট ডায়ালগ শীঘ্রই দেখা যাবে। সেখান থেকে আপনি এটিকে পিডিএফ হিসেবে সেভ করতে পারেন।'
+        },
+        hi: {
+            // Header
+            currentLanguage: 'हिंदी',
+            privacyText: 'गोपनीयता',
+            backToDashboard: 'डैशबोर्ड पर वापस जाएं',
+            // Main Content
+            appMainHeading: 'आशा कार्यकर्ता डेटा शेयरिंग',
+            appTagline: 'एक-बार के कोड का उपयोग करके अन्य आशा कार्यकर्ताओं के साथ रोगी डेटा सुरक्षित रूप से साझा करें।',
+            authStatusLoading: 'लोड हो रहा है...',
+            shareHeading: 'रोगी के विवरण साझा करें',
+            patientSelectLabel: 'रोगी चुनें:',
+            recipientIdLabel: 'प्राप्तकर्ता आशा कार्यकर्ता आईडी:',
+            recipientIdPlaceholder: 'प्राप्तकर्ता की आईडी दर्ज करें',
+            shareBtn: 'शेयर कोड बनाएं',
+            shareCodeGenerated: 'शेयर कोड बनाया गया:',
+            shareCodeInfo: 'यह कोड प्राप्तकर्ता के साथ साझा करें। यह कोड एक-बार उपयोग के लिए है।',
+            accessHeading: 'साझा किए गए डेटा तक पहुंचें',
+            shareCodeLabel: 'शेयर कोड दर्ज करें:',
+            shareCodePlaceholder: 'कोड दर्ज करें',
+            myIdLabel: 'आपकी आशा कार्यकर्ता आईडी:',
+            accessBtn: 'विवरण तक पहुंचें',
+            patientDetailsFrom: 'रोगी के विवरण (आशा कार्यकर्ता',
+            // Footer
+            footerText1: '© 2025 स्मार्ट सामुदायिक स्वास्थ्य निगरानी प्रणाली',
+            footerText2: 'पूर्वोत्तर भारत के ग्रामीण क्षेत्रों के लिए AJU छात्रों द्वारा विकसित • प्रौद्योगिकी के माध्यम से समुदायों की रक्षा करना',
+            // Modal
+            modalErrorTitle: 'त्रुटि',
+            modalErrorSelect: 'कृपया एक रोगी चुनें और एक प्राप्तकर्ता आईडी दर्ज करें।',
+            modalErrorNotFound: 'चुना गया रोगी नहीं मिला।',
+            modalSharingFailed: 'साझा करने के दौरान एक त्रुटि हुई। कृपया पुन: प्रयास करें।',
+            modalErrorCode: 'कृपया एक शेयर कोड दर्ज करें।',
+            modalInvalidCodeTitle: 'अमान्य कोड',
+            modalInvalidCodeMessage: 'कोड अमान्य है, समाप्त हो गया है, या आपके पास पहुंच नहीं है।',
+            modalSuccessTitle: 'सफलता!',
+            modalSuccessMessage: 'डेटा प्राप्त हो गया है। शेयर कोड अब अमान्य है।',
+            modalAccessFailedTitle: 'पहुंच विफल',
+            modalAccessFailedMessage: 'डेटा तक पहुंचने के दौरान एक त्रुटि हुई। कृपया कोड की जांच करें।',
+            modalPrinting: 'मुद्रण',
+            modalPrintingMessage: 'आपके ब्राउज़र का प्रिंट डायलॉग जल्द ही दिखाई देगा। आप इसे वहां से पीडीएफ के रूप में सहेज सकते हैं।'
+        }
+    };
+    
+    // Element Selections
+    const langDropdown = document.getElementById('language-dropdown');
+    const langBtn = document.getElementById('language-btn');
+    const currentLangSpan = document.getElementById('current-language');
+    const privacyText = document.getElementById('privacy-text');
+    const backToDashboardText = document.getElementById('back-to-dashboard-text');
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    let isDark = true;
+    const header = document.querySelector('header');
+    const footer = document.querySelector('footer');
+    const headerTitle = document.getElementById('header-title');
+    const headerTagline = document.getElementById('header-tagline');
+    const headerButtons = document.querySelectorAll('.header-button');
+    const headerIcons = document.querySelectorAll('.header-icon');
+    const headerTexts = document.querySelectorAll('.header-text');
+    const logoContainer = document.getElementById('logo-container');
+    const logoIcon = document.getElementById('logo-icon');
+
+    // Main App Content Elements
+    const appMainHeadingEl = document.getElementById('app-main-heading');
+    const appTaglineEl = document.getElementById('app-tagline');
+    const shareHeadingEl = document.getElementById('share-heading');
+    const patientSelectLabelEl = document.getElementById('patient-select-label');
+    const recipientIdLabelEl = document.getElementById('recipient-id-label');
+    const recipientIdInput = document.getElementById('recipient-id');
+    const shareBtnEl = document.getElementById('share-btn');
+    const shareResultEl = document.getElementById('share-result');
+    const shareResultGeneratedEl = document.getElementById('share-code-generated-text');
+    const shareResultInfoEl = document.getElementById('share-code-info-text');
+    const accessHeadingEl = document.getElementById('access-heading');
+    const shareCodeLabelEl = document.getElementById('share-code-label');
+    const shareCodeInput = document.getElementById('share-code-input');
+    const myIdLabelEl = document.getElementById('my-id-label');
+    const accessBtnEl = document.getElementById('access-btn');
+    const patientDetailsFromEl = document.getElementById('patient-details-from-text');
+    const footerText1El = document.getElementById('footer-text-1');
+    const footerText2El = document.getElementById('footer-text-2');
+    
+    let currentLang = 'en';
+
+    function renderContent(lang) {
+        const data = translations[lang];
+        currentLang = lang;
+
+        // Update Header
+        currentLangSpan.textContent = data.currentLanguage;
+        backToDashboardText.textContent = data.backToDashboard;
+        
+        // Update Main Content
+        appMainHeadingEl.textContent = data.appMainHeading;
+        appTaglineEl.textContent = data.appTagline;
+        shareHeadingEl.textContent = data.shareHeading;
+        patientSelectLabelEl.textContent = data.patientSelectLabel;
+        recipientIdLabelEl.textContent = data.recipientIdLabel;
+        recipientIdInput.placeholder = data.recipientIdPlaceholder;
+        shareBtnEl.textContent = data.shareBtn;
+        accessHeadingEl.textContent = data.accessHeading;
+        shareCodeLabelEl.textContent = data.shareCodeLabel;
+        shareCodeInput.placeholder = data.shareCodePlaceholder;
+        myIdLabelEl.textContent = data.myIdLabel;
+        accessBtnEl.textContent = data.accessBtn;
+        footerText1El.textContent = data.footerText1;
+        footerText2El.textContent = data.footerText2;
+        
+        if (shareResultGeneratedEl) {
+            shareResultGeneratedEl.textContent = data.shareCodeGenerated;
+            shareResultInfoEl.textContent = data.shareCodeInfo;
+        }
+
+        const detailsFromEl = patientDetailsContainer.querySelector('[data-i18n="patientDetailsFrom"]');
+        if (detailsFromEl) {
+            detailsFromEl.textContent = data.patientDetailsFrom;
+        }
+    }
+
+    langBtn.addEventListener('click', () => {
+        langDropdown.classList.toggle('hidden');
+    });
+
+    document.querySelectorAll('.language-option').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const lang = e.target.dataset.lang;
+            renderContent(lang);
+            langDropdown.classList.add('hidden');
+        });
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!langBtn.contains(e.target) && !langDropdown.contains(e.target)) {
+            langDropdown.classList.add('hidden');
+        }
+    });
+
+    const lightBackgroundClasses = ['bg-gray-50', 'bg-gradient-to-br', 'from-gray-50', 'to-indigo-100'];
+    const lightHeaderFooterClasses = ['bg-white', 'text-gray-900'];
+
+    function applyTheme(isDarkTheme) {
+        const elementsToToggle = [
+            { el: body, dark: ['gradient-bg', 'text-white'], light: [...lightBackgroundClasses, 'text-gray-900'] },
+            { el: header, dark: ['bg-transparent'], light: ['bg-gray-100', 'shadow-md'] },
+            { el: footer, dark: ['text-white/70'], light: ['text-gray-800', 'shadow-inner', 'bg-gray-100'] },
+            { el: logoContainer, dark: ['bg-white/20'], light: ['bg-purple-200/50'] },
+            { el: logoIcon, dark: ['text-white'], light: ['text-transparent', 'bg-clip-text', 'bg-gradient-to-r', 'from-blue-500', 'to-green-500'] },
+            { el: headerTitle, dark: ['text-white'], light: ['text-gray-900'] },
+            { el: headerTagline, dark: ['text-white/80'], light: ['text-gray-700'] },
+            { el: langDropdown, dark: ['bg-gray-800/80', 'text-white'], light: ['bg-white', 'shadow-lg'] }
+        ];
+
+        elementsToToggle.forEach(({ el, dark, light }) => {
+            el.classList.remove(...(isDarkTheme ? light : dark));
+            el.classList.add(...(isDarkTheme ? dark : light));
+        });
+        
+        headerButtons.forEach(btn => {
+            btn.classList.toggle('bg-white/20', isDarkTheme);
+            btn.classList.toggle('hover:bg-white/30', isDarkTheme);
+            btn.classList.toggle('bg-gray-200', !isDarkTheme);
+            btn.classList.toggle('hover:bg-gray-300', !isDarkTheme);
+        });
+        
+        [...headerIcons, ...headerTexts].forEach(el => {
+            el.classList.toggle('text-white', isDarkTheme);
+            el.classList.toggle('text-gray-800', !isDarkTheme);
+        });
+
+        const appContent = document.getElementById('app');
+        appContent.classList.toggle('bg-white', !isDarkTheme);
+        appContent.classList.toggle('glass-effect', isDarkTheme);
+
+        const formContainers = document.querySelectorAll('.glass-effect');
+        formContainers.forEach(container => {
+            container.classList.toggle('bg-blue-50', !isDarkTheme);
+            container.classList.toggle('border-blue-200', !isDarkTheme);
+            container.classList.toggle('bg-green-50', !isDarkTheme);
+            container.classList.toggle('border-green-200', !isDarkTheme);
+            container.classList.toggle('bg-gray-800/50', isDarkTheme);
+        });
+
+        const labels = document.querySelectorAll('label');
+        labels.forEach(label => {
+            label.classList.toggle('text-gray-300', isDarkTheme);
+            label.classList.toggle('text-gray-700', !isDarkTheme);
+        });
+        
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.classList.toggle('border-gray-500', isDarkTheme);
+            input.classList.toggle('bg-gray-800/50', isDarkTheme);
+            input.classList.toggle('text-white', isDarkTheme);
+            input.classList.toggle('border-gray-300', !isDarkTheme);
+            input.classList.toggle('bg-white', !isDarkTheme);
+            input.classList.toggle('text-gray-900', !isDarkTheme);
+        });
+
+        const preElement = document.querySelector('#access-result pre');
+        if (preElement) {
+            preElement.classList.toggle('bg-gray-800/50', isDarkTheme);
+            preElement.classList.toggle('text-gray-200', isDarkTheme);
+            preElement.classList.toggle('bg-gray-100', !isDarkTheme);
+            preElement.classList.toggle('text-gray-700', !isDarkTheme);
+        }
+
+        themeToggle.innerHTML = isDarkTheme 
+            ? '<i data-lucide="sun" class="w-5 h-5 text-white"></i>' 
+            : '<i data-lucide="moon" class="w-5 h-5 text-gray-800"></i>';
+        
+        lucide.createIcons();
+    }
+
+    themeToggle.addEventListener('click', () => {
+        isDark = !isDark;
+        applyTheme(isDark);
+    });
+
+    window.onload = () => {
+        initFirebase();
+        applyTheme(isDark);
+        renderContent(currentLang);
+    };
+
+    window.handleShare = handleShare;
+    window.handleAccess = handleAccess;
+
+</script>
+</body>
+</html>
