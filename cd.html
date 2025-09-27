@@ -117,24 +117,31 @@
             </div>
 
             <!-- Card: Water Quality Report -->
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="p-3 rounded-full bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300">
-                        <i data-lucide="droplets" class="w-5 h-5"></i>
-                    </div>
-                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Water Quality Report</h2>
-                </div>
-                <div class="space-y-4">
-                    <p class="text-gray-600 dark:text-gray-300">Quickly report water contamination or issues from your testing kits.</p>
-                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                        <p class="text-sm text-gray-600 dark:text-gray-300">Last report submitted:</p>
-                        <p class="font-semibold text-gray-900 dark:text-gray-50">Water Source A3 - High Bacterial Count</p>
-                    </div>
-                    <button class="w-full py-3 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors show-modal" data-title="Water Quality Report" data-message="A form to report water quality will be displayed here.">
-                        Submit New Report
-                    </button>
-                </div>
-            </div>
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
+    <div class="flex items-center gap-3 mb-4">
+        <div class="p-3 rounded-full bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300">
+            <!-- Note: 'droplets' icon requires lucide-icons to be loaded in the page header -->
+            <i data-lucide="droplets" class="w-5 h-5"></i>
+        </div>
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Water Quality Report</h2>
+    </div>
+    <div class="space-y-4">
+        <p class="text-gray-600 dark:text-gray-300">Quickly report water contamination or issues from your testing kits.</p>
+        <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+            <p class="text-sm text-gray-600 dark:text-gray-300">Last report submitted:</p>
+            <p class="font-semibold text-gray-900 dark:text-gray-50">Water Source A3 - High Bacterial Count</p>
+        </div>
+        
+        <!-- FIXED: Changed button to anchor tag <a> with href for navigation -->
+        <a href="water_report.html" 
+           class="w-full inline-block text-center py-3 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-lg font-bold"
+           role="button">
+            Submit New Report
+        </a>
+        
+    </div>
+</div>
+
 
             <!-- Card: Local Outbreaks & Alerts -->
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 lg:col-span-2 transition-transform hover:scale-[1.01] duration-300">
