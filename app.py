@@ -10,7 +10,7 @@ import string
 import time
 
 app = Flask(__name__, static_folder='.', static_url_path='')
-app.secret_key = os.environ.get('SECRET_KEY', 'waterborne-disease-secret-key-2024')
+app.secret_key = os.environ.get('f9b138838d7a7c876f6e31baef07fbe6c2ffa0cafe67062d19728ceaac0b6b00', 'waterborne-disease-secret-key-2024')
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['PERMANENT_SESSION_LIFETIME'] = 3600
 
