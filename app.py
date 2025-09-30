@@ -21,8 +21,8 @@ def get_db_client():
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            api_key = os.environ.get("CLOUDANT_APIKEY", "tSpMMkxehpD7_4GsZq7rOra6Pu0pavcPWB72_O4ywgQ1")
-            service_url = os.environ.get("CLOUDANT_URL", "https://b4cadce0-fd64-4d6c-b2da-fbcdc657bc10-bluemix.cloudantnosqldb.appdomain.cloud")
+            api_key = os.environ.get("CLOUDANT_APIKEY", "FIAt087x47tQFkRVZfg0qbwOGAUeyLcil0AUeScVtbXN")
+            service_url = os.environ.get("CLOUDANT_URL", "https://b1dab01f-53d0-4f7b-8f1a-7968e4d80a5d-bluemix.cloudantnosqldb.appdomain.cloud")
             
             authenticator = IAMAuthenticator(api_key)
             client = CloudantV1(authenticator=authenticator)
