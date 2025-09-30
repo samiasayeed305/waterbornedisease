@@ -7,50 +7,103 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from datetime import datetime
 import random
 import string
+import time
 
 app = Flask(__name__, static_folder='.', static_url_path='')
 app.secret_key = os.environ.get('SECRET_KEY', 'waterborne-disease-secret-key-2024')
-CORS(app)
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # 1 hour
 
-# Database Configuration
+# Configure CORS properly
+CORS(app, supports_credentials=True, origins=[
+    "http://localhost:3000",
+    "http://localhost:5000", 
+    "https://*.railway.app",
+    "https://*.up.railway.app"
+])
+
+# Database Configuration with retry logic
 def get_db_client():
-    api_key = os.environ.get("CLOUDANT_APIKEY", "tSpMMkxehpD7_4GsZq7rOra6Pu0pavcPWB72_O4ywgQ1")
-    service_url = os.environ.get("CLOUDANT_URL", "https://b4cadce0-fd64-4d6c-b2da-fbcdc657bc10-bluemix.cloudantnosqldb.appdomain.cloud")
-    
-    try:
-        authenticator = IAMAuthenticator(api_key)
-        client = CloudantV1(authenticator=authenticator)
-        client.set_service_url(service_url)
-        print("✅ Connected to IBM Cloudant")
-        return client
-    except Exception as e:
-        print(f"❌ Cloudant connection failed: {e}")
-        return None
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            api_key = os.environ.get("CLOUDANT_APIKEY", "tSpMMkxehpD7_4GsZq7rOra6Pu0pavcPWB72_O4ywgQ1")
+            service_url = os.environ.get("CLOUDANT_URL", "https://b4cadce0-fd64-4d6c-b2da-fbcdc657bc10-bluemix.cloudantnosqldb.appdomain.cloud")
+            
+            authenticator = IAMAuthenticator(api_key)
+            client = CloudantV1(authenticator=authenticator)
+            client.set_service_url(service_url)
+            
+            # Test connection
+            client.get_server_information().get_result()
+            print("✅ Connected to IBM Cloudant successfully")
+            return client
+        except Exception as e:
+            print(f"❌ Cloudant connection attempt {attempt + 1} failed: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(2)  # Wait before retry
+                continue
+            else:
+                print("❌ All connection attempts failed")
+                return None
 
-client = get_db_client()
+client = None
 
 def ensure_db_exists(db_name):
+    global client
+    if not client:
+        client = get_db_client()
+    
     if client:
         try:
             client.get_database_information(db=db_name).get_result()
             print(f"✅ Database '{db_name}' ready")
-        except Exception:
-            client.put_database(db=db_name).get_result()
-            print(f"✅ Created database '{db_name}'")
+            return True
+        except Exception as e:
+            try:
+                client.put_database(db=db_name).get_result()
+                print(f"✅ Created database '{db_name}'")
+                return True
+            except Exception as create_error:
+                print(f"❌ Failed to create database '{db_name}': {create_error}")
+                return False
+    return False
 
-# Ensure databases exist when app starts
-if client:
-    ensure_db_exists('users')
-    ensure_db_exists('patients')
-    ensure_db_exists('predictions')
+# Initialize databases on startup
+def initialize_databases():
+    global client
+    client = get_db_client()
+    if client:
+        databases = ['users', 'patients', 'predictions']
+        for db in databases:
+            ensure_db_exists(db)
+    else:
+        print("⚠️ Database initialization failed - running in limited mode")
+
+# Health check endpoint
+@app.route('/health', methods=['GET'])
+def health_check():
+    db_status = "connected" if client else "disconnected"
+    return jsonify({
+        'status': 'healthy', 
+        'timestamp': datetime.now().isoformat(),
+        'database': db_status
+    }), 200
+
+@app.route('/api/health', methods=['GET'])
+def api_health():
+    return health_check()
 
 @app.route('/api/register', methods=['POST'])
 def register():
     if not client:
-        return jsonify({'success': False, 'error': 'Database unavailable'}), 500
+        return jsonify({'success': False, 'error': 'Database unavailable. Please try again later.'}), 503
     
     try:
         data = request.get_json()
+        if not data:
+            return jsonify({'success': False, 'error': 'No data provided'}), 400
+        
         print(f"📝 Registration attempt for role: {data.get('role', 'unknown')}")
         
         username = data.get('username')
@@ -132,18 +185,17 @@ def register():
         
     except Exception as e:
         print(f"❌ Registration error: {e}")
-        return jsonify({'success': False, 'error': 'Registration failed'}), 500
+        return jsonify({'success': False, 'error': 'Registration failed. Please try again.'}), 500
 
 @app.route('/api/login', methods=['POST'])
 def login():
     if not client:
-        return jsonify({'success': False, 'error': 'Database unavailable'}), 500
+        return jsonify({'success': False, 'error': 'Database unavailable. Please try again later.'}), 503
     
     try:
         data = request.get_json()
         username = data.get('username')
         password = data.get('password')
-        role = data.get('role')
         
         if not username or not password:
             return jsonify({'success': False, 'error': 'Username and password required'}), 400
@@ -166,6 +218,7 @@ def login():
             user_data = {k: v for k, v in user.items() if k != 'password'}
             
             # Set session
+            session.permanent = True
             session['user_id'] = user['_id']
             session['username'] = user['username']
             session['role'] = user['role']
@@ -182,13 +235,17 @@ def login():
             
     except Exception as e:
         print(f"❌ Login error: {e}")
-        return jsonify({'success': False, 'error': 'Login failed'}), 500
+        return jsonify({'success': False, 'error': 'Login failed. Please try again.'}), 500
 
 @app.route('/api/check-auth', methods=['GET'])
 def check_auth():
     if 'user_id' in session:
-        return jsonify({'authenticated': True, 'role': session.get('role')}), 200
-    return jsonify({'authenticated': False}), 401
+        return jsonify({
+            'authenticated': True, 
+            'role': session.get('role'),
+            'username': session.get('username')
+        }), 200
+    return jsonify({'authenticated': False}), 200  # Return 200 instead of 401
 
 @app.route('/api/logout', methods=['POST'])
 def logout():
@@ -202,8 +259,27 @@ def serve_index():
 
 @app.route('/<path:path>')
 def serve_static(path):
-    return send_from_directory('.', path)
+    try:
+        return send_from_directory('.', path)
+    except Exception as e:
+        print(f"Static file error: {e}")
+        return jsonify({'error': 'File not found'}), 404
 
+# Error handlers
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({'error': 'Endpoint not found'}), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    return jsonify({'error': 'Internal server error'}), 500
+
+# Initialize app
 if __name__ == '__main__':
+    initialize_databases()
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    debug = os.environ.get('FLASK_DEBUG', 'false').lower() == 'true'
+    app.run(host='0.0.0.0', port=port, debug=debug)
+else:
+    # For Gunicorn
+    initialize_databases()
