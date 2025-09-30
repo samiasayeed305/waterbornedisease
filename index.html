@@ -287,7 +287,96 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.innerHTML = '<span>Signing in...</span>';
             
             try {
-                const response = await fetch('/api/login', {
+                // 🔥 CRITICAL FIX: Use absolute URL to Railway backend
+                const response = await fetch('https://waterbornedisease-production.up.railway.app/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(loginData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Store user data in localStorage
+                    localStorage.setItem('currentUser', JSON.stringify(result.user));
+                    
+                    // Show success message
+                    alert('Login successful! Redirecting...');
+                    
+                    // Redirect based on role
+                    const redirects = {
+                        'asha': 'ashaworker.html',
+                        'volunteer': 'volunteer-dashboard.html',
+                        'admin': 'admin-dashboard.html',
+                        'hospital': 'hospital-dashboard.html',
+                        'patient': 'patient-dashboard.html'
+                    };
+                    
+                    const redirectPage = redirects[result.user.role] || 'dashboard.html';
+                    window.location.href = redirectPage;
+                    
+                } else {
+                    alert('Login failed: ' + result.error);
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Login failed. Please check your connection and try again.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+    }
+    
+    // If you have role selection buttons, add click handlers
+    const roleButtons = document.querySelectorAll('.role-btn');
+    roleButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Remove active class from all buttons
+            roleButtons.forEach(b => b.classList.remove('active'));
+            // Add active class to clicked button
+            this.classList.add('active');
+        });
+    });
+});
+</script><script>
+// Login form handler for index.html
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    
+    if (loginForm) {
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Get the selected role from the dropdown or buttons
+            const roleSelect = document.querySelector('select[name="role"]');
+            const role = roleSelect ? roleSelect.value : document.querySelector('input[name="role"]:checked')?.value;
+            
+            if (!role) {
+                alert('Please select a role');
+                return;
+            }
+            
+            const formData = new FormData(e.target);
+            const loginData = {
+                username: formData.get('username'),
+                password: formData.get('password'),
+                role: role
+            };
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Signing in...</span>';
+            
+            try {
+                // 🔥 CRITICAL FIX: Use absolute URL to Railway backend
+                const response = await fetch('https://waterbornedisease-production.up.railway.app/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
