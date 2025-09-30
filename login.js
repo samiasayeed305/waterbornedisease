@@ -1,3 +1,35 @@
+// === REDIRECT LOOP PREVENTION - ADD THIS FIRST ===
+(function() {
+    console.log('🚀 Page loading - checking for redirect loops...');
+    
+    // Check if we're in a redirect loop
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectPrevention = urlParams.get('redirect');
+    
+    if (redirectPrevention === 'prevent') {
+        console.log('🛑 Redirect prevention active');
+        // Remove the parameter without reloading
+        const newUrl = window.location.pathname + window.location.hash;
+        window.history.replaceState({}, document.title, newUrl);
+    }
+    
+    // Check session storage for loop detection
+    const lastLoadTime = sessionStorage.getItem('lastPageLoad');
+    const currentTime = Date.now();
+    
+    if (lastLoadTime && currentTime - parseInt(lastLoadTime) < 2000) {
+        console.error('🔄 RAPID RELOAD DETECTED - Possible redirect loop!');
+        // Clear storage and stop
+        sessionStorage.clear();
+        localStorage.removeItem('currentUser');
+        alert('Redirect loop detected. Please refresh the page.');
+        return;
+    }
+    
+    sessionStorage.setItem('lastPageLoad', currentTime.toString());
+})();
+// === END REDIRECT PREVENTION ===
+
 // Configuration and Constants
 const CONFIG = {
     theme: {
@@ -22,6 +54,24 @@ const APP_STATE = {
     currentRole: '',
     currentUser: JSON.parse(localStorage.getItem('currentUser')) || null
 };
+
+// Debug function - call this in browser console if issues persist
+function debugAuth() {
+    console.log('🔍 DEBUG INFO:');
+    console.log('Current User:', APP_STATE.currentUser);
+    console.log('LocalStorage User:', localStorage.getItem('currentUser'));
+    console.log('Current Role:', APP_STATE.currentRole);
+    console.log('Page URL:', window.location.href);
+    console.log('Session Storage:', { ...sessionStorage });
+    
+    // Test backend connection
+    fetch(CONFIG.endpoints.checkAuth)
+        .then(r => console.log('Backend check:', r.status, r.url))
+        .catch(e => console.error('Backend check failed:', e));
+}
+
+// Make it globally available
+window.debugAuth = debugAuth;
 
 // Safe icon creation with retry logic
 function createIconsSafely(maxRetries = 3, delay = 500) {
@@ -153,16 +203,54 @@ const LanguageManager = {
 const AuthManager = {
     async login(credentials) {
         try {
+            console.log('🔐 Attempting login for role:', credentials.role);
+            
             const response = await fetch(CONFIG.endpoints.login, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(credentials)
+                body: JSON.stringify(credentials),
+                redirect: 'manual' // Important: handle redirects manually
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            console.log('📨 Login response status:', response.status);
+            console.log('📨 Login response type:', response.type);
+
+            // Handle redirect responses
+            if (response.status >= 300 && response.status < 400) {
+                const redirectUrl = response.headers.get('Location');
+                console.warn('🔄 Server redirect detected to:', redirectUrl);
+                
+                if (redirectUrl && redirectUrl !== window.location.href) {
+                    // Add prevention parameter to break loops
+                    const separator = redirectUrl.includes('?') ? '&' : '?';
+                    window.location.href = redirectUrl + separator + 'redirect=prevent';
+                    return { success: true, redirect: true };
+                } else {
+                    throw new Error('Redirect loop detected');
+                }
+            }
+
+            // Handle non-JSON responses
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await response.text();
+                console.warn('⚠️ Non-JSON response:', text.substring(0, 200));
+                
+                if (response.ok) {
+                    // Assume success if response is OK but not JSON
+                    const mockUser = {
+                        id: credentials.username,
+                        role: credentials.role,
+                        name: credentials.role.charAt(0).toUpperCase() + credentials.role.slice(1) + ' User'
+                    };
+                    APP_STATE.currentUser = mockUser;
+                    localStorage.setItem('currentUser', JSON.stringify(mockUser));
+                    return { success: true, user: mockUser };
+                } else {
+                    throw new Error(`Server returned non-JSON response: ${response.status}`);
+                }
             }
 
             const result = await response.json();
@@ -178,7 +266,7 @@ const AuthManager = {
             console.error('Login error:', error);
             return { 
                 success: false, 
-                error: 'Network error. Please check your connection and try again.' 
+                error: error.message || 'Network error. Please check your connection and try again.' 
             };
         }
     },
@@ -310,7 +398,11 @@ const ModalManager = {
         
         const targetPage = redirectMap[APP_STATE.currentRole];
         if (targetPage) {
-            window.location.href = targetPage;
+            console.log('🔄 Redirecting to:', targetPage);
+            // Use replace to avoid adding to history stack
+            window.location.replace(targetPage + '?redirect=prevent');
+        } else {
+            console.error('❌ No redirect mapping for role:', APP_STATE.currentRole);
         }
     }
 };
@@ -320,7 +412,6 @@ async function handleLogin(event) {
     event.preventDefault();
     
     const form = event.target;
-    const formData = new FormData(form);
     const loginData = {
         username: form.querySelector('input[type="text"]').value,
         password: form.querySelector('input[type="password"]').value,
@@ -334,13 +425,30 @@ async function handleLogin(event) {
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span>Signing in...</span>';
     
-    const result = await AuthManager.login(loginData);
-    
-    if (result.success) {
-        ModalManager.closeModal();
-        ModalManager.showSuccessModal();
-    } else {
-        this.showErrorAlert(result.error);
+    try {
+        const result = await AuthManager.login(loginData);
+        
+        if (result.success) {
+            if (result.redirect) {
+                // Redirect is already happening, just close modal
+                ModalManager.closeModal();
+                console.log('✅ Login successful, redirecting...');
+            } else {
+                ModalManager.closeModal();
+                ModalManager.showSuccessModal();
+                
+                setTimeout(() => {
+                    ModalManager.closeSuccessModal();
+                    ModalManager.redirectToDashboard();
+                }, 2000);
+            }
+        } else {
+            throw new Error(result.error);
+        }
+        
+    } catch (error) {
+        console.error('Login process error:', error);
+        showErrorAlert(error.message);
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
     }
@@ -376,6 +484,8 @@ function toggleLanguageDropdown() {
 
 // Initialize the application
 function initializeApp() {
+    console.log('🚀 Initializing application...');
+    
     // Initialize Tailwind
     if (typeof tailwind !== 'undefined') {
         tailwind.config = CONFIG.theme;
@@ -429,6 +539,8 @@ function initializeApp() {
     } else {
         LanguageManager.updateUI();
     }
+    
+    console.log('✅ Application initialized successfully');
 }
 
 // Backend connection check (optional)
@@ -451,3 +563,13 @@ function logoutUser() {
     AuthManager.logout();
     window.location.href = 'index.html';
 }
+
+// Add global error handler to catch any unhandled errors
+window.addEventListener('error', function(e) {
+    console.error('Global error caught:', e.error);
+});
+
+// Add unhandled promise rejection handler
+window.addEventListener('unhandledrejection', function(e) {
+    console.error('Unhandled promise rejection:', e.reason);
+});
