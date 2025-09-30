@@ -22,8 +22,7 @@
                     </div>
                 </div>
                 <!-- This link should point to your homepage -->
-                <a href="#" class="px-4 py-2 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors text-blue-700 flex items-center gap-2">
-                    <i data-lucide="home" class="w-4 h-4"></i>
+          <a href="index.html" class="px-4 py-2 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors text-blue-700 flex items-center gap-2">
                     <span>Back to Home</span>
                 </a>
             </div>
@@ -181,41 +180,78 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialize Lucide icons
-            if (typeof lucide !== 'undefined' && lucide.createIcons) {
-                lucide.createIcons();
-            }
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+            lucide.createIcons();
+        }
 
-            // Get the form and modal elements
-            const form = document.getElementById('volunteerRegistrationForm');
-            const successModal = document.getElementById('successModal');
-            const closeModalBtn = document.getElementById('closeModal');
+        // Get the form and modal elements
+        const form = document.getElementById('volunteerRegistrationForm');
+        const successModal = document.getElementById('successModal');
+        const closeModalBtn = document.getElementById('closeModal');
 
-            // Form submission handling
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
+        // Form submission handling - UPDATED VERSION
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Registering...</span>';
+            
+            try {
                 // Get form data
                 const formData = new FormData(e.target);
                 const formObject = Object.fromEntries(formData.entries());
                 
-                // For demonstration - log to console
-                console.log('Form submitted:', formObject);
+                // Add role to the data
+                const registrationData = {
+                    ...formObject,
+                    role: 'volunteer'
+                };
                 
-                // Show the success modal
-                successModal.classList.remove('hidden');
+                console.log('Sending registration data:', registrationData);
                 
-                // Reset form after submission
-                e.target.reset();
-            });
-
-            // Close the modal when the "OK" button is clicked
-            closeModalBtn.addEventListener('click', () => {
-                successModal.classList.add('hidden');
-            });
+                // Send to backend
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(registrationData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Show the success modal
+                    successModal.classList.remove('hidden');
+                    
+                    // Reset form after submission
+                    e.target.reset();
+                } else {
+                    alert('Registration failed: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('Registration failed. Please check your connection and try again.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
         });
-    </script>
+
+        // Close the modal when the "OK" button is clicked
+        closeModalBtn.addEventListener('click', () => {
+            successModal.classList.add('hidden');
+            // Redirect to login page after closing modal
+            window.location.href = 'index.html';
+        });
+    });
+</script>
 </body>
 </html>

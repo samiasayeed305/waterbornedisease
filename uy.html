@@ -193,6 +193,73 @@
             </div>
         </div>
     </main>
+<script>
+// ASHA Worker Registration Form Handler
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('ashaRegistrationForm');
+    const successModal = document.getElementById('successModal');
+    const closeModalBtn = document.getElementById('closeModal');
+
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
+    }
+
+    if (form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const formObject = Object.fromEntries(formData.entries());
+            
+            // Add role to the data - IMPORTANT: This should be 'asha' not 'volunteer'
+            const registrationData = {
+                ...formObject,
+                role: 'asha'  // Changed from 'volunteer' to 'asha'
+            };
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Registering...</span>';
+            
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(registrationData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Show success message
+                    alert('Registration successful! You can now login.');
+                    form.reset();
+                    
+                    // Optional: Redirect to login page after success
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                    
+                } else {
+                    alert('Registration failed: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('Registration failed. Please try again.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+    }
+});
+</script>
     <script src="uy.js"></script>
     </body>
 </html>

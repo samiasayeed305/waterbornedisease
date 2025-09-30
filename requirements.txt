@@ -1,0 +1,5 @@
+Flask==2.3.3
+flask-cors==4.0.0
+bcrypt==4.0.1
+ibm-cloud-sdk-core==3.16.3
+ibmcloudant==0.0.29

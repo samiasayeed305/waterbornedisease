@@ -423,48 +423,90 @@ function showLoginModal(role) {
     createIconsSafely();
 }
 
-// Handle login
-function handleLogin(event) {
+// Handle login - UPDATED VERSION
+async function handleLogin(event) {
     event.preventDefault();
     
-    document.getElementById('login-modal').classList.add('hidden');
-    document.getElementById('success-modal').classList.remove('hidden');
+    const form = event.target;
+    const formData = new FormData(form);
+    const loginData = {
+        username: form.querySelector('input[type="text"]').value,
+        password: form.querySelector('input[type="password"]').value,
+        role: currentRole
+    };
     
-    setTimeout(() => {
-        document.getElementById('success-modal').classList.add('hidden');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span>Signing in...</span>';
+    
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(loginData)
+        });
         
-        if (currentRole === 'patient') {
-            window.location.href = 'pd.html';
-        } else if (currentRole === 'asha') {
-            window.location.href = 'ashaworker.html';
-        } else if (currentRole === 'volunteer') {
-            window.location.href = 'cd.html';
-        } else if (currentRole === 'admin') {
-            window.location.href = 'had.html';
+        const result = await response.json();
+        
+        if (result.success) {
+            // Store user data in localStorage
+            localStorage.setItem('currentUser', JSON.stringify(result.user));
+            
+            // Show success modal
+            document.getElementById('login-modal').classList.add('hidden');
+            document.getElementById('success-modal').classList.remove('hidden');
+            
+            setTimeout(() => {
+                document.getElementById('success-modal').classList.add('hidden');
+                
+                // Redirect based on role
+                if (currentRole === 'patient') {
+                    window.location.href = 'pd.html';
+                } else if (currentRole === 'asha') {
+                    window.location.href = 'ashaworker.html';
+                } else if (currentRole === 'volunteer') {
+                    window.location.href = 'cd.html';
+                } else if (currentRole === 'admin') {
+                    window.location.href = 'had.html';
+                }
+            }, 2000);
+            
+        } else {
+            alert('Login failed: ' + result.error);
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
         }
-    }, 3000);
+    } catch (error) {
+        console.error('Login error:', error);
+        alert('Login failed. Please check your connection and try again.');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+    }
 }
 
 // Show registration info
+// Show registration info - UPDATED VERSION
 function showRegistrationInfo(role) {
     closeModal();
-    if (role === 'volunteer') {
-        window.location.href = 'cv.html';
-    } else if (role === 'admin') {
-        window.location.href = 'uy1ha.html';
-    } 
-    else if (role === 'asha'){
-        window.location.href = 'uy.html'
-    }
-    else if(role === 'patient'){
-        window.location.href = ''
-
-    }
-        else {
+    const registrationPages = {
+        'volunteer': 'cv.html',        // Community Volunteer registration
+        'admin': 'uy1ha.html',    // Health Admin registration  
+        'asha': 'uy.html',      // ASHA Worker registration
+        'hospital': 'hospital-registration.html' // Hospital registration
+    };
+    
+    const page = registrationPages[role];
+    if (page) {
+        window.location.href = page;
+    } else {
         alert(`To request access as a ${role}, please contact your local health administrator.`);
     }
 }
-
 // Close modal
 function closeModal() {
     document.getElementById('login-modal').classList.add('hidden');
@@ -595,3 +637,47 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
     loadLanguagePreference();
 });
+// Check backend connection
+async function checkBackendConnection() {
+    try {
+        const response = await fetch('/api/check-auth');
+        console.log('✅ Backend connection successful');
+        return true;
+    } catch (error) {
+        console.warn('❌ Backend connection failed:', error);
+        return false;
+    }
+}
+// Utility function to get current user
+function getCurrentUser() {
+    const userStr = localStorage.getItem('currentUser');
+    return userStr ? JSON.parse(userStr) : null;
+}
+
+// Utility function to check if user is logged in
+function isUserLoggedIn() {
+    return localStorage.getItem('currentUser') !== null;
+}
+
+// Utility function to logout
+function logoutUser() {
+    localStorage.removeItem('currentUser');
+    // You can also call the backend logout endpoint
+    fetch('/api/logout', { method: 'POST' });
+    window.location.href = 'index.html';
+}
+// Initialize the app - UPDATED VERSION
+async function initializeApp() {
+    createIconsSafely();
+    setupEventListeners();
+    loadTheme();
+    
+    // Check backend connection
+    const isBackendReady = await checkBackendConnection();
+    if (!isBackendReady) {
+        console.warn('Backend not available - running in offline mode');
+    }
+    
+    // Load language preference
+    loadLanguagePreference();
+}

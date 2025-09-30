@@ -154,23 +154,58 @@
             lucide.createIcons();
         }
         
-        // Form submission handling
-        document.getElementById('ashaRegistrationForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = new FormData(e.target);
-            const formObject = Object.fromEntries(formData.entries());
-            
-            // For demo purposes - log to console
-            console.log('Form submitted:', formObject);
-            
-            // Show success message (in a real application, you'd send to server)
-            alert('Registration successful! In a real application, this data would be saved.');
-            
-            // Reset form
-            e.target.reset();
+  // Form submission handling - UPDATED VERSION
+document.getElementById('ashaRegistrationForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = new FormData(e.target);
+    const formObject = Object.fromEntries(formData.entries());
+    
+    // Add role to the data
+    const registrationData = {
+        ...formObject,
+        role: 'asha'  // This is correct for ASHA workers
+    };
+    
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span>Registering...</span>';
+    
+    try {
+        const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(registrationData)
         });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('Registration successful! You can now login.');
+            e.target.reset();
+            
+            // Redirect to login page after success
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+            
+        } else {
+            alert('Registration failed: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Registration error:', error);
+        alert('Registration failed. Please try again.');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+    }
+});
 
         // Language functions
         function toggleLanguageDropdown() {
