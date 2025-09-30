@@ -10,7 +10,7 @@ import string
 import time
 
 app = Flask(__name__, static_folder='.', static_url_path='')
-app.secret_key = os.environ.get('f9b138838d7a7c876f6e31baef07fbe6c2ffa0cafe67062d19728ceaac0b6b00', 'fallback-secret-key-2024')
+app.secret_key = os.environ.get('SECRET_KEY', 'fallback-secret-key-2024')
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['PERMANENT_SESSION_LIFETIME'] = 3600
 
@@ -21,8 +21,8 @@ def get_db_client():
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            api_key = os.environ.get("FIAt087x47tQFkRVZfg0qbwOGAUeyLcil0AUeScVtbXN")
-            service_url = os.environ.get("=https://b1dab01f-53d0-4f7b-8f1a-7968e4d80a5d-bluemix.cloudantnosqldb.appdomain.cloudL")
+            api_key = os.environ.get("CLOUDANT_APIKEY")
+            service_url = os.environ.get("CLOUDANT_URL")
             
             if not api_key or not service_url:
                 print("❌ Missing Cloudant environment variables")
