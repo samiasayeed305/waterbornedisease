@@ -9,13 +9,13 @@ import random
 import string
 
 app = Flask(__name__, static_folder='.', static_url_path='')
-app.secret_key = 'waterborne-disease-secret-key-2024'
+app.secret_key = os.environ.get('SECRET_KEY', 'waterborne-disease-secret-key-2024')
 CORS(app)
 
 # Database Configuration
 def get_db_client():
-    api_key = "FIAt087x47tQFkRVZfg0qbwOGAUeyLcil0AUeScVtbXN"
-    service_url = "https://b1dab01f-53d0-4f7b-8f1a-7968e4d80a5d-bluemix.cloudantnosqldb.appdomain.cloud"
+    api_key = os.environ.get("CLOUDANT_APIKEY", "tSpMMkxehpD7_4GsZq7rOra6Pu0pavcPWB72_O4ywgQ1")
+    service_url = os.environ.get("CLOUDANT_URL", "https://b4cadce0-fd64-4d6c-b2da-fbcdc657bc10-bluemix.cloudantnosqldb.appdomain.cloud")
     
     try:
         authenticator = IAMAuthenticator(api_key)
@@ -38,9 +38,11 @@ def ensure_db_exists(db_name):
             client.put_database(db=db_name).get_result()
             print(f"✅ Created database '{db_name}'")
 
-ensure_db_exists('users')
-ensure_db_exists('patients')
-ensure_db_exists('predictions')
+# Ensure databases exist when app starts
+if client:
+    ensure_db_exists('users')
+    ensure_db_exists('patients')
+    ensure_db_exists('predictions')
 
 @app.route('/api/register', methods=['POST'])
 def register():
@@ -203,4 +205,5 @@ def serve_static(path):
     return send_from_directory('.', path)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000, host='0.0.0.0')
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
