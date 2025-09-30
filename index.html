@@ -4,21 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Smart Community Health Monitoring and Early Warning System for Water-Borne Diseases in Rural Northeast India">
+    
+    <!-- Enhanced SEO Meta Tags -->
+    <meta name="description" content="Samaj Health Suraksha Login Portal - Smart Community Health Monitoring and Early Warning System for Water-Borne Diseases in Rural Northeast India">
+    <meta name="keywords" content="samaj health suraksha, samaj health suraksha login portal, waterborne disease monitoring, community health, northeast india, health initiative, asha workers, rural health, disease prevention">
+    <meta name="author" content="Samaj Health Suraksha">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Google Site Verification -->
     <meta name="google-site-verification" content="4k6NElY2k9ys65Jx6D16HWYU0NCnH9kZVtZzlNdSnGk" />
-    <title>SAMAJ HEALTH  SURAKSHA - Login Portal</title>
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="SAMAJ HEALTH SURAKSHA - Login Portal">
+    <meta property="og:description" content="Early Warning System for Water-Borne Diseases in Rural Northeast India">
+    <meta property="og:url" content="https://waterbornedisease-production.up.railway.app/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Samaj Health Suraksha">
+    
+    <title>SAMAJ HEALTH SURAKSHA - Login Portal</title>
+    
+    <!-- Enhanced Redirect -->
     <script>
+        // Immediate redirect for GitHub Pages
         if (window.location.hostname.includes('github.io')) {
-            window.location.href = 'https://waterbornedisease-production.up.railway.app/';
+            window.location.replace('https://waterbornedisease-production.up.railway.app/');
         }
+        // Backup redirect after 1 second
+        setTimeout(function() {
+            if (!window.location.hostname.includes('railway.app')) {
+                window.location.href = 'https://waterbornedisease-production.up.railway.app/';
+            }
+        }, 1000);
     </script>
+    <meta http-equiv="refresh" content="0; url=https://waterbornedisease-production.up.railway.app/">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="min-h-screen theme-transition gradient-bg">
+    <!-- Redirect Message (only shows if JavaScript is disabled) -->
+    <noscript>
+        <div style="text-align: center; padding: 100px; font-family: Arial, sans-serif; color: white; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Samaj Health Suraksha</h1>
+            <p style="font-size: 1.2rem; margin-bottom: 30px;">JavaScript is required for redirection.</p>
+            <a href="https://waterbornedisease-production.up.railway.app/" 
+               style="background: white; color: #667eea; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                Go to Samaj Health Suraksha Login Portal
+            </a>
+        </div>
+    </noscript>
+
     <header class="relative z-30 p-6">
         <div class="container mx-auto flex items-center justify-between">
             <div class="flex items-center gap-4 animate-slide-in-left">
@@ -238,7 +274,8 @@
                 </button>
             </div>
             <div class="p-6" id="modal-content">
-                </div>
+                <!-- Modal content will be inserted here by JavaScript -->
+            </div>
         </div>
     </div>
 
@@ -254,40 +291,173 @@
             </div>
         </div>
     </div>
-<script>
-// Login form handler for index.html
-document.addEventListener('DOMContentLoaded', function() {
-    const loginForm = document.getElementById('loginForm');
-    
-    if (loginForm) {
-        loginForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
+
+    <script>
+    // Enhanced login form handler
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        const loginForm = document.getElementById('loginForm');
+        
+        if (loginForm) {
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Get the selected role from the dropdown or buttons
+                const roleSelect = document.querySelector('select[name="role"]');
+                const role = roleSelect ? roleSelect.value : document.querySelector('input[name="role"]:checked')?.value;
+                
+                if (!role) {
+                    alert('Please select a role');
+                    return;
+                }
+                
+                const formData = new FormData(e.target);
+                const loginData = {
+                    username: formData.get('username'),
+                    password: formData.get('password'),
+                    role: role
+                };
+                
+                const submitBtn = e.target.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>Signing in...</span>';
+                
+                try {
+                    // Use absolute URL to Railway backend
+                    const response = await fetch('https://waterbornedisease-production.up.railway.app/api/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(loginData)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        // Store user data in localStorage
+                        localStorage.setItem('currentUser', JSON.stringify(result.user));
+                        
+                        // Show success message
+                        alert('Login successful! Redirecting...');
+                        
+                        // Redirect based on role
+                        const redirects = {
+                            'asha': 'ashaworker.html',
+                            'volunteer': 'volunteer-dashboard.html',
+                            'admin': 'admin-dashboard.html',
+                            'hospital': 'hospital-dashboard.html',
+                            'patient': 'patient-dashboard.html'
+                        };
+                        
+                        const redirectPage = redirects[result.user.role] || 'dashboard.html';
+                        window.location.href = redirectPage;
+                        
+                    } else {
+                        alert('Login failed: ' + result.error);
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    alert('Login failed. Please check your connection and try again.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            });
+        }
+        
+        // Role selection buttons
+        const roleButtons = document.querySelectorAll('.role-btn');
+        roleButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                roleButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Modal functionality
+        window.showLoginModal = function(role) {
+            const modal = document.getElementById('login-modal');
+            const modalContent = document.getElementById('modal-content');
+            const modalTitle = document.getElementById('modal-title');
             
-            // Get the selected role from the dropdown or buttons
-            const roleSelect = document.querySelector('select[name="role"]');
-            const role = roleSelect ? roleSelect.value : document.querySelector('input[name="role"]:checked')?.value;
+            modalTitle.textContent = `Login as ${role.charAt(0).toUpperCase() + role.slice(1)}`;
             
-            if (!role) {
-                alert('Please select a role');
-                return;
+            modalContent.innerHTML = `
+                <form id="loginForm">
+                    <input type="hidden" name="role" value="${role}">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Username</label>
+                            <input type="text" name="username" required 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                            <input type="password" name="password" required 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <button type="submit" 
+                                class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                            Sign In
+                        </button>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            Don't have an account? 
+                            <a href="#" class="text-blue-600 hover:text-blue-700 font-medium" onclick="showRegisterModal('${role}')">Register here</a>
+                        </p>
+                    </div>
+                </form>
+            `;
+            
+            modal.classList.remove('hidden');
+            
+            // Re-attach event listener to the new form
+            const newLoginForm = document.getElementById('loginForm');
+            if (newLoginForm) {
+                newLoginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const formData = new FormData(this);
+                    const loginData = {
+                        username: formData.get('username'),
+                        password: formData.get('password'),
+                        role: formData.get('role')
+                    };
+                    
+                    // Use the same login logic as above
+                    handleLogin(loginData);
+                });
             }
-            
-            const formData = new FormData(e.target);
-            const loginData = {
-                username: formData.get('username'),
-                password: formData.get('password'),
-                role: role
-            };
-            
-            const submitBtn = e.target.querySelector('button[type="submit"]');
+        };
+
+        // Close modal functionality
+        document.getElementById('close-modal').addEventListener('click', function() {
+            document.getElementById('login-modal').classList.add('hidden');
+        });
+
+        // Close modal when clicking backdrop
+        document.getElementById('login-modal').addEventListener('click', function(e) {
+            if (e.target.id === 'login-modal') {
+                this.classList.add('hidden');
+            }
+        });
+
+        // Handle login function
+        async function handleLogin(loginData) {
+            const submitBtn = document.querySelector('#loginForm button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             
-            // Show loading state
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span>Signing in...</span>';
             
             try {
-                // 🔥 CRITICAL FIX: Use absolute URL to Railway backend
                 const response = await fetch('https://waterbornedisease-production.up.railway.app/api/login', {
                     method: 'POST',
                     headers: {
@@ -299,23 +469,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 const result = await response.json();
                 
                 if (result.success) {
-                    // Store user data in localStorage
                     localStorage.setItem('currentUser', JSON.stringify(result.user));
+                    document.getElementById('success-modal').classList.remove('hidden');
                     
-                    // Show success message
-                    alert('Login successful! Redirecting...');
-                    
-                    // Redirect based on role
-                    const redirects = {
-                        'asha': 'ashaworker.html',
-                        'volunteer': 'volunteer-dashboard.html',
-                        'admin': 'admin-dashboard.html',
-                        'hospital': 'hospital-dashboard.html',
-                        'patient': 'patient-dashboard.html'
-                    };
-                    
-                    const redirectPage = redirects[result.user.role] || 'dashboard.html';
-                    window.location.href = redirectPage;
+                    setTimeout(() => {
+                        const redirects = {
+                            'asha': 'ashaworker.html',
+                            'volunteer': 'volunteer-dashboard.html',
+                            'admin': 'admin-dashboard.html',
+                            'hospital': 'hospital-dashboard.html',
+                            'patient': 'patient-dashboard.html'
+                        };
+                        
+                        const redirectPage = redirects[result.user.role] || 'dashboard.html';
+                        window.location.href = redirectPage;
+                    }, 2000);
                     
                 } else {
                     alert('Login failed: ' + result.error);
@@ -328,109 +496,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalText;
             }
-        });
-    }
-    
-    // If you have role selection buttons, add click handlers
-    const roleButtons = document.querySelectorAll('.role-btn');
-    roleButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // Remove active class from all buttons
-            roleButtons.forEach(b => b.classList.remove('active'));
-            // Add active class to clicked button
-            this.classList.add('active');
-        });
+        }
     });
-});
-</script><script>
-// Login form handler for index.html
-document.addEventListener('DOMContentLoaded', function() {
-    const loginForm = document.getElementById('loginForm');
-    
-    if (loginForm) {
-        loginForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // Get the selected role from the dropdown or buttons
-            const roleSelect = document.querySelector('select[name="role"]');
-            const role = roleSelect ? roleSelect.value : document.querySelector('input[name="role"]:checked')?.value;
-            
-            if (!role) {
-                alert('Please select a role');
-                return;
-            }
-            
-            const formData = new FormData(e.target);
-            const loginData = {
-                username: formData.get('username'),
-                password: formData.get('password'),
-                role: role
-            };
-            
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            
-            // Show loading state
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span>Signing in...</span>';
-            
-            try {
-                // 🔥 CRITICAL FIX: Use absolute URL to Railway backend
-                const response = await fetch('https://waterbornedisease-production.up.railway.app/api/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(loginData)
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    // Store user data in localStorage
-                    localStorage.setItem('currentUser', JSON.stringify(result.user));
-                    
-                    // Show success message
-                    alert('Login successful! Redirecting...');
-                    
-                    // Redirect based on role
-                    const redirects = {
-                        'asha': 'ashaworker.html',
-                        'volunteer': 'volunteer-dashboard.html',
-                        'admin': 'admin-dashboard.html',
-                        'hospital': 'hospital-dashboard.html',
-                        'patient': 'patient-dashboard.html'
-                    };
-                    
-                    const redirectPage = redirects[result.user.role] || 'dashboard.html';
-                    window.location.href = redirectPage;
-                    
-                } else {
-                    alert('Login failed: ' + result.error);
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalText;
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                alert('Login failed. Please check your connection and try again.');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-            }
-        });
-    }
-    
-    // If you have role selection buttons, add click handlers
-    const roleButtons = document.querySelectorAll('.role-btn');
-    roleButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // Remove active class from all buttons
-            roleButtons.forEach(b => b.classList.remove('active'));
-            // Add active class to clicked button
-            this.classList.add('active');
-        });
-    });
-});
-</script>
-    <script src="login.js"></script>
+    </script>
 </body>
 </html>
