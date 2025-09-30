@@ -12,17 +12,11 @@ import time
 app = Flask(__name__, static_folder='.', static_url_path='')
 app.secret_key = os.environ.get('SECRET_KEY', 'waterborne-disease-secret-key-2024')
 app.config['SESSION_TYPE'] = 'filesystem'
-app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # 1 hour
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600
 
-# Configure CORS properly
-CORS(app, supports_credentials=True, origins=[
-    "http://localhost:3000",
-    "http://localhost:5000", 
-    "https://*.railway.app",
-    "https://*.up.railway.app"
-])
+CORS(app, supports_credentials=True)
 
-# Database Configuration with retry logic
+# Database Configuration
 def get_db_client():
     max_retries = 3
     for attempt in range(max_retries):
@@ -41,7 +35,7 @@ def get_db_client():
         except Exception as e:
             print(f"❌ Cloudant connection attempt {attempt + 1} failed: {e}")
             if attempt < max_retries - 1:
-                time.sleep(2)  # Wait before retry
+                time.sleep(2)
                 continue
             else:
                 print("❌ All connection attempts failed")
@@ -69,7 +63,7 @@ def ensure_db_exists(db_name):
                 return False
     return False
 
-# Initialize databases on startup
+# Initialize databases
 def initialize_databases():
     global client
     client = get_db_client()
@@ -77,8 +71,12 @@ def initialize_databases():
         databases = ['users', 'patients', 'predictions']
         for db in databases:
             ensure_db_exists(db)
+        print("✅ Database initialization completed")
     else:
         print("⚠️ Database initialization failed - running in limited mode")
+
+# Initialize on app start
+initialize_databases()
 
 # Health check endpoint
 @app.route('/health', methods=['GET'])
@@ -245,7 +243,7 @@ def check_auth():
             'role': session.get('role'),
             'username': session.get('username')
         }), 200
-    return jsonify({'authenticated': False}), 200  # Return 200 instead of 401
+    return jsonify({'authenticated': False}), 200
 
 @app.route('/api/logout', methods=['POST'])
 def logout():
@@ -274,12 +272,8 @@ def not_found(error):
 def internal_error(error):
     return jsonify({'error': 'Internal server error'}), 500
 
-# Initialize app
+# This part is important for Gunicorn
 if __name__ == '__main__':
-    initialize_databases()
     port = int(os.environ.get('PORT', 5000))
     debug = os.environ.get('FLASK_DEBUG', 'false').lower() == 'true'
     app.run(host='0.0.0.0', port=port, debug=debug)
-else:
-    # For Gunicorn
-    initialize_databases()

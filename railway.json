@@ -4,4 +4,6 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "gunicorn app:
+    "startCommand": "gunicorn app:app"
+  }
+}
