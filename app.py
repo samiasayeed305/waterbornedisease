@@ -10,7 +10,7 @@ import string
 import time
 
 app = Flask(__name__, static_folder='.', static_url_path='')
-app.secret_key = os.environ.get('f9b138838d7a7c876f6e31baef07fbe6c2ffa0cafe67062d19728ceaac0b6b00', 'waterborne-disease-secret-key-2024')
+app.secret_key = os.environ.get('f9b138838d7a7c876f6e31baef07fbe6c2ffa0cafe67062d19728ceaac0b6b00', 'fallback-secret-key-2024')
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['PERMANENT_SESSION_LIFETIME'] = 3600
 
@@ -21,8 +21,12 @@ def get_db_client():
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            api_key = os.environ.get("CLOUDANT_APIKEY", "FIAt087x47tQFkRVZfg0qbwOGAUeyLcil0AUeScVtbXN")
-            service_url = os.environ.get("CLOUDANT_URL", "https://b1dab01f-53d0-4f7b-8f1a-7968e4d80a5d-bluemix.cloudantnosqldb.appdomain.cloud")
+            api_key = os.environ.get("FIAt087x47tQFkRVZfg0qbwOGAUeyLcil0AUeScVtbXN")
+            service_url = os.environ.get("=https://b1dab01f-53d0-4f7b-8f1a-7968e4d80a5d-bluemix.cloudantnosqldb.appdomain.cloudL")
+            
+            if not api_key or not service_url:
+                print("❌ Missing Cloudant environment variables")
+                return None
             
             authenticator = IAMAuthenticator(api_key)
             client = CloudantV1(authenticator=authenticator)
@@ -91,6 +95,21 @@ def health_check():
 @app.route('/api/health', methods=['GET'])
 def api_health():
     return health_check()
+
+@app.route('/api/debug')
+def debug_info():
+    return jsonify({
+        'database_connected': client is not None,
+        'environment_variables_set': {
+            'SECRET_KEY': bool(os.environ.get('SECRET_KEY')),
+            'CLOUDANT_APIKEY': bool(os.environ.get('CLOUDANT_APIKEY')),
+            'CLOUDANT_URL': bool(os.environ.get('CLOUDANT_URL'))
+        },
+        'current_config': {
+            'secret_key_length': len(app.secret_key) if app.secret_key else 0,
+            'cloudant_configured': client is not None
+        }
+    })
 
 @app.route('/api/register', methods=['POST'])
 def register():
@@ -277,14 +296,3 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     debug = os.environ.get('FLASK_DEBUG', 'false').lower() == 'true'
     app.run(host='0.0.0.0', port=port, debug=debug)
-
-@app.route('/api/debug')
-def debug_info():
-    return jsonify({
-        'database_connected': client is not None,
-        'environment_variables': {
-            'SECRET_KEY_set': bool(os.environ.get('f9b138838d7a7c876f6e31baef07fbe6c2ffa0cafe67062d19728ceaac0b6b00')),
-            'CLOUDANT_APIKEY_set': bool(os.environ.get('FIAt087x47tQFkRVZfg0qbwOGAUeyLcil0AUeScVtbXN')),
-            'CLOUDANT_URL_set': bool(os.environ.get('https://b1dab01f-53d0-4f7b-8f1a-7968e4d80a5d-bluemix.cloudantnosqldb.appdomain.cloud'))
-        }
-    })
