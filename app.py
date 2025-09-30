@@ -16,6 +16,9 @@ app.config['PERMANENT_SESSION_LIFETIME'] = 3600
 
 CORS(app, supports_credentials=True)
 
+# Temporary in-memory database for demo
+temp_users_db = []
+
 # Database Configuration
 def get_db_client():
     max_retries = 3
@@ -42,7 +45,7 @@ def get_db_client():
                 time.sleep(2)
                 continue
             else:
-                print("❌ All connection attempts failed")
+                print("❌ All connection attempts failed - using temporary database")
                 return None
 
 client = None
@@ -77,7 +80,7 @@ def initialize_databases():
             ensure_db_exists(db)
         print("✅ Database initialization completed")
     else:
-        print("⚠️ Database initialization failed - running in limited mode")
+        print("⚠️ Database initialization failed - using temporary in-memory storage")
 
 # Initialize on app start
 initialize_databases()
@@ -85,11 +88,12 @@ initialize_databases()
 # Health check endpoint
 @app.route('/health', methods=['GET'])
 def health_check():
-    db_status = "connected" if client else "disconnected"
+    db_status = "connected" if client else "disconnected (using temp storage)"
     return jsonify({
         'status': 'healthy', 
         'timestamp': datetime.now().isoformat(),
-        'database': db_status
+        'database': db_status,
+        'message': 'Application is running - some features may use temporary storage'
     }), 200
 
 @app.route('/api/health', methods=['GET'])
@@ -107,21 +111,109 @@ def debug_info():
         },
         'current_config': {
             'secret_key_length': len(app.secret_key) if app.secret_key else 0,
-            'cloudant_configured': client is not None
-        }
+            'cloudant_configured': client is not None,
+            'temp_users_count': len(temp_users_db)
+        },
+        'message': 'Using temporary in-memory storage for demo purposes'
     })
 
 @app.route('/api/register', methods=['POST'])
 def register():
-    if not client:
-        return jsonify({'success': False, 'error': 'Database unavailable. Please try again later.'}), 503
+    # Try Cloudant first, fallback to temporary storage
+    if client:
+        try:
+            data = request.get_json()
+            if not data:
+                return jsonify({'success': False, 'error': 'No data provided'}), 400
+            
+            print(f"📝 Registration attempt for role: {data.get('role', 'unknown')}")
+            
+            username = data.get('username')
+            password = data.get('password')
+            role = data.get('role')
+            
+            if not all([username, password, role]):
+                return jsonify({'success': False, 'error': 'Missing required fields'}), 400
+            
+            # Check if username exists
+            selector = {'username': username}
+            existing = client.post_find(db='users', selector=selector).get_result()
+            if existing.get('docs'):
+                return jsonify({'success': False, 'error': 'Username already exists'}), 400
+            
+            # Hash password
+            hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+            
+            user_doc = {
+                'type': 'user',
+                'username': username,
+                'password': hashed_pw,
+                'role': role,
+                'status': 'active',
+                'created_at': datetime.now().isoformat()
+            }
+            
+            # Add role-specific data
+            if role == 'asha':
+                user_doc.update({
+                    'full_name': data.get('name'),
+                    'phone': data.get('mobile'),
+                    'email': data.get('email'),
+                    'asha_id': data.get('ashaId'),
+                    'district': data.get('district'),
+                    'date_of_birth': data.get('dateOfBirth')
+                })
+            elif role == 'volunteer':
+                user_doc.update({
+                    'full_name': data.get('name'),
+                    'phone': data.get('mobile'),
+                    'email': data.get('email'),
+                    'emergency_contact_name': data.get('emergencyName'),
+                    'emergency_contact_number': data.get('emergencyNumber'),
+                    'address': data.get('address'),
+                    'city': data.get('city'),
+                    'state': data.get('state'),
+                    'pincode': data.get('pincode'),
+                    'aadhaar': data.get('aadhaar'),
+                    'skills': data.get('skills'),
+                    'availability': data.get('availability'),
+                    'date_of_birth': data.get('dateOfBirth')
+                })
+            elif role == 'admin':
+                user_doc.update({
+                    'full_name': data.get('name'),
+                    'employee_id': data.get('employeeId'),
+                    'job_role': data.get('role'),
+                    'department': data.get('department'),
+                    'work_email': data.get('workEmail'),
+                    'work_phone': data.get('workPhone')
+                })
+            elif role == 'hospital':
+                user_doc.update({
+                    'hospital_name': data.get('hospitalName'),
+                    'contact_person': data.get('contactPerson'),
+                    'phone': data.get('phone'),
+                    'email': data.get('email'),
+                    'address': data.get('address')
+                })
+            
+            result = client.post_document(db='users', document=user_doc).get_result()
+            
+            return jsonify({
+                'success': True,
+                'message': 'Registration successful!',
+                'user_id': result['id']
+            }), 201
+            
+        except Exception as e:
+            print(f"❌ Cloudant registration error: {e}")
+            # Fall through to temporary storage
     
+    # Fallback: Temporary in-memory storage
     try:
         data = request.get_json()
         if not data:
             return jsonify({'success': False, 'error': 'No data provided'}), 400
-        
-        print(f"📝 Registration attempt for role: {data.get('role', 'unknown')}")
         
         username = data.get('username')
         password = data.get('password')
@@ -130,74 +222,32 @@ def register():
         if not all([username, password, role]):
             return jsonify({'success': False, 'error': 'Missing required fields'}), 400
         
-        # Check if username exists
-        selector = {'username': username}
-        existing = client.post_find(db='users', selector=selector).get_result()
-        if existing.get('docs'):
+        # Check if username exists in temp storage
+        if any(user['username'] == username for user in temp_users_db):
             return jsonify({'success': False, 'error': 'Username already exists'}), 400
         
         # Hash password
         hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         
-        user_doc = {
-            'type': 'user',
+        user_data = {
+            'id': len(temp_users_db) + 1,
             'username': username,
             'password': hashed_pw,
             'role': role,
             'status': 'active',
-            'created_at': datetime.now().isoformat()
+            'created_at': datetime.now().isoformat(),
+            'full_name': data.get('name', ''),
+            'email': data.get('email', ''),
+            'phone': data.get('mobile', '')
         }
         
-        # Add role-specific data
-        if role == 'asha':
-            user_doc.update({
-                'full_name': data.get('name'),
-                'phone': data.get('mobile'),
-                'email': data.get('email'),
-                'asha_id': data.get('ashaId'),
-                'district': data.get('district'),
-                'date_of_birth': data.get('dateOfBirth')
-            })
-        elif role == 'volunteer':
-            user_doc.update({
-                'full_name': data.get('name'),
-                'phone': data.get('mobile'),
-                'email': data.get('email'),
-                'emergency_contact_name': data.get('emergencyName'),
-                'emergency_contact_number': data.get('emergencyNumber'),
-                'address': data.get('address'),
-                'city': data.get('city'),
-                'state': data.get('state'),
-                'pincode': data.get('pincode'),
-                'aadhaar': data.get('aadhaar'),
-                'skills': data.get('skills'),
-                'availability': data.get('availability'),
-                'date_of_birth': data.get('dateOfBirth')
-            })
-        elif role == 'admin':
-            user_doc.update({
-                'full_name': data.get('name'),
-                'employee_id': data.get('employeeId'),
-                'job_role': data.get('role'),
-                'department': data.get('department'),
-                'work_email': data.get('workEmail'),
-                'work_phone': data.get('workPhone')
-            })
-        elif role == 'hospital':
-            user_doc.update({
-                'hospital_name': data.get('hospitalName'),
-                'contact_person': data.get('contactPerson'),
-                'phone': data.get('phone'),
-                'email': data.get('email'),
-                'address': data.get('address')
-            })
-        
-        result = client.post_document(db='users', document=user_doc).get_result()
+        temp_users_db.append(user_data)
         
         return jsonify({
             'success': True,
-            'message': 'Registration successful!',
-            'user_id': result['id']
+            'message': 'Registration successful! (Temporary storage)',
+            'user_id': user_data['id'],
+            'note': 'Data stored in temporary memory for demo'
         }), 201
         
     except Exception as e:
@@ -206,53 +256,55 @@ def register():
 
 @app.route('/api/login', methods=['POST'])
 def login():
-    if not client:
-        return jsonify({'success': False, 'error': 'Database unavailable. Please try again later.'}), 503
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
     
-    try:
-        data = request.get_json()
-        username = data.get('username')
-        password = data.get('password')
-        
-        if not username or not password:
-            return jsonify({'success': False, 'error': 'Username and password required'}), 400
-        
-        print(f"🔐 Login attempt: {username}")
-        
-        # Find user by username
-        selector = {'username': username}
-        result = client.post_find(db='users', selector=selector).get_result()
-        users = result.get('docs', [])
-        
-        if not users:
-            return jsonify({'success': False, 'error': 'Invalid username or password'}), 401
-        
-        user = users[0]
-        
-        # Verify password
-        if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-            # Remove password from response
-            user_data = {k: v for k, v in user.items() if k != 'password'}
+    if not username or not password:
+        return jsonify({'success': False, 'error': 'Username and password required'}), 400
+    
+    # Try Cloudant first
+    if client:
+        try:
+            selector = {'username': username}
+            result = client.post_find(db='users', selector=selector).get_result()
+            users = result.get('docs', [])
             
-            # Set session
-            session.permanent = True
-            session['user_id'] = user['_id']
-            session['username'] = user['username']
-            session['role'] = user['role']
-            
-            print(f"✅ Login successful: {user['username']} ({user['role']})")
-            
-            return jsonify({
-                'success': True,
-                'message': 'Login successful!',
-                'user': user_data
-            }), 200
-        else:
-            return jsonify({'success': False, 'error': 'Invalid username or password'}), 401
-            
-    except Exception as e:
-        print(f"❌ Login error: {e}")
-        return jsonify({'success': False, 'error': 'Login failed. Please try again.'}), 500
+            if users:
+                user = users[0]
+                if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+                    user_data = {k: v for k, v in user.items() if k != 'password'}
+                    session.permanent = True
+                    session['user_id'] = user['_id']
+                    session['username'] = user['username']
+                    session['role'] = user['role']
+                    
+                    return jsonify({
+                        'success': True,
+                        'message': 'Login successful!',
+                        'user': user_data
+                    }), 200
+        except Exception as e:
+            print(f"❌ Cloudant login error: {e}")
+            # Fall through to temporary storage
+    
+    # Fallback: Check temporary storage
+    user = next((u for u in temp_users_db if u['username'] == username), None)
+    if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+        user_data = {k: v for k, v in user.items() if k != 'password'}
+        session.permanent = True
+        session['user_id'] = user['id']
+        session['username'] = user['username']
+        session['role'] = user['role']
+        
+        return jsonify({
+            'success': True,
+            'message': 'Login successful! (Temporary storage)',
+            'user': user_data,
+            'note': 'Using temporary demo storage'
+        }), 200
+    
+    return jsonify({'success': False, 'error': 'Invalid username or password'}), 401
 
 @app.route('/api/check-auth', methods=['GET'])
 def check_auth():
