@@ -1,47 +1,54 @@
-// Initialize Lucide icons
-lucide.createIcons();
-
-// Add event listener for the awareness button
-document.getElementById('awareness-btn').addEventListener('click', function() {
-    // Open awareness page in a new tab
-    window.open('awareness.html', '_blank');
-});
-
-// Tailwind CSS configuration
-tailwind.config = {
-    darkMode: 'class',
-    theme: {
-        extend: {
-            fontFamily: {
-                'poppins': ['Poppins', 'sans-serif']
-            }
-        }
+// === SAFE INITIALIZATION ===
+(function() {
+    console.log('🚀 Page loading safely...');
+    
+    // Check for rapid reloads (simplified)
+    const lastLoadTime = sessionStorage.getItem('lastPageLoad');
+    const currentTime = Date.now();
+    
+    if (lastLoadTime && currentTime - parseInt(lastLoadTime) < 1000) {
+        console.warn('🔄 Rapid reload detected');
+        sessionStorage.clear();
     }
-};
+    
+    sessionStorage.setItem('lastPageLoad', currentTime.toString());
+})();
+
+// Safe icon creation function
+function createIconsSafely() {
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        try {
+            lucide.createIcons();
+        } catch (error) {
+            console.warn('Error creating Lucide icons:', error);
+        }
+    } else {
+        console.warn('Lucide not available');
+    }
+}
+
+// Initialize the app safely
+function initializeApp() {
+    console.log('🚀 Initializing application...');
+    
+    // Initialize icons first
+    createIconsSafely();
+    
+    // Set up basic event listeners
+    setupEventListeners();
+    
+    // Load user preferences
+    loadTheme();
+    loadLanguagePreference();
+    
+    console.log('✅ Application initialized successfully');
+}
 
 // Global state
 let isDarkMode = false;
 let currentLanguage = 'en';
 let currentRole = '';
 
-// Debug function - call this in browser console if issues persist
-function debugAuth() {
-    console.log('🔍 DEBUG INFO:');
-    console.log('Current User:', JSON.parse(localStorage.getItem('currentUser')));
-    console.log('Current Role:', currentRole);
-    console.log('Page URL:', window.location.href);
-    console.log('Session Storage:', { ...sessionStorage });
-    
-    // Test backend connection
-    fetch('/api/check-auth')
-        .then(r => console.log('Backend check:', r.status, r.url))
-        .catch(e => console.error('Backend check failed:', e));
-}
-
-// Make it globally available
-window.debugAuth = debugAuth;
-
-// Language translations
 const translations = {
     en: {
         headerTitle: "SAMAJ HEALTH SURAKSHA",
@@ -353,8 +360,10 @@ function toggleTheme() {
     document.documentElement.classList.toggle('dark', isDarkMode);
     
     const themeIcon = document.querySelector('#theme-toggle i');
-    themeIcon.setAttribute('data-lucide', isDarkMode ? 'moon' : 'sun');
-    createIconsSafely();
+    if (themeIcon) {
+        themeIcon.setAttribute('data-lucide', isDarkMode ? 'moon' : 'sun');
+        createIconsSafely();
+    }
     
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
 }
@@ -378,6 +387,11 @@ function showLoginModal(role) {
     const modal = document.getElementById('login-modal');
     const title = document.getElementById('modal-title');
     const content = document.getElementById('modal-content');
+    
+    if (!modal || !title || !content) {
+        console.error('Modal elements not found');
+        return;
+    }
     
     const t = translations[currentLanguage];
     const roleNames = {
@@ -434,19 +448,22 @@ function showLoginModal(role) {
     createIconsSafely();
 }
 
+// Handle login - SIMPLIFIED AND FIXED
 async function handleLogin(event) {
     event.preventDefault();
     
     const form = event.target;
+    const inputs = form.querySelectorAll('input');
     const loginData = {
-        username: form.querySelector('input[type="text"]').value,
-        password: form.querySelector('input[type="password"]').value,
+        username: inputs[0].value,
+        password: inputs[1].value,
         role: currentRole
     };
     
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
     
+    // Show loading state
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span>Signing in...</span>';
     
@@ -457,9 +474,11 @@ async function handleLogin(event) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-            },
+            'Accept': 'application/json'
+            // REMOVED redirect: 'manual' - this was causing issues
+        },
             body: JSON.stringify(loginData),
-            credentials: 'include' // ✅ Important for sessions
+            credentials: 'include' // Important for sessions
         });
 
         console.log('📨 Login response status:', response.status);
@@ -478,7 +497,10 @@ async function handleLogin(event) {
         const result = await response.json();
         
         if (result.success) {
+            // Store user data in localStorage
             localStorage.setItem('currentUser', JSON.stringify(result.user));
+            
+            // Show success modal
             document.getElementById('login-modal').classList.add('hidden');
             document.getElementById('success-modal').classList.remove('hidden');
             
@@ -486,24 +508,25 @@ async function handleLogin(event) {
                 document.getElementById('success-modal').classList.add('hidden');
                 redirectToDashboard();
             }, 2000);
+            
         } else {
             throw new Error(result.error || 'Login failed');
         }
     } catch (error) {
         console.error('Login error:', error);
         
-        let userMessage = error.message;
+        let userMessage = 'Login failed. Please try again.';
         if (error.message.includes('Failed to fetch')) {
             userMessage = 'Cannot connect to server. Please check your internet connection.';
         }
         
-        alert('Login failed: ' + userMessage);
+        alert(userMessage);
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
     }
 }
 
-// Redirect to dashboard with prevention
+// Redirect to dashboard
 function redirectToDashboard() {
     const redirectMap = {
         'patient': 'pd.html',
@@ -515,8 +538,10 @@ function redirectToDashboard() {
     const targetPage = redirectMap[currentRole];
     if (targetPage) {
         console.log('🔄 Redirecting to:', targetPage);
-        // Use replace to avoid adding to history stack
-        window.location.replace(targetPage + '?redirect=prevent');
+        window.location.href = targetPage;
+    } else {
+        console.error('No redirect mapping for role:', currentRole);
+        window.location.href = 'dashboard.html';
     }
 }
 
@@ -540,13 +565,18 @@ function showRegistrationInfo(role) {
 
 // Close modal
 function closeModal() {
-    document.getElementById('login-modal').classList.add('hidden');
+    const modal = document.getElementById('login-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
 }
 
 // Language functions
 function toggleLanguageDropdown() {
     const dropdown = document.getElementById('language-dropdown');
-    dropdown.classList.toggle('show');
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
 }
 
 function changeLanguage(lang) {
@@ -558,8 +588,15 @@ function changeLanguage(lang) {
         hi: 'हिंदी'
     };
     
-    document.getElementById('current-language').textContent = langNames[lang];
-    document.getElementById('language-dropdown').classList.remove('show');
+    const currentLangElement = document.getElementById('current-language');
+    if (currentLangElement) {
+        currentLangElement.textContent = langNames[lang];
+    }
+    
+    const dropdown = document.getElementById('language-dropdown');
+    if (dropdown) {
+        dropdown.classList.remove('show');
+    }
     
     updatePageContent();
     localStorage.setItem('language', lang);
@@ -585,7 +622,7 @@ function updatePageContent() {
     setText('#header-title', t.headerTitle);
     setText('#header-subtitle', t.headerSubtitle);
 
-    // Update main heading (retains the gradient span)
+    // Update main heading
     const mainHeading = document.getElementById('main-heading');
     if (mainHeading) {
         const titleString = t.title;
@@ -624,32 +661,67 @@ function updatePageContent() {
 }
 
 function setupEventListeners() {
-    document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
-    document.getElementById('close-modal')?.addEventListener('click', closeModal);
-    document.getElementById('language-btn')?.addEventListener('click', toggleLanguageDropdown);
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
     
+    // Close modal
+    const closeModalBtn = document.getElementById('close-modal');
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
+    }
+    
+    // Language selector
+    const languageBtn = document.getElementById('language-btn');
+    if (languageBtn) {
+        languageBtn.addEventListener('click', toggleLanguageDropdown);
+    }
+    
+    // Language options
     document.querySelectorAll('.language-option').forEach(option => {
         option.addEventListener('click', () => {
             changeLanguage(option.dataset.lang);
         });
     });
     
+    // Close language dropdown when clicking outside
     document.addEventListener('click', (e) => {
         const languageSelector = document.querySelector('.language-selector');
         if (languageSelector && !languageSelector.contains(e.target)) {
-            document.getElementById('language-dropdown')?.classList.remove('show');
+            const dropdown = document.getElementById('language-dropdown');
+            if (dropdown) {
+                dropdown.classList.remove('show');
+            }
         }
     });
     
-    document.getElementById('help-btn')?.addEventListener('click', () => {
-        alert('🆘 Help & Support:\n\n📞 Technical Support: +91-XXXX-XXXXXX\n📧 Email: support@healthmonitor.gov.in\n\n💡 Quick Tips:\n• Choose your role to access tools.\n• Contact your supervisor for login credentials.');
-    });
+    // Help button
+    const helpBtn = document.getElementById('help-btn');
+    if (helpBtn) {
+        helpBtn.addEventListener('click', () => {
+            alert('🆘 Help & Support:\n\n📞 Technical Support: +91-XXXX-XXXXXX\n📧 Email: support@healthmonitor.gov.in\n\n💡 Quick Tips:\n• Choose your role to access tools.\n• Contact your supervisor for login credentials.');
+        });
+    }
     
-    document.getElementById('login-modal')?.addEventListener('click', (e) => {
-        if (e.target === e.currentTarget) {
-            closeModal();
-        }
-    });
+    // Awareness button
+    const awarenessBtn = document.getElementById('awareness-btn');
+    if (awarenessBtn) {
+        awarenessBtn.addEventListener('click', function() {
+            window.open('awareness.html', '_blank');
+        });
+    }
+    
+    // Modal backdrop click
+    const loginModal = document.getElementById('login-modal');
+    if (loginModal) {
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                closeModal();
+            }
+        });
+    }
 }
 
 function loadLanguagePreference() {
@@ -659,48 +731,17 @@ function loadLanguagePreference() {
     }
 }
 
-// Check backend connection
-async function checkBackendConnection() {
-    try {
-        const response = await fetch('/api/check-auth');
-        console.log('✅ Backend connection successful');
-        return true;
-    } catch (error) {
-        console.warn('❌ Backend connection failed:', error);
-        return false;
-    }
-}
-
-// Utility function to get current user
-function getCurrentUser() {
-    const userStr = localStorage.getItem('currentUser');
-    return userStr ? JSON.parse(userStr) : null;
-}
-
-// Utility function to check if user is logged in
-function isUserLoggedIn() {
-    return localStorage.getItem('currentUser') !== null;
-}
-
-// Utility function to logout
-function logoutUser() {
-    localStorage.removeItem('currentUser');
-    // You can also call the backend logout endpoint
-    fetch('/api/logout', { method: 'POST' });
-    window.location.href = 'index.html';
-}
-
-// Add global error handler to catch any unhandled errors
-window.addEventListener('error', function(e) {
-    console.error('Global error caught:', e.error);
-});
-
-// Add unhandled promise rejection handler
-window.addEventListener('unhandledrejection', function(e) {
-    console.error('Unhandled promise rejection:', e.reason);
-});
+// Make functions globally available
+window.showLoginModal = showLoginModal;
+window.handleLogin = handleLogin;
+window.showRegistrationInfo = showRegistrationInfo;
+window.closeModal = closeModal;
+window.toggleLanguageDropdown = toggleLanguageDropdown;
+window.changeLanguage = changeLanguage;
 
 // Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
     initializeApp();
-});
+}
