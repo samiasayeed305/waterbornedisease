@@ -1,35 +1,3 @@
-// === REDIRECT LOOP PREVENTION - ADD THIS FIRST ===
-(function() {
-    console.log('🚀 Page loading - checking for redirect loops...');
-    
-    // Check if we're in a redirect loop
-    const urlParams = new URLSearchParams(window.location.search);
-    const redirectPrevention = urlParams.get('redirect');
-    
-    if (redirectPrevention === 'prevent') {
-        console.log('🛑 Redirect prevention active');
-        // Remove the parameter without reloading
-        const newUrl = window.location.pathname + window.location.hash;
-        window.history.replaceState({}, document.title, newUrl);
-    }
-    
-    // Check session storage for loop detection
-    const lastLoadTime = sessionStorage.getItem('lastPageLoad');
-    const currentTime = Date.now();
-    
-    if (lastLoadTime && currentTime - parseInt(lastLoadTime) < 2000) {
-        console.error('🔄 RAPID RELOAD DETECTED - Possible redirect loop!');
-        // Clear storage and stop
-        sessionStorage.clear();
-        localStorage.removeItem('currentUser');
-        alert('Redirect loop detected. Please refresh the page.');
-        return;
-    }
-    
-    sessionStorage.setItem('lastPageLoad', currentTime.toString());
-})();
-// === END REDIRECT PREVENTION ===
-
 // Initialize Lucide icons
 lucide.createIcons();
 
@@ -466,7 +434,6 @@ function showLoginModal(role) {
     createIconsSafely();
 }
 
-// Handle login - UPDATED VERSION WITH REDIRECT FIXES
 async function handleLogin(event) {
     event.preventDefault();
     
@@ -480,7 +447,6 @@ async function handleLogin(event) {
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
     
-    // Show loading state
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span>Signing in...</span>';
     
@@ -493,62 +459,26 @@ async function handleLogin(event) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(loginData),
-            redirect: 'manual' // Important: handle redirects manually
+            credentials: 'include' // ✅ Important for sessions
         });
 
         console.log('📨 Login response status:', response.status);
 
-        // Handle redirect responses
-        if (response.status >= 300 && response.status < 400) {
-            const redirectUrl = response.headers.get('Location');
-            console.warn('🔄 Server redirect detected to:', redirectUrl);
-            
-            if (redirectUrl && redirectUrl !== window.location.href) {
-                // Add prevention parameter to break loops
-                const separator = redirectUrl.includes('?') ? '&' : '?';
-                window.location.href = redirectUrl + separator + 'redirect=prevent';
-                return;
-            } else {
-                throw new Error('Redirect loop detected');
+        if (!response.ok) {
+            let errorMessage = 'Login failed';
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.error || errorMessage;
+            } catch (e) {
+                errorMessage = `Server error: ${response.status}`;
             }
-        }
-
-        // Handle non-JSON responses
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            const text = await response.text();
-            console.warn('⚠️ Non-JSON response:', text.substring(0, 200));
-            
-            if (response.ok) {
-                // Assume success if response is OK but not JSON
-                const mockUser = {
-                    id: loginData.username,
-                    role: loginData.role,
-                    name: loginData.role.charAt(0).toUpperCase() + loginData.role.slice(1) + ' User'
-                };
-                localStorage.setItem('currentUser', JSON.stringify(mockUser));
-                
-                // Show success modal
-                document.getElementById('login-modal').classList.add('hidden');
-                document.getElementById('success-modal').classList.remove('hidden');
-                
-                setTimeout(() => {
-                    document.getElementById('success-modal').classList.add('hidden');
-                    redirectToDashboard();
-                }, 2000);
-                return;
-            } else {
-                throw new Error(`Server returned non-JSON response: ${response.status}`);
-            }
+            throw new Error(errorMessage);
         }
 
         const result = await response.json();
         
         if (result.success) {
-            // Store user data in localStorage
             localStorage.setItem('currentUser', JSON.stringify(result.user));
-            
-            // Show success modal
             document.getElementById('login-modal').classList.add('hidden');
             document.getElementById('success-modal').classList.remove('hidden');
             
@@ -556,13 +486,18 @@ async function handleLogin(event) {
                 document.getElementById('success-modal').classList.add('hidden');
                 redirectToDashboard();
             }, 2000);
-            
         } else {
             throw new Error(result.error || 'Login failed');
         }
     } catch (error) {
         console.error('Login error:', error);
-        alert('Login failed: ' + error.message);
+        
+        let userMessage = error.message;
+        if (error.message.includes('Failed to fetch')) {
+            userMessage = 'Cannot connect to server. Please check your internet connection.';
+        }
+        
+        alert('Login failed: ' + userMessage);
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
     }
