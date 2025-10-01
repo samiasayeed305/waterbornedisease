@@ -1,48 +1,16 @@
 // === SAFE INITIALIZATION ===
-(function() {
+(function () {
     console.log('🚀 Page loading safely...');
-    
-    // Check for rapid reloads (simplified)
+
+    // Prevent rapid reloads
     const lastLoadTime = sessionStorage.getItem('lastPageLoad');
     const currentTime = Date.now();
-    
     if (lastLoadTime && currentTime - parseInt(lastLoadTime) < 1000) {
         console.warn('🔄 Rapid reload detected');
         sessionStorage.clear();
     }
-    
     sessionStorage.setItem('lastPageLoad', currentTime.toString());
 })();
-
-// Safe icon creation function
-function createIconsSafely() {
-    if (typeof lucide !== 'undefined' && lucide.createIcons) {
-        try {
-            lucide.createIcons();
-        } catch (error) {
-            console.warn('Error creating Lucide icons:', error);
-        }
-    } else {
-        console.warn('Lucide not available');
-    }
-}
-
-// Initialize the app safely
-function initializeApp() {
-    console.log('🚀 Initializing application...');
-    
-    // Initialize icons first
-    createIconsSafely();
-    
-    // Set up basic event listeners
-    setupEventListeners();
-    
-    // Load user preferences
-    loadTheme();
-    loadLanguagePreference();
-    
-    console.log('✅ Application initialized successfully');
-}
 
 // Global state
 let isDarkMode = false;
@@ -320,7 +288,7 @@ const translations = {
     }
 };
 
-// Safe icon creation function
+// === SAFE ICON CREATION ===
 function createIconsSafely() {
     if (typeof lucide !== 'undefined' && lucide.createIcons) {
         try {
@@ -328,11 +296,8 @@ function createIconsSafely() {
         } catch (error) {
             console.warn('Error creating Lucide icons:', error);
             setTimeout(() => {
-                try {
-                    lucide.createIcons();
-                } catch (retryError) {
-                    console.warn('Retry failed for Lucide icons:', retryError);
-                }
+                try { lucide.createIcons(); }
+                catch (retryError) { console.warn('Retry failed for Lucide icons:', retryError); }
             }, 1000);
         }
     } else {
@@ -341,407 +306,191 @@ function createIconsSafely() {
     }
 }
 
-// Initialize the app
+// === INITIALIZE APP ===
 function initializeApp() {
     console.log('🚀 Initializing application...');
     createIconsSafely();
     setupEventListeners();
     loadTheme();
-    
-    // Load language preference
     loadLanguagePreference();
-    
     console.log('✅ Application initialized successfully');
 }
 
-// Toggle theme
+// === THEME TOGGLE ===
 function toggleTheme() {
     isDarkMode = !isDarkMode;
     document.documentElement.classList.toggle('dark', isDarkMode);
-    
+
     const themeIcon = document.querySelector('#theme-toggle i');
     if (themeIcon) {
         themeIcon.setAttribute('data-lucide', isDarkMode ? 'moon' : 'sun');
         createIconsSafely();
     }
-    
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
 }
 
-// Load theme preference
 function loadTheme() {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         isDarkMode = true;
         document.documentElement.classList.add('dark');
         const themeIcon = document.querySelector('#theme-toggle i');
-        if (themeIcon) {
-            themeIcon.setAttribute('data-lucide', 'moon');
-        }
+        if (themeIcon) themeIcon.setAttribute('data-lucide', 'moon');
     }
 }
 
-// Show login modal
+// === LOGIN MODAL ===
 function showLoginModal(role) {
     currentRole = role;
     const modal = document.getElementById('login-modal');
     const title = document.getElementById('modal-title');
     const content = document.getElementById('modal-content');
-    
-    if (!modal || !title || !content) {
-        console.error('Modal elements not found');
-        return;
-    }
-    
+    if (!modal || !title || !content) return console.error('Modal not found');
+
     const t = translations[currentLanguage];
-    const roleNames = {
-        asha: t.asha,
-        volunteer: t.volunteer,
-        admin: t.admin,
-        patient: t.patient
-    };
-    
-    // Use the translated login title with role placeholder
+    const roleNames = { asha: t.asha, volunteer: t.volunteer, admin: t.admin, patient: t.patient };
+
     title.textContent = t.login_title.replace('{role}', roleNames[role]);
-    
+
     content.innerHTML = `
         <form class="space-y-4" onsubmit="handleLogin(event)">
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">${t.user_id_label}</label>
-                <input type="text" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="${t.user_id_placeholder}">
+                <label class="block mb-2">${t.user_id_label}</label>
+                <input type="text" required placeholder="${t.user_id_placeholder}" class="w-full px-3 py-2 border rounded-lg">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">${t.password_label}</label>
-                <input type="password" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="${t.password_placeholder}">
+                <label class="block mb-2">${t.password_label}</label>
+                <input type="password" required placeholder="${t.password_placeholder}" class="w-full px-3 py-2 border rounded-lg">
             </div>
             <div class="flex items-center justify-between">
                 <label class="flex items-center gap-2">
-                    <input type="checkbox" class="text-blue-600 rounded">
-                    <span class="text-sm text-gray-600 dark:text-gray-400">${t.remember_me}</span>
+                    <input type="checkbox"><span class="text-sm">${t.remember_me}</span>
                 </label>
-                <button type="button" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
-                    ${t.forgot_password}
-                </button>
+                <button type="button" class="text-sm text-blue-600">${t.forgot_password}</button>
             </div>
-            <div class="space-y-3 pt-4">
-                <button type="submit" class="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium">
-                    <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i>
-                    ${t.login_button}
-                </button>
-                <div class="text-center">
-                    <span class="text-sm text-gray-600 dark:text-gray-400">${t.no_account}</span>
-                    <button type="button" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300" onclick="showRegistrationInfo('${role}')">
-                        ${t.request_access}
-                    </button>
-                </div>
+            <button type="submit" class="w-full px-4 py-3 bg-blue-600 text-white rounded-lg">
+                <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i>${t.login_button}
+            </button>
+            <div class="text-center mt-3">
+                <span class="text-sm">${t.no_account}</span>
+                <button type="button" onclick="showRegistrationInfo('${role}')" class="text-sm text-blue-600">${t.request_access}</button>
             </div>
         </form>
-        
-        <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <p class="text-xs text-gray-500 dark:text-gray-400 text-center">
-                ${t.security_note}
-            </p>
-        </div>
+        <p class="text-xs mt-6 text-center">${t.security_note}</p>
     `;
-    
     modal.classList.remove('hidden');
     createIconsSafely();
 }
 
-// Handle login - SIMPLIFIED AND FIXED
+// === HANDLE LOGIN ===
 async function handleLogin(event) {
     event.preventDefault();
-    
     const form = event.target;
     const inputs = form.querySelectorAll('input');
-    const loginData = {
-        username: inputs[0].value,
-        password: inputs[1].value,
-        role: currentRole
-    };
-    
+    const loginData = { username: inputs[0].value, password: inputs[1].value, role: currentRole };
+
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
-    
-    // Show loading state
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span>Signing in...</span>';
-    
+    submitBtn.innerHTML = 'Signing in...';
+
     try {
-        console.log('🔐 Attempting login for role:', loginData.role);
-        
         const response = await fetch('/api/login', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            'Accept': 'application/json'
-            // REMOVED redirect: 'manual' - this was causing issues
-        },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(loginData),
-            credentials: 'include' // Important for sessions
+            credentials: 'include'
         });
-
-        console.log('📨 Login response status:', response.status);
-
-        if (!response.ok) {
-            let errorMessage = 'Login failed';
-            try {
-                const errorData = await response.json();
-                errorMessage = errorData.error || errorMessage;
-            } catch (e) {
-                errorMessage = `Server error: ${response.status}`;
-            }
-            throw new Error(errorMessage);
-        }
-
+        if (!response.ok) throw new Error(`Login failed: ${response.status}`);
         const result = await response.json();
-        
         if (result.success) {
-            // Store user data in localStorage
             localStorage.setItem('currentUser', JSON.stringify(result.user));
-            
-            // Show success modal
             document.getElementById('login-modal').classList.add('hidden');
             document.getElementById('success-modal').classList.remove('hidden');
-            
             setTimeout(() => {
                 document.getElementById('success-modal').classList.add('hidden');
                 redirectToDashboard();
             }, 2000);
-            
-        } else {
-            throw new Error(result.error || 'Login failed');
-        }
-    } catch (error) {
-        console.error('Login error:', error);
-        
-        let userMessage = 'Login failed. Please try again.';
-        if (error.message.includes('Failed to fetch')) {
-            userMessage = 'Cannot connect to server. Please check your internet connection.';
-        }
-        
-        alert(userMessage);
+        } else throw new Error(result.error || 'Login failed');
+    } catch (err) {
+        alert(err.message);
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
     }
 }
 
-// Redirect to dashboard
 function redirectToDashboard() {
-    const redirectMap = {
-        'patient': 'pd.html',
-        'asha': 'ashaworker.html',
-        'volunteer': 'cd.html',
-        'admin': 'had.html'
-    };
-    
-    const targetPage = redirectMap[currentRole];
-    if (targetPage) {
-        console.log('🔄 Redirecting to:', targetPage);
-        window.location.href = targetPage;
-    } else {
-        console.error('No redirect mapping for role:', currentRole);
-        window.location.href = 'dashboard.html';
-    }
+    const redirectMap = { patient: 'pd.html', asha: 'ashaworker.html', volunteer: 'cd.html', admin: 'had.html' };
+    window.location.href = redirectMap[currentRole] || 'dashboard.html';
 }
 
-// Show registration info
 function showRegistrationInfo(role) {
     closeModal();
-    const registrationPages = {
-        'volunteer': 'cv.html',
-        'admin': 'uy1ha.html',  
-        'asha': 'uy.html',
-        'hospital': 'hospital-registration.html'
-    };
-    
+    const registrationPages = { volunteer: 'cv.html', admin: 'uy1ha.html', asha: 'uy.html', hospital: 'hospital-registration.html' };
     const page = registrationPages[role];
-    if (page) {
-        window.location.href = page;
-    } else {
-        alert(`To request access as a ${role}, please contact your local health administrator.`);
-    }
+    if (page) window.location.href = page;
+    else alert(`Contact your health administrator for ${role} access.`);
 }
 
-// Close modal
 function closeModal() {
     const modal = document.getElementById('login-modal');
-    if (modal) {
-        modal.classList.add('hidden');
-    }
+    if (modal) modal.classList.add('hidden');
 }
 
-// Language functions
+// === LANGUAGE HANDLING ===
 function toggleLanguageDropdown() {
     const dropdown = document.getElementById('language-dropdown');
-    if (dropdown) {
-        dropdown.classList.toggle('show');
-    }
+    if (dropdown) dropdown.classList.toggle('show');
 }
 
 function changeLanguage(lang) {
     currentLanguage = lang;
-    const langNames = {
-        en: 'English',
-        as: 'অসমীয়া',
-        bn: 'বাংলা',
-        hi: 'हिंदी'
-    };
-    
+    const langNames = { en: 'English', as: 'অসমীয়া', bn: 'বাংলা', hi: 'हिंदी' };
     const currentLangElement = document.getElementById('current-language');
-    if (currentLangElement) {
-        currentLangElement.textContent = langNames[lang];
-    }
-    
+    if (currentLangElement) currentLangElement.textContent = langNames[lang];
     const dropdown = document.getElementById('language-dropdown');
-    if (dropdown) {
-        dropdown.classList.remove('show');
-    }
-    
+    if (dropdown) dropdown.classList.remove('show');
     updatePageContent();
     localStorage.setItem('language', lang);
 }
 
-// Update page content
+function loadLanguagePreference() {
+    const savedLang = localStorage.getItem('language') || 'en';
+    changeLanguage(savedLang);
+}
+
 function updatePageContent() {
     const t = translations[currentLanguage];
-    if (!t) {
-        console.error(`Translations not found for language: ${currentLanguage}`);
-        return;
-    }
+    if (!t) return console.error(`No translations for ${currentLanguage}`);
 
-    // Helper function to safely set text content
-    const setText = (selector, text) => {
-        const element = document.querySelector(selector);
-        if (element) {
-            element.textContent = text;
-        }
-    };
+    const setText = (selector, text) => { const el = document.querySelector(selector); if (el) el.textContent = text; };
 
-    // Update header section
     setText('#header-title', t.headerTitle);
     setText('#header-subtitle', t.headerSubtitle);
-
-    // Update main heading
-    const mainHeading = document.getElementById('main-heading');
-    if (mainHeading) {
-        const titleString = t.title;
-        const lastSpaceIndex = titleString.lastIndexOf(' ');
-        const part1 = titleString.substring(0, lastSpaceIndex);
-        const part2 = titleString.substring(lastSpaceIndex + 1);
-        mainHeading.innerHTML = `${part1} <span class="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300">${part2}</span>`;
-    }
-
-    // Update other main text elements
     setText('#sub-heading', t.subtitle);
     setText('#tagline', t.tagline);
     setText('#choose-role-heading', t.chooseRole);
     setText('#role-description', t.roleDescription);
-    
-    // Update role cards
-    const roles = ['asha', 'volunteer', 'admin', 'patient'];
-    roles.forEach(role => {
-        setText(`[data-role-title="${role}"]`, t[role]);
-        setText(`[data-role-desc="${role}"]`, t[`${role}_desc`]);
-        setText(`[data-role-button="${role}"]`, t[`${role}_button`]);
-        for (let i = 1; i <= 4; i++) {
-            setText(`[data-role-item="${role}-${i}"]`, t[`${role}_item${i}`]);
-        }
-    });
 
-    // Update features section
-    setText('#features-title', t.featuresTitle);
-    setText('#features-description', t.featuresDescription);
-    for (let i = 1; i <= 6; i++) {
-        setText(`[data-feature-title="${i}"]`, t[`feature${i}_title`]);
-        setText(`[data-feature-desc="${i}"]`, t[`feature${i}_desc`]);
+    // Main heading styled split
+    const mainHeading = document.getElementById('main-heading');
+    if (mainHeading) {
+        const parts = t.title.split(' ');
+        const lastWord = parts.pop();
+        mainHeading.innerHTML = `${parts.join(' ')} <span class="bg-gradient-to-r from-yellow-300 to-pink-300 text-transparent bg-clip-text">${lastWord}</span>`;
     }
-
-    console.log(`Page content updated to ${currentLanguage}`);
 }
 
+// === EVENT LISTENERS ===
 function setupEventListeners() {
-    // Theme toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', toggleTheme);
-    }
-    
-    // Close modal
-    const closeModalBtn = document.getElementById('close-modal');
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', closeModal);
-    }
-    
-    // Language selector
-    const languageBtn = document.getElementById('language-btn');
-    if (languageBtn) {
-        languageBtn.addEventListener('click', toggleLanguageDropdown);
-    }
-    
-    // Language options
-    document.querySelectorAll('.language-option').forEach(option => {
-        option.addEventListener('click', () => {
-            changeLanguage(option.dataset.lang);
-        });
-    });
-    
-    // Close language dropdown when clicking outside
+    const themeBtn = document.getElementById('theme-toggle');
+    if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
     document.addEventListener('click', (e) => {
-        const languageSelector = document.querySelector('.language-selector');
-        if (languageSelector && !languageSelector.contains(e.target)) {
-            const dropdown = document.getElementById('language-dropdown');
-            if (dropdown) {
-                dropdown.classList.remove('show');
-            }
+        if (!e.target.closest('#language-selector')) {
+            document.getElementById('language-dropdown')?.classList.remove('show');
         }
     });
-    
-    // Help button
-    const helpBtn = document.getElementById('help-btn');
-    if (helpBtn) {
-        helpBtn.addEventListener('click', () => {
-            alert('🆘 Help & Support:\n\n📞 Technical Support: +91-XXXX-XXXXXX\n📧 Email: support@healthmonitor.gov.in\n\n💡 Quick Tips:\n• Choose your role to access tools.\n• Contact your supervisor for login credentials.');
-        });
-    }
-    
-    // Awareness button
-    const awarenessBtn = document.getElementById('awareness-btn');
-    if (awarenessBtn) {
-        awarenessBtn.addEventListener('click', function() {
-            window.open('awareness.html', '_blank');
-        });
-    }
-    
-    // Modal backdrop click
-    const loginModal = document.getElementById('login-modal');
-    if (loginModal) {
-        loginModal.addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) {
-                closeModal();
-            }
-        });
-    }
 }
 
-function loadLanguagePreference() {
-    const savedLanguage = localStorage.getItem('language');
-    if (savedLanguage && translations[savedLanguage]) {
-        changeLanguage(savedLanguage);
-    }
-}
-
-// Make functions globally available
-window.showLoginModal = showLoginModal;
-window.handleLogin = handleLogin;
-window.showRegistrationInfo = showRegistrationInfo;
-window.closeModal = closeModal;
-window.toggleLanguageDropdown = toggleLanguageDropdown;
-window.changeLanguage = changeLanguage;
-
-// Initialize when DOM is loaded
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeApp);
-} else {
-    initializeApp();
-}
+// === START APP ===
+document.addEventListener('DOMContentLoaded', initializeApp);
