@@ -25,7 +25,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(me
 # Flask App Initialization
 # -----------------------------
 app = Flask(__name__, static_folder='static', static_url_path='/static')
-app.secret_key = os.environ.get('SECRET_KEY', 'fallback-secret-key-2024')
+app.secret_key = os.environ.get('f9b138838d7a7c876f6e31baef07fbe6c2ffa0cafe67062d19728ceaac0b6b00', 'fallback-secret-key-2024')
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['PERMANENT_SESSION_LIFETIME'] = SESSION_LIFETIME
 CORS(app, supports_credentials=True, origins=ALLOWED_ORIGINS)
