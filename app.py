@@ -43,8 +43,8 @@ def get_db_client():
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            api_key = os.environ.get("CLOUDANT_APIKEY")
-            service_url = os.environ.get("CLOUDANT_URL")
+            api_key = os.environ.get("FIAt087x47tQFkRVZfg0qbwOGAUeyLcil0AUeScVtbXNY")
+            service_url = os.environ.get("https://b1dab01f-53d0-4f7b-8f1a-7968e4d80a5d-bluemix.cloudantnosqldb.appdomain.cloud")
             if not api_key or not service_url:
                 logging.error("Missing Cloudant environment variables")
                 return None
